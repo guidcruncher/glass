@@ -1,0 +1,92 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+
+.glass-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.glass-toggle-label {
+  margin-right: 0.75rem;
+  font-size: 1rem;
+  color: theme-prop(light, text-color);
+  min-width: 80px;
+}
+
+.glass-toggle {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.glass-toggle-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider-base {
+  @include apply-glass-theme(light);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 28px;
+  transition: all 0.3s ease;
+
+  background: theme-prop(light, bg-panel);
+  border-color: theme-prop(light, border-color);
+}
+
+.slider-thumb {
+  position: absolute;
+  content: '';
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: theme-prop(light, text-color);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.glass-toggle-input:checked + .slider-base {
+  background: theme-prop(light, accent-color);
+  border-color: theme-prop(light, accent-color);
+}
+
+.glass-toggle-input:checked + .slider-base .slider-thumb {
+  transform: translateX(22px);
+  background-color: white;
+}
+
+// Dark Mode Overrides
+.dark-mode {
+  .glass-toggle-label {
+    color: theme-prop(dark, text-color);
+  }
+
+  .slider-base {
+    @include apply-glass-theme(dark);
+    background: theme-prop(dark, bg-panel);
+    border-color: theme-prop(dark, border-color);
+  }
+
+  .slider-thumb {
+    background-color: theme-prop(dark, text-color);
+  }
+
+  .glass-toggle-input:checked + .slider-base {
+    background: theme-prop(dark, accent-color);
+    border-color: theme-prop(dark, accent-color);
+  }
+
+  .glass-toggle-input:checked + .slider-base .slider-thumb {
+    background-color: black;
+  }
+}

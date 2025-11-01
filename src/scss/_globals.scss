@@ -1,0 +1,15 @@
+/* Global Styles (e.g., in a main.css file or root SCSS import) */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Important: Tells the body to fill the HTML height */
+  overflow-y: hidden; /* Prevent vertical scrolling globally */
+  overflow-x: hidden; /* Prevents horizontal scrolling */
+}
+
+/* Optional: Ensure the app mounting point fills the space too (e.g., #app) */
+#app {
+  height: 100%;
+}

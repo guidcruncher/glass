@@ -1,0 +1,230 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+@use './LiquidGlassCard' as *;
+@use 'sass:color';
+
+// --- ASSUMED ACCENT COLORS (If not already defined in config.scss) ---
+// These are typical glassmorphic accent colors used for focus/selection highlights.
+$color-accent-light: theme-prop(light, color-accent);
+$color-accent-dark: theme-prop(dark, color-accent);
+
+// --- 1. Select Control Theming Mixin ---
+// Applies theme to the input field, text, caret, and option states.
+@mixin select-control-theme($theme, $accent-color) {
+  $bg-surface: theme-prop($theme, bg-surface);
+  $text-color: theme-prop($theme, text-color);
+  $border-color: theme-prop($theme, border-color);
+  $shadow-inset: theme-prop($theme, shadow-inset);
+
+  // --- Main Control Field (.glass-select / .glass-combobox__input) ---
+  .glass-select {
+    background: $bg-surface;
+    border: 1px solid $border-color;
+    color: $text-color;
+    box-shadow: $shadow-inset; // Creates the 'recessed' look
+
+    &:hover:not(.glass-select--disabled) {
+      // Subtle change on hover
+      border-color: lighten($border-color, 15%);
+    }
+  }
+
+  .glass-combobox__input {
+    background: inherit;
+    border: 1px solid $border-color;
+    color: $text-color;
+    box-shadow: $shadow-inset; // Creates the 'recessed' look
+    &:hover:not(.glass-select--disabled) {
+      // Subtle change on hover
+      border-color: lighten($border-color, 15%);
+    }
+  }
+
+  // Focus state (applies to both the select wrapper and the combobox input)
+  .glass-select-wrapper:focus-within .glass-select,
+  .glass-combobox__input:focus {
+    outline: none;
+    border-color: lighten($border-color, 15%);
+    // Apply a subtle accent-colored glow/ring on focus
+    box-shadow:
+      0 0 0 2px rgba($accent-color, 0.3),
+      $shadow-inset;
+  }
+
+  // Caret color (uses an icon font for the caret)
+  .glass-select__caret,
+  .glass-combobox__input + .fas {
+    color: color.adjust($text-color, $lightness: if($theme == dark, -10%, 20%));
+  }
+
+  // Label and Placeholder
+  .glass-select__label {
+    color: $text-color;
+  }
+  .glass-select--placeholder .glass-select__selected-value,
+  .glass-combobox__input::placeholder {
+    color: lighten($text-color, 30%); // Faded placeholder text
+    opacity: 0.8;
+  }
+
+  // --- Option States (Used inside the dropdown panel) ---
+  .glass-select__option {
+    color: $text-color;
+
+    &:hover,
+    &--focused {
+      // Highlight color on hover or keyboard focus
+      background: rgba($accent-color, 0.1);
+    }
+    &--active {
+      // Selected, permanent background color
+      background: rgba($accent-color, 0.2);
+      font-weight: 500;
+    }
+  }
+}
+
+// --- 2. Dropdown Panel Theming Mixin ---
+// Handles the glass panel styling for the floating options list.
+@mixin dropdown-panel-theme($theme) {
+  $bg-panel: theme-prop($theme, bg-panel);
+  $border-color: theme-prop($theme, border-color);
+  $shadow-lift: theme-prop($theme, shadow-lift);
+
+  .glass-select__dropdown {
+    background: $bg-panel;
+    border: 1px solid $border-color;
+    // Use a standard lift shadow for a floating panel
+    box-shadow: $shadow-lift;
+  }
+}
+
+// --- 3. Component Styles (Applying themes) ---
+
+// The wrapper for the entire component (label, control, dropdown)
+.glass-select-wrapper {
+  position: relative;
+  display: block; // Allows full width usage
+  width: 100%;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+
+  // 🔑 Apply Default (Light) Theme
+  @include select-control-theme(light, $color-accent-light);
+  @include dropdown-panel-theme(light);
+
+  // 🔑 Dark Mode Override (The Fix)
+  .dark-mode & {
+    @include select-control-theme(dark, $color-accent-dark);
+    @include dropdown-panel-theme(dark);
+  }
+}
+
+// --- Base Styles (Structural & Non-Theme Dependent) ---
+
+.glass-select,
+.glass-combobox__input {
+  // Shared base styles for the control field
+  display: flex;
+  align-items: center;
+  width: 96%; // Ensures the wrapper's 100% width is respected with padding/border
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-family: $font-family-primary;
+  border-radius: calc($glass-border-radius / 2);
+  min-height: 20px;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  // Core glassmorphic effects
+  backdrop-filter: blur($glass-blur-mobile);
+  -webkit-backdrop-filter: blur($glass-blur-mobile);
+  transition: all 0.2s ease;
+}
+
+.glass-select {
+  justify-content: space-between; // Space out value and caret
+  user-select: none;
+  // Ensures the wrapper is the focus target for styling consistency with GlassInput
+  &[tabindex]:focus {
+    outline: none;
+  }
+}
+
+// Input element specifically for GlassCombobox
+.glass-combobox__input {
+  width: 100%;
+  // Clear out base theming/effects from the component for a seamless look
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  cursor: text;
+
+  &:focus {
+    // Focus styles are applied to the parent wrapper for a consistent border/shadow effect
+    box-shadow: none;
+    border: none;
+  }
+}
+
+.glass-select__selected-value {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.glass-select__caret {
+  margin-left: 0.5rem;
+  font-size: 0.8em;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+
+  &--open {
+    transform: rotate(180deg);
+  }
+}
+
+// --- Dropdown Panel Structure ---
+
+.glass-select__dropdown {
+  position: absolute;
+  top: calc(100% + 5px); // Offset below the control
+  left: 0;
+  width: 100%; // Takes full width of the wrapper
+
+  z-index: 8000;
+  border-radius: calc($glass-border-radius / 2);
+  overflow: hidden;
+  max-height: 300px;
+  overflow-y: auto;
+
+  // Core Glassmorphic effect on floating panel
+  backdrop-filter: blur($glass-blur-mobile);
+  -webkit-backdrop-filter: blur($glass-blur-mobile);
+  transition: all 0.2s ease;
+}
+
+.glass-select__option {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+  user-select: none;
+}
+
+// Fade-Slide Transition (Vue Transition)
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}

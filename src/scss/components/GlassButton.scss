@@ -1,0 +1,68 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+@use 'sass:color';
+
+.glass-button {
+  @include apply-glass-theme(light);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  user-select: none;
+
+  background: theme-prop(light, bg-panel);
+  border-color: theme-prop(light, border-color);
+
+  &:hover:not(:disabled) {
+    background: theme-prop(light, bg-input-focus);
+    box-shadow: theme-prop(light, shadow-depth), theme-prop(light, shadow-inset);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: theme-prop(light, shadow-inset);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  &.accent-btn {
+    background: theme-prop(light, button-color);
+    color: #fff;
+    border: none;
+
+    &:hover:not(:disabled) {
+      background: color.adjust(theme-prop(light, button-color), $lightness: -10%);
+    }
+  }
+}
+
+.dark-mode {
+  .glass-button {
+    @include apply-glass-theme(dark);
+    background: theme-prop(dark, bg-panel);
+    border-color: theme-prop(dark, border-color);
+
+    &:hover:not(:disabled) {
+      background: theme-prop(dark, input-bg-focus);
+    }
+
+    &.accent-btn {
+      background: theme-prop(dark, button-color);
+
+      &:hover:not(:disabled) {
+        background: color.adjust(theme-prop(dark, button-color), $lightness: 10%);
+      }
+    }
+  }
+}

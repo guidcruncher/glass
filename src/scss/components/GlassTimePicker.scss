@@ -1,0 +1,144 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+@use 'sass:color';
+
+$panel-width: 280px;
+
+.glass-timepicker-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  min-width: 150px;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.glass-input.time-display {
+  @include apply-input-theme(light);
+  width: 100%;
+  padding: 0.75rem 3rem 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.time-icon {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  color: theme-prop(light, accent-color);
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &.is-open {
+    color: color.adjust(theme-prop(light, accent-color), $lightness: -10%);
+  }
+}
+
+.time-dropdown {
+  position: absolute;
+  z-index: 950;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: $panel-width;
+  max-width: 95vw;
+  margin-top: 10px;
+
+  @include apply-glass-theme(light);
+
+  padding: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.time-scroll-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+}
+
+.separator {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.time-scroller {
+  height: 150px;
+  width: 80px;
+  overflow-y: scroll;
+  padding: 10px 0;
+
+  &::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  scrollbar-width: none;
+}
+
+.ampm-scroller {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 50px;
+}
+
+.time-option {
+  padding: 5px 0;
+  text-align: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 4px;
+
+  &:hover {
+    background: rgba(theme-prop(light, accent-color), 0.1);
+  }
+
+  &.is-selected {
+    background: theme-prop(light, accent-color);
+    color: white;
+  }
+}
+
+.time-footer {
+  border-top: 1px solid theme-prop(light, border-color);
+  padding-top: 10px;
+  text-align: right;
+}
+
+.dark-mode {
+  .glass-input.time-display {
+    @include apply-input-theme(dark);
+  }
+
+  .time-icon {
+    color: color.adjust(theme-prop(dark, accent-color), $lightness: 10%);
+  }
+
+  .time-dropdown {
+    @include apply-glass-theme(dark);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  }
+
+  .separator,
+  .time-option {
+    color: theme-prop(dark, text-color);
+  }
+
+  .time-option {
+    &:hover {
+      background: rgba(theme-prop(dark, accent-color), 0.1);
+    }
+    &.is-selected {
+      background: theme-prop(dark, accent-color);
+      color: black;
+    }
+  }
+
+  .time-footer {
+    border-top: 1px solid theme-prop(dark, border-color);
+  }
+}

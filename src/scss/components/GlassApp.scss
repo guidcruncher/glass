@@ -1,0 +1,47 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+
+.glass-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  // Base colors are set here, body background is in style.scss
+  background: theme-prop(light, bg-surface);
+  color: theme-prop(light, text-color);
+}
+
+.glass-app__main-content {
+  flex-grow: 1;
+  position: relative;
+  padding-top: $glass-appbar-height;
+
+  // Default: Content starts at 0 (full width)
+  margin-left: 0;
+  margin-right: 20px;
+  transition: margin-left 0.3s ease;
+}
+
+// Layout modifier when the sidebar is docked left and visible
+.glass-app--sidebar-left:not(.glass-app--sidebar-collapsed) {
+  .glass-app__main-content {
+    margin-left: 270px;
+  }
+}
+
+// Layout modifier when the sidebar is docked left and collapsed
+.glass-app--sidebar-left.glass-app--sidebar-collapsed {
+  .glass-app__main-content {
+    margin-left: 20px;
+  }
+}
+
+.dark-mode {
+  .glass-app {
+    background: theme-prop(dark, bg-surface);
+    color: theme-prop(dark, text-color);
+  }
+}

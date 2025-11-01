@@ -1,0 +1,41 @@
+@use 'config' as *;
+@use 'mixins' as *;
+
+@mixin apply-glass-theme($theme) {
+  $blur: $glass-blur-mobile;
+  @include respond-to(desktop) {
+    $blur: $glass-blur-desktop;
+  }
+
+  @include liquid-glass($theme, $blur);
+  color: theme-prop($theme, text-color);
+  box-sizing: border-box;
+}
+
+@mixin apply-input-theme($theme) {
+  $border-color: theme-prop($theme, border-color);
+  $text-color: theme-prop($theme, text-color);
+
+  @include apply-glass-theme($theme);
+
+  background: theme-prop($theme, bg-panel);
+  border-color: $border-color;
+
+  &:focus:not(:disabled) {
+    border-color: theme-prop($theme, accent-color);
+    box-shadow:
+      0 0 0 3px rgba(theme-prop($theme, accent-color), 0.3),
+      theme-prop($theme, shadow-depth),
+      theme-prop($theme, shadow-inset);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    background: theme-prop($theme, bg-surface);
+  }
+
+  &::placeholder {
+    color: rgba($text-color, 0.6);
+  }
+}

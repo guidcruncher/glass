@@ -1,0 +1,28 @@
+{
+  "name": "liquid-ui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run format && npm run registry && vite --host",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "registry": "cd ./scripts && node ./generateGlassRegistry.ts",
+    "sass": "npm run registry && mkdir -p ./dist && sass ./src/scss/style.scss ./dist/style.css",
+    "format": "prettier --config ./.prettierrc --write src/"
+  },
+  "dependencies": {
+    "prettier": "^3.6.2",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "vue": "^3.5.22"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/tsconfig": "^0.8.1",
+    "sass": "^1.93.2",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.7",
+    "vue-tsc": "^3.1.0"
+  }
+}

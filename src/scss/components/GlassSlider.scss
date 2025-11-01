@@ -1,0 +1,68 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+
+.glass-slider-wrapper {
+  width: 100%;
+  margin: 1.5rem 0;
+  padding: 0.5rem 0;
+}
+
+.slider-label {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: theme-prop(light, text-color);
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.glass-slider {
+  flex-grow: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 4px;
+  background: theme-prop(light, bg-panel);
+  transition: background 0.2s;
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: theme-prop(light, accent-color);
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.slider-value {
+  width: 50px;
+  font-weight: bold;
+  color: theme-prop(light, accent-color);
+}
+
+.dark-mode {
+  .slider-label {
+    color: theme-prop(dark, text-color);
+  }
+
+  .glass-slider {
+    background: theme-prop(dark, bg-panel);
+
+    &::-webkit-slider-thumb {
+      background: theme-prop(dark, accent-color);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .slider-value {
+    color: theme-prop(dark, accent-color);
+  }
+}

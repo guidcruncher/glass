@@ -1,0 +1,95 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+
+.glass-sidebar {
+  position: fixed;
+  top: $glass-appbar-height;
+  left: 0;
+  bottom: 0;
+  z-index: 990;
+  width: 250px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem 0;
+  transition:
+    width 0.3s ease,
+    transform 0.3s ease;
+
+  @include liquid-glass(light, $glass-blur-desktop);
+  background: theme-prop(light, bg-panel);
+  border-right: 1px solid theme-prop(light, border-color);
+  color: theme-prop(light, text-color);
+
+  &--collapsed {
+    width: 60px;
+    .sidebar-header,
+    .sidebar-link-text {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .sidebar-link {
+      justify-content: center;
+    }
+  }
+}
+
+.sidebar-header {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  color: theme-prop(light, accent-color);
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: theme-prop(light, text-color);
+
+  i {
+    font-size: 1.1rem;
+    min-width: 25px;
+  }
+
+  &:hover {
+    background: rgba(theme-prop(light, accent-color), 0.1);
+  }
+
+  &.is-active {
+    background: theme-prop(light, accent-color);
+    color: white;
+    font-weight: 600;
+  }
+}
+
+.dark-mode {
+  .glass-sidebar {
+    @include liquid-glass(dark, $glass-blur-desktop);
+    background: theme-prop(dark, bg-panel);
+    border-right: 1px solid theme-prop(dark, border-color);
+    color: theme-prop(dark, text-color);
+  }
+
+  .sidebar-header {
+    color: theme-prop(dark, accent-color);
+  }
+
+  .sidebar-link {
+    color: theme-prop(dark, text-color);
+
+    &:hover {
+      background: rgba(theme-prop(dark, accent-color), 0.15);
+    }
+
+    &.is-active {
+      background: theme-prop(dark, accent-color);
+      color: black;
+    }
+  }
+}

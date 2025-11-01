@@ -1,0 +1,79 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+
+.glass-checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 10px;
+}
+
+.glass-checkbox-label {
+  margin-left: 0.75rem;
+  font-size: 1rem;
+  color: theme-prop(light, text-color);
+}
+
+.glass-checkbox {
+  // Hide the native checkbox
+  opacity: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.custom-checkbox {
+  @include apply-glass-theme(light);
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+
+  background: theme-prop(light, bg-panel);
+  border-color: theme-prop(light, border-color);
+
+  // Checkmark style (hidden by default)
+  &::after {
+    content: '\2713'; // Checkmark symbol
+    font-size: 14px;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.2s ease;
+    font-weight: bold;
+  }
+}
+
+// When the native checkbox is checked
+.glass-checkbox:checked + .custom-checkbox {
+  background: theme-prop(light, accent-color);
+  border-color: theme-prop(light, accent-color);
+
+  &::after {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+// Dark Mode Overrides
+.dark-mode {
+  .glass-checkbox-label {
+    color: theme-prop(dark, text-color);
+  }
+
+  .custom-checkbox {
+    @include apply-glass-theme(dark);
+    background: theme-prop(dark, bg-panel);
+    border-color: theme-prop(dark, border-color);
+  }
+
+  .glass-checkbox:checked + .custom-checkbox {
+    background: theme-prop(dark, accent-color);
+    border-color: theme-prop(dark, accent-color);
+  }
+}
