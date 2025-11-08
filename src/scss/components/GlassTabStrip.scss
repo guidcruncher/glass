@@ -1,0 +1,117 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+@use 'sass:color';
+
+// --- 1. Tab Strip Theming Mixin ---
+// This mixin encapsulates all theme-dependent styles.
+@mixin tab-strip-theme($theme) {
+  // Retrieve properties from the theme map
+  $bg-panel: theme-prop($theme, bg-panel);
+  $ui-border-color: theme-prop($theme, ui-border-color);
+  $ui-text-color: theme-prop($theme, ui-text-color);
+  $shadow-depth: theme-prop($theme, shadow-depth);
+  $shadow-lift: theme-prop($theme, shadow-lift);
+  $tab-bg-color: color.adjust($bg-panel, $lightness: if($theme == dark, 5%, -10%));
+
+  .glass-tab-strip {
+    // Base glass panel look for the container
+    background: $bg-panel;
+    border: 1px solid $ui-border-color;
+    box-shadow: $shadow-depth;
+    // Text color for the entire strip, affects icons/text
+    color: $ui-text-color;
+  }
+
+  .glass-tab-strip__item {
+    // Text/icon color for inactive tabs (faded based on theme)
+    $inactive-color: color.adjust($ui-text-color, $lightness: if($theme == dark, -20%, 30%));
+    color: $inactive-color;
+    border-bottom: 1px solid $ui-border-color;
+    border-right: 1px solid $ui-border-color;
+
+    // Hover State
+    &:hover {
+      // Slight background adjustment on hover
+      background: color.adjust($bg-panel, $lightness: if($theme == dark, 3%, -5%));
+      // Slight text color lift on hover
+      color: color.adjust($ui-text-color, $lightness: if($theme == dark, 10%, -10%));
+      cursor: pointer;
+    }
+
+    &--active {
+      // Full color for active tab
+      color: $ui-text-color;
+      // More distinct active background
+      background: color.adjust($bg-panel, $lightness: if($theme == dark, 5%, -10%));
+      border-bottom: 1px solid color.adjust($bg-panel, $lightness: if($theme == dark, 5%, -10%));
+      // Subtle inset shadow to make it look "pushed in"
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+      font-weight: 500;
+    }
+  }
+
+  // Remove border from the last item
+  .glass-tab-strip__item:last-child {
+    border-right: none;
+  }
+}
+
+// --- 2. Component Styles ---
+.glass-tab-strip-wrapper {
+  display: block;
+  width: 100%;
+  margin: 1rem 0;
+  overflow: hidden; // Ensures the strip stays within bounds
+}
+
+.glass-tab-strip {
+  display: flex;
+  align-items: center;
+  border-radius: $glass-border-radius;
+  height: $glass-tabstrip-height;
+  // Core non-theme glassmorphic effects (e.g., blur)
+  backdrop-filter: blur($glass-blur-mobile);
+  -webkit-backdrop-filter: blur($glass-blur-mobile);
+  transition: all 0.3s ease;
+
+  // Scrollable behavior
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+
+  &--scrollable {
+    // Subtle visual clue that it is scrollable, maybe a shadow or border change
+  }
+
+  // Hide scrollbar but allow scrolling
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  @include tab-strip-theme(light);
+
+  // When the parent (<body>) has the .dark-mode class, apply the dark theme.
+  .dark-mode & {
+    @include tab-strip-theme(dark);
+  }
+}
+
+.glass-tab-strip__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.5rem;
+  height: 100%;
+  flex-grow: 1; // Ensures items fill the space if not scrollable
+  flex-shrink: 0; // Prevents items from squishing in a scrollable container
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  user-select: none;
+
+  // Ensure the entire item area is clickable
+  box-sizing: border-box;
+}

@@ -1,0 +1,120 @@
+// styles/themes/_dark.scss
+
+$theme-dark-map: (
+  // ---------------- CORE UI COLORS -----------------
+  bg-surface: rgba(255, 255, 255, 0.05),
+  bg-panel: rgba(30, 30, 30, 0.8),
+  bg-input-focus: rgba(255, 255, 255, 0.12),
+  bg-hover: rgba(0, 0, 0, 0.45),
+  bg-accent-gradient: linear-gradient(to right, rgba(97, 68, 149, 0.4), rgba(0, 255, 192, 0.4)),
+  bg-gradient: linear-gradient(135deg, #1f1f47 0%, #0a0a2a 100%),
+  // ---------------- STANDARD UI PROPERTIES -----------------
+  'ui-text-color': #ffffff,
+  'ui-border-color': rgba(255, 255, 255, 0.1),
+  'ui-close-icon-color': #cccccc,
+  'ui-accent-color': #bb86fc,
+  // Primary non-system accent color
+  link-color: #0a84ff,
+
+  //  iOS Dark System Blue
+  shadow-lift: 0 8px 20px rgba(0, 0, 0, 0.7),
+  shadow-depth: 0 4px 12px rgba(0, 0, 0, 0.25),
+  shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.15),
+  // ---------------- BUTTON/SYSTEM COLORS -----------------
+  'ui-button-bg-default': rgba(255, 255, 255, 0.12),
+  'ui-button-bg-hover': rgba(255, 255, 255, 0.2),
+  'ui-primary-button-bg': #6200ee,
+  'ui-primary-button-text': #ffffff,
+  ui-system-red-button-text: #ffffff,
+  ui-system-red-button-bg: #ff453a,
+  //  iOS Dark System Red (Destructive)
+  ui-system-green-bg: #30d158,
+
+  //  iOS Dark System Green (Success)
+  // ---------------- SELECTED/ACTIVE STATE PROPERTIES -----------------
+  'ui-selected-text-color': #000000,
+  'ui-selected-bg': #bb86fc,
+  'ui-hover-bg-subtle': rgba(255, 255, 255, 0.1),
+  // ---------------- CHECKBOX PROPERTIES -----------------
+  'ui-checkbox-checked-bg': #bb86fc,
+  'ui-checkbox-checkmark-color': #000000,
+
+  // ---------------- CLOCK PROPERTIES -----------------
+  'clock-segment-off': #181818,
+  'clock-segment-on': #00ffc0,
+  'clock-segment-glow': rgba(0, 255, 192, 0.6),
+  'clock-second-hand-color': #00ffc0,
+  'clock-hand-color': #ffffff,
+
+  // ---------------- SLIDER/PROGRESS/SWITCH PROPERTIES -----------------
+  'slider-primary-color': #bb86fc,
+  'slider-track-bg': rgba(255, 255, 255, 0.3),
+  'slider-handle-color': #bb86fc,
+  'slider-handle-disabled-color': #555555,
+  'slider-track-disabled-color': rgba(50, 50, 50, 0.8),
+  progress-bar-shadow-color: rgba(0, 0, 0, 0.4),
+  progress-bar-fill-gradient: linear-gradient(90deg, #0a84ff, #30d158),
+  'switch-on-bg': #30d158,
+  'switch-off-bg': #8e8e9329,
+  'thumb-color': #e5e5ea,
+
+  // ---------------- GLASS/PICKER PROPERTIES -----------------
+  'glass-overlay': rgba(0, 0, 0, 0.3),
+  color-picker-background-color: rgba(30, 30, 30, 0.4),
+  color-picker-border-color: rgba(100, 100, 100, 0.4),
+  color-picker-shadow: rgba(0, 0, 0, 0.3),
+  color-picker-text-color: #ffffff,
+  color-picker-handle-border: rgba(0, 0, 0, 0.8)
+);
+
+$system-colors-dark: (
+  // MARK: Accent Colors (Brighter for contrast)
+  'system-blue': #0a84ff,
+  'system-indigo': #5e5ce6,
+  'system-purple': #bf5af2,
+  'system-pink': #ff375f,
+  'system-red': #ff453a,
+  'system-orange': #ff9f0a,
+  'system-yellow': #ffd60a,
+  'system-green': #30d158,
+  'system-teal': #64d2ff,
+  'system-cyan': #64d2ff,
+
+  // MARK: Grayscale / UI Colors (Darker)
+  'system-gray': #8e8e93,
+  'system-gray2': #636366,
+  'system-gray3': #48484a,
+  'system-gray4': #3a3a3c,
+  'system-gray5': #2c2c2e,
+  'system-gray6': #1c1c1e,
+
+  // MARK: Semantic Background Colors (Non-Grouped Views)
+  'system-background': #000000,
+  // Full-screen background (Pure Black/Deep Dark Gray)
+  'secondary-system-background': #1c1c1e,
+  // Layered content (e.g., standard cells)
+  'tertiary-system-background': #2c2c2e,
+
+  // Further layered content
+  // MARK: Semantic Background Colors (Grouped Views)
+  'system-grouped-background': #1c1c1e,
+  // Full-screen background for grouped content
+  'secondary-system-grouped-background': #000000,
+  // Cells/groups within the primary grouped background
+  'tertiary-system-grouped-background': #1c1c1e,
+
+  // Further layered content within groups
+  // MARK: Semantic Label Colors (Text)
+  'label': #ffffff,
+  // Primary text (Pure White)
+  'secondary-label': rgba(235, 235, 245, 0.6),
+  // Secondary text
+  'tertiary-label': rgba(235, 235, 245, 0.3),
+  // Placeholder/metadata
+  'quaternary-label': rgba(235, 235, 245, 0.15),
+  // Lowest emphasis
+  // MARK: Semantic Separator Colors
+  'separator': rgba(84, 84, 88, 0.69),
+  // Translucent separator line
+  'opaque-separator': #48484a // Opaque separator line
+);

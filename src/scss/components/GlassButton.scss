@@ -1,0 +1,28 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+@use 'sass:color';
+
+.glass-button {
+  // Apply all theming and interaction styles from the mixin
+  @include apply-glass-button-theme(light);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.dark-mode {
+  .glass-button {
+    @include apply-glass-button-theme(dark);
+  }
+}
+// All specific states (.accent-btn, :hover, :disabled, :active) are handled by the mixin.

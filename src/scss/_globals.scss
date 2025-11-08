@@ -1,0 +1,33 @@
+/* -Global Styles (e.g., in a main.css file or root SCSS import) */
+
+@import 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap';
+@import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
+
+@media only screen and (min-width: 320px) {
+  $breakpoint: iphone;
+  $min-width: 320px;
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (min-width: 480px) {
+  $breakpoint: mobile;
+  $min-width: 480px;
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width: 768px) {
+  $breakpoint: tablet;
+  $min-width: 768px;
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width: 992px) {
+  $breakpoint: desktop;
+  $min-width: 992px;
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width: 1200px) {
+  $breakpoint: widescreen;
+  $min-width: 1200px;
+}

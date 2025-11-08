@@ -1,0 +1,172 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+@use 'sass:color';
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+
+// --- SCSS VARIABLES ---\
+$glass-color-light: theme-prop('light', 'bg-surface');
+$glass-border-light: 1px solid theme-prop('light', 'ui-border-color');
+$glass-blur: 15px; // Assuming a fallback/default blur
+
+// --- COMPONENT STYLES ---
+
+.glass-slider-container {
+  // --- START MODIFIED FOR SLOTS ---
+  display: flex; // Use flex for horizontal layout
+  align-items: center; // Vertically center all content (slots and slider)
+  gap: 10px; // Add spacing between the slots and the slider
+  // --- END MODIFIED FOR SLOTS ---
+
+  width: 90%;
+  padding: 8px;
+  border-radius: 12px;
+
+  // Apply base Glassmorphism effect
+  background: $glass-color-light;
+  backdrop-filter: blur($glass-blur);
+  -webkit-backdrop-filter: blur($glass-blur);
+  border: $glass-border-light;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
+  // --- Theme-Specific CSS Variable Assignment (Default/Light) ---
+  $slider-primary-color: theme-prop('light', 'slider-primary-color');
+  $slider-track-bg: theme-prop('light', 'slider-track-bg');
+  $slider-handle-color: theme-prop('light', 'slider-handle-color');
+  $slider-handle-disabled-color: theme-prop('light', 'slider-handle-disabled-color');
+  $slider-track-disabled-color: theme-prop('light', 'slider-track-disabled-color');
+
+  --slider-primary-color: #{$slider-primary-color};
+  --slider-track-bg: #{$slider-track-bg};
+  --slider-handle-color: #{$slider-handle-color};
+  --slider-handle-disabled-color: #{$slider-handle-disabled-color};
+  --slider-track-disabled-color: #{$slider-track-disabled-color};
+
+  // Override for Dark Theme
+  .dark-mode & {
+    $slider-primary-color: theme-prop('dark', 'slider-primary-color');
+    $slider-track-bg: theme-prop('dark', 'slider-track-bg');
+    $slider-handle-color: theme-prop('dark', 'slider-handle-color');
+    $slider-handle-disabled-color: theme-prop('dark', 'slider-handle-disabled-color');
+    $slider-track-disabled-color: theme-prop('dark', 'slider-track-disabled-color');
+
+    // Override the CSS variables with dark mode values
+    --slider-primary-color: #{$slider-primary-color};
+    --slider-track-bg: #{$slider-track-bg};
+    --slider-handle-color: #{$slider-handle-color};
+    --slider-handle-disabled-color: #{$slider-handle-disabled-color};
+    --slider-track-disabled-color: #{$slider-track-disabled-color};
+
+    background: theme-prop('dark', 'bg-surface');
+    border: 1px solid theme-prop('dark', 'ui-border-color');
+  }
+
+  // Styles for the actual range input
+  input[type='range'] {
+    // --- NEW: Allows the slider to fill the space between slots ---
+    flex-grow: 1;
+    min-width: 50px;
+    // --- END NEW ---
+
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 10px; // Track height
+    background: transparent;
+    cursor: pointer;
+    margin: 0; // Remove default browser margins
+
+    // Disabled state
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    // --- WebKit (Chrome, Safari, Edge) Track Styling ---
+    &::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      // CRITICAL: Dynamic background using the CSS variable set in Vue
+      background: linear-gradient(
+        to right,
+        var(--slider-primary-color) 0%,
+        var(--slider-primary-color) var(--slider-fill-percentage),
+        var(--slider-track-bg) var(--slider-fill-percentage)
+      );
+      transition: background 0.2s ease;
+
+      &:disabled {
+        background: var(--slider-track-disabled-color);
+      }
+    }
+
+    // --- Mozilla (Firefox) Track Styling ---
+    &::-moz-range-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      // CRITICAL: Dynamic background using the CSS variable set in Vue
+      background: linear-gradient(
+        to right,
+        var(--slider-primary-color) 0%,
+        var(--slider-primary-color) var(--slider-fill-percentage),
+        var(--slider-track-bg) var(--slider-fill-percentage)
+      );
+      transition: background 0.2s ease;
+
+      &:disabled {
+        background: var(--slider-track-disabled-color);
+      }
+    }
+
+    // Thumb (Handle) styling
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--slider-handle-color);
+      cursor: pointer;
+      margin-top: -6px; // Center it vertically on the 8px track
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
+
+      &:disabled {
+        background: var(--slider-handle-disabled-color);
+      }
+    }
+
+    &::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border: none;
+      border-radius: 50%;
+      background: var(--slider-handle-color);
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
+
+      &:disabled {
+        background: var(--slider-handle-disabled-color);
+      }
+    }
+
+    // Hover/Active states
+    &:not(:disabled):hover::-webkit-slider-thumb {
+      transform: scale(1.1);
+    }
+    &:not(:disabled):active::-webkit-slider-thumb {
+      transform: scale(1.2);
+    }
+    &:not(:disabled):hover::-moz-range-thumb {
+      transform: scale(1.1);
+    }
+    &:not(:disabled):active::-moz-range-thumb {
+      transform: scale(1.2);
+    }
+  }
+}

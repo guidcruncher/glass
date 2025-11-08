@@ -1,0 +1,156 @@
+@use 'sass:color';
+@use '../mixins' as *;
+@use '../config' as *;
+
+// _app_icon.scss
+
+// --- 1. Icon Theming Mixin ---
+@mixin icon-theme($theme) {
+  $bg-panel: theme-prop($theme, bg-panel);
+  $ui-border-color: theme-prop($theme, ui-border-color);
+  $ui-text-color: theme-prop($theme, ui-text-color);
+
+  .glass-app-icon__image {
+    // Base glass color is slightly more transparent/opaque
+    background: color.adjust($bg-panel, $alpha: calc(15% / 1%));
+    border: 1px solid $ui-border-color;
+    color: $ui-text-color;
+  }
+
+  .glass-app-icon__label {
+    color: $ui-text-color;
+    // Text Shadow for readability against bright backgrounds (Apple style)
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// --- 2. Component Structure (The Clickable Wrapper) ---
+.glass-app-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  user-select: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  // Apply default (light) theme
+  @include icon-theme(light);
+
+  // Dark mode override
+  .dark-mode & {
+    @include icon-theme(dark);
+    .glass-app-icon__image {
+      background: color.adjust(theme-prop(dark, bg-panel), $alpha: calc(15% / 1%));
+    }
+    .glass-app-icon__label {
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  // --- Interaction States ---
+  &:hover:not(.glass-app-icon--disabled) {
+    // Subtle lift on hover
+    transform: translateY(-2px);
+
+    .glass-app-icon__image {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); // Increased shadow
+    }
+  }
+
+  &:active:not(.glass-app-icon--disabled) {
+    // Subtle press on click
+    transform: scale(0.95);
+
+    .glass-app-icon__image {
+      // Push-in effect on the glass
+      transform: scale(0.98);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+// --- 3. Icon Image Container (The Liquid Glass Square) ---
+.glass-app-icon__image {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // **KEY:** Apple-style super-ellipse rounding (approx 20% radius)
+  border-radius: 20%;
+
+  // Core Glassmorphic effect
+  backdrop-filter: blur($glass-blur-desktop);
+  -webkit-backdrop-filter: blur($glass-blur-desktop);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  // **NEW:** Clip the image content to the rounded container
+  overflow: hidden;
+
+  // --- Liquid Glass Gloss Effect (:after) ---
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit; // Inherit the super-ellipse shape
+
+    // Key to the "Liquid Glass" shine: A subtle white gradient at the top
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.5) 0%,
+      /* Top White Highlight */ rgba(255, 255, 255, 0) 20%,
+      /* Fade out */ transparent 50%
+    );
+    // Clip the highlight to a curved top section
+    clip-path: polygon(0 0, 100% 0, 100% 30%, 0 30%);
+    opacity: 0.8;
+    z-index: 10;
+    pointer-events: none;
+  }
+}
+
+// --- 4. Icon Symbol (Existing) ---
+.glass-app-icon__icon {
+  z-index: 20;
+  // Apply a thin outline/shadow to the icon itself for depth
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+// --- 4. Image Asset (NEW) ---
+.glass-app-icon__img-asset {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  // Ensures the image fills the container without stretching
+  object-fit: cover;
+  border-radius: inherit;
+  z-index: 5; // Place it below the glass gloss effect (z-index 10)
+}
+
+// --- 5. Text Label ---
+.glass-app-icon__label {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+// --- 6. Disabled State ---
+.glass-app-icon--disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  // Ensure no hover/active effects apply
+  transform: none !important;
+
+  .glass-app-icon__image {
+    box-shadow: none !important;
+    transform: none !important;
+  }
+}

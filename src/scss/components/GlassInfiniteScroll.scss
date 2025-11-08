@@ -1,0 +1,117 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+@use 'sass:color';
+
+// --- Theming Mixin ---
+@mixin glass-scroll-theme($theme) {
+  // Retrieve properties from the theme map
+  $bg-surface: theme-prop($theme, bg-surface);
+  $ui-border-color: theme-prop($theme, ui-border-color);
+  $ui-text-color: theme-prop($theme, ui-text-color);
+  $shadow-depth: theme-prop($theme, shadow-depth);
+
+  .glass-scroll-wrapper {
+    // Base glass panel look for the container
+    background: $bg-surface;
+    border: 1px solid $ui-border-color;
+    color: $ui-text-color;
+    box-shadow: $shadow-depth;
+  }
+
+  // Header/Footer separation borders
+  .glass-scroll__header,
+  .glass-scroll__footer {
+    ui-border-color: $ui-border-color;
+  }
+
+  .observer-target {
+    color: color.adjust($ui-text-color, $alpha: 0.7);
+  }
+
+  .error-message {
+    color: theme-prop($theme, ui-accent-color);
+  }
+}
+
+// --- Component Styles ---
+.glass-scroll-wrapper {
+  // --- 1. Layout & Configurable Height ---
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  // Read dynamic height, blur, and border-radius from Vue props/CSS variables
+  height: var(--panel-height); // Default '100%' or a fixed value
+  border-radius: var(--panel-border-radius);
+  backdrop-filter: blur(var(--panel-blur));
+  -webkit-backdrop-filter: blur(var(--panel-blur));
+  transition: all 0.3s ease;
+
+  min-height: 200px; // Ensure a minimum visible area
+  width: 100%;
+  position: relative; // Context for absolute children if any
+  z-index: 10;
+
+  // Apply default (light) theme
+  @include glass-scroll-theme(light);
+}
+
+// Dark Mode Override
+.glass-scroll--dark {
+  @include glass-scroll-theme(dark);
+}
+
+// --- 2. Header and Footer (Fixed Height) ---
+.glass-scroll__header {
+  padding: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid;
+  flex-shrink: 0; // Prevent shrinking in the flex container
+}
+
+.glass-scroll__footer {
+  padding: 1rem;
+  border-top: 1px solid;
+  flex-shrink: 0; // Prevent shrinking in the flex container
+}
+
+// --- 3. Body (Scrollable Content Area) ---
+.glass-scroll__body {
+  flex-grow: 1; // Take up all available vertical space between header/footer
+  overflow-y: auto; // CRITICAL: Enables scrolling for the infinite list
+  overflow-x: hidden;
+  padding: 1rem;
+
+  // Custom Scrollbar (optional, but improves glass theme)
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+  .dark-mode &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+// --- 4. Observer Target & Status Messages ---
+.observer-target {
+  padding: 1rem 0;
+  text-align: center;
+  font-size: 0.9rem;
+  min-height: 20px;
+}
+
+// Fallback List Styling
+.default-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.default-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05); // Subtle separator
+}

@@ -1,0 +1,129 @@
+@use 'sass:color';
+@use 'sass:map';
+
+// --- THEME VARIABLE MAP ---
+// Contains all theme properties for both light and dark modes.
+$windowthemes: (
+  light: (
+    // Glassmorphism properties
+    window-bg-color: rgb(240, 240, 240),
+    // Near white for light glass
+    ui-text-color: #333333,
+    ui-border-color: rgb(255, 255, 255),
+    // Pure white for border highlight
+    shadow-color: rgba(0, 0, 0, 0.1),
+    // General theming properties (for use in internal/parent elements)
+    bg-gradient: linear-gradient(145deg, #f0f0f0 0%, #ffffff 100%),
+    bg-surface: #f0f0f0,
+    shadow-inset: inset 2px 2px 5px rgba(255, 255, 255, 0.7),
+    shadow-depth: 5px 5px 10px rgba(180, 180, 180, 0.4),
+  ),
+  dark: (
+    // Glassmorphism properties
+    window-bg-color: rgb(240, 240, 240),
+    // Dark grey for dark glass
+    ui-text-color: #ffffff,
+    ui-border-color: rgb(51, 51, 51),
+    // Dark border line
+    shadow-color: rgba(0, 0, 0, 0.5),
+    // General theming properties
+    bg-gradient: linear-gradient(145deg, #1e1e1e 0%, #2c2c2c 100%),
+    bg-surface: #202020,
+    shadow-inset: inset 2px 2px 5px rgba(0, 0, 0, 0.9),
+    shadow-depth: 5px 5px 10px rgba(0, 0, 0, 0.7),
+  ),
+);
+
+// --- THEME PROPERTY FUNCTION ---
+// Retrieves a property value from a specified theme map.
+@function window-theme-prop($theme-name, $prop-name) {
+  @if map.has-key($windowthemes, $theme-name) {
+    $theme: map.get($windowthemes, $theme-name);
+    @if map.has-key($theme, $prop-name) {
+      @return map.get($theme, $prop-name);
+    } @else {
+      @warn "Property '#{$prop-name}' not found in theme '#{$theme-name}'.";
+      @return #ff0000;
+    }
+  } @else {
+    @warn "Theme '#{$theme-name}' not found.";
+    @return #ff0000;
+  }
+}
+
+// --- Component Styles ---
+.glass-window__backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  z-index: 9998;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.glass-window {
+  // 1. Light Theme Assignments (Default)
+  $light-bg: window-theme-prop(light, window-bg-color);
+  $light-border: window-theme-prop(light, ui-border-color);
+  color: window-theme-prop(light, ui-text-color);
+  box-shadow: 0 4px 30px window-theme-prop(light, shadow-color);
+
+  // Dynamic dimensions from props
+  width: var(--window-width);
+  height: var(--window-height);
+  padding: 20px;
+  border-radius: 16px;
+  z-index: 9999;
+
+  // Background: Combines theme color (RGB) with dynamic opacity (--bg-opacity) from Vue props.
+  background-color: rgba(
+    color.channel($light-bg, 'red', $space: rgb),
+    color.channel($light-bg, 'green', $space: rgb),
+    color.channel($light-bg, 'blue', $space: rgb),
+    var(--bg-opacity)
+  );
+
+  // Border: Uses theme color with fixed 0.5 opacity.
+  border: 1px solid
+    rgba(
+      color.channel($light-border, 'red', $space: rgb),
+      color.channel($light-border, 'green', $space: rgb),
+      color.channel($light-border, 'blue', $space: rgb),
+      0.5
+    );
+
+  // Core iPadOS Glassmorphism effect
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+
+  // 2. Dark Mode Overwrites (triggered by a parent .dark-mode class)
+  .dark-mode & {
+    $dark-bg: window-theme-prop(dark, window-bg-color);
+    $dark-border: window-theme-prop(dark, ui-border-color);
+
+    color: window-theme-prop(dark, ui-text-color);
+    box-shadow: 0 4px 30px window-theme-prop(dark, shadow-color);
+
+    // Dark Background Overwrite
+    background-color: rgba(
+      color.channel($dark-bg, 'red', $space: rgb),
+      color.channel($dark-bg, 'green', $space: rgb),
+      color.channel($dark-bg, 'blue', $space: rgb),
+      var(--bg-opacity)
+    );
+
+    // Dark Border Overwrite
+    border: 1px solid
+      rgba(
+        color.channel($dark-border, 'red', $space: rgb),
+        color.channel($dark-border, 'green', $space: rgb),
+        color.channel($dark-border, 'blue', $space: rgb),
+        0.5
+      );
+  }
+}

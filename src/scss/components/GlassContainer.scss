@@ -1,0 +1,57 @@
+@use '../config' as *;
+@use '../mixins' as *;
+
+// --- Glass Container Theming Logic ---
+
+// The core mixin to apply all glass theme properties (mobile blur)
+@mixin apply-container-theme($theme) {
+  // Applies background, border, shadow-depth, shadow-inset, and backdrop-filter
+  @include liquid-glass($theme, $glass-blur-mobile);
+
+  // Set text color
+  color: theme-prop($theme, ui-text-color);
+
+  // Optionally override box-shadow to use the more prominent 'shadow-lift'
+  // for a floating card-like appearance, similar to LiquidGlassCard.scss.
+  box-shadow: theme-prop($theme, shadow-lift);
+}
+
+// --- Component Styles ---
+
+.glass-container {
+  display: block;
+  width: auto;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  // Apply dynamic border radius from prop
+  border-radius: var(--container-border-radius);
+  transition: all 0.3s ease;
+
+  // 1. Apply Light Theme (Default Mobile)
+  @include apply-container-theme(light);
+}
+
+// 2. Desktop/Tablet Blur and Shadow Override
+@include respond-to(tablet) {
+  .glass-container {
+    // Re-include the liquid-glass mixin with the desktop blur value
+    // This updates the backdrop-filter and re-applies the full style block
+    @include liquid-glass(light, $glass-blur-desktop);
+    box-shadow: theme-prop(light, shadow-lift);
+  }
+}
+
+// 3. Dark Mode Override (Global or Prop-Driven)
+.dark-mode .glass-container,
+.glass-container--dark {
+  // Re-apply the full dark theme (Mobile)
+  @include apply-container-theme(dark);
+
+  // Nested desktop override for dark mode
+  @include respond-to(tablet) {
+    @include liquid-glass(dark, $glass-blur-desktop);
+    box-shadow: theme-prop(dark, shadow-lift);
+  }
+}

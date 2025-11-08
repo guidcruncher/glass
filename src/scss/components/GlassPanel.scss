@@ -1,0 +1,21 @@
+// GlassPanel.scss - REFACTORED
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+
+.glass-panel {
+  width: 100%;
+  padding: 1rem;
+  border-radius: $glass-border-radius;
+  box-sizing: border-box;
+
+  // Single line to apply all theme properties for light mode
+  @include apply-glass-theme(light, bg-surface);
+}
+
+.dark-mode {
+  .glass-panel {
+    // Single line to apply all theme properties for dark mode
+    @include apply-glass-theme(dark, bg-surface);
+  }
+}

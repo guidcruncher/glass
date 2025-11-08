@@ -1,0 +1,40 @@
+@use 'config' as *;
+@use 'mixins' as *;
+@use '_glass-theme.mixin' as *;
+@use '_globals' as *;
+@use '_components';
+
+.roboto-body {
+  font-family: 'Roboto', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+  font-variation-settings: 'wdth' 100;
+}
+
+body {
+  min-height: 100vh;
+  font-family: $font-family-primary;
+
+  @include apply-theme-base(light); // Use mixin for base theme
+  transition: background-color 0.5s ease;
+}
+
+.liquid-glass-card {
+  padding: 2rem;
+  margin: 1rem;
+  z-index: 10;
+
+  // The mixin now handles the responsive backdrop-filter
+  @include liquid-glass(light);
+}
+
+.dark-mode {
+  body & {
+    @include apply-theme-base(dark); // Use mixin for base theme
+  }
+
+  .liquid-glass-card {
+    @include liquid-glass(dark);
+  }
+}

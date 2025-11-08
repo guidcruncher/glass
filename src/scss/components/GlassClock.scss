@@ -1,0 +1,90 @@
+@use 'sass:color';
+@use '../mixins' as *;
+@use '../config' as *;
+
+// _glass_analog_clock.scss
+
+// Fallback for configuration variables
+$glass-blur-desktop: 15px !default;
+
+// --- 1. Theming Mixin ---
+@mixin clock-theme($theme) {
+  $bg-panel: theme-prop($theme, bg-panel);
+  $ui-text-color: theme-prop($theme, ui-text-color);
+  $ui-border-color: theme-prop($theme, ui-border-color);
+  $clock-hand-color: theme-prop($theme, clock-hand-color);
+
+  .glass-analog-clock__face-circle {
+    // Use the CSS variable for opacity
+    fill: rgba(
+      color.channel($bg-panel, 'red', $space: rgb),
+      color.channel($bg-panel, 'green', $space: rgb),
+      color.channel($bg-panel, 'blue', $space: rgb),
+      var(--glass-opacity, 0.2)
+    );
+    stroke: $ui-border-color;
+  }
+
+  .glass-analog-clock__label {
+    color: $ui-text-color;
+    // Text shadow for readability over glass
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  }
+
+  .glass-analog-clock__indicator-line {
+    stroke: $ui-text-color;
+    opacity: 0.5;
+
+    &--major {
+      stroke-width: 2.5;
+      opacity: 0.8;
+    }
+  }
+
+  .glass-analog-clock__center-pin {
+    fill: $ui-text-color;
+    stroke: color.adjust($ui-text-color, $lightness: -20%);
+  }
+
+  .glass-analog-clock__hand {
+    stroke: $clock-hand-color;
+    stroke-linecap: round;
+
+    &--hour {
+      stroke-width: 3.5;
+    }
+    &--minute {
+      stroke-width: 2.5;
+    }
+    &--second {
+      stroke-width: 1;
+      stroke: #ef4444; // Red accent for second hand
+    }
+  }
+}
+
+// --- 2. Component Structure and Glassmorphism ---
+.glass-analog-clock {
+  display: inline-block;
+  padding: 10px;
+  box-sizing: content-box;
+}
+
+.glass-analog-clock__face-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+
+  // Core Glassmorphic effect applied to the wrapper
+  backdrop-filter: blur($glass-blur-desktop);
+  -webkit-backdrop-filter: blur($glass-blur-desktop);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+  // Apply default (light) theme
+  @include clock-theme(light);
+
+  .dark-mode & {
+    @include clock-theme(dark);
+  }
+}

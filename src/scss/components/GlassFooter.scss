@@ -1,0 +1,71 @@
+@use 'sass:color';
+@use '../mixins' as *;
+@use '../config' as *;
+
+// _glass_footer.scss
+// --- Theming Mixin ---
+@mixin footer-theme($theme) {
+  $bg-panel: theme-prop($theme, bg-panel);
+  $ui-border-color: theme-prop($theme, ui-border-color);
+  $ui-text-color: theme-prop($theme, ui-text-color);
+
+  background: color.adjust($bg-panel, $alpha: calc(-20% / 1%)); // Slightly more opaque background
+  color: $ui-text-color;
+  // Add a light border to the top edge for separation
+  border-top: 1px solid $ui-border-color;
+}
+
+.main-content {
+  padding-bottom: calc($glass-footer-height + 1rem * 2);
+}
+
+.glass-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: $glass-footer-padding-y $glass-footer-padding-x;
+  min-height: $glass-footer-height;
+  box-sizing: border-box;
+
+  // Core Glassmorphic Effect
+  backdrop-filter: blur($glass-blur-desktop);
+  -webkit-backdrop-filter: blur($glass-blur-desktop);
+
+  // Apply default (light) theme
+  @include footer-theme(light);
+
+  // Dark mode override
+  .dark-mode & {
+    @include footer-theme(dark);
+  }
+
+  // --- Fixed Positioning ---
+  &--fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    // z-index can be controlled via the component prop
+    z-index: var(--z-index, 900);
+  }
+}
+
+.glass-footer__content {
+  display: flex;
+  align-items: center;
+  // Base padding for all slots
+  padding: 0 1rem;
+
+  &--center {
+    flex-grow: 1;
+    justify-content: center;
+  }
+
+  &--right {
+    justify-content: flex-end;
+  }
+
+  &--left {
+    justify-content: flex-start;
+  }
+}

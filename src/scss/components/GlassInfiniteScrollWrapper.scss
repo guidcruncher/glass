@@ -1,0 +1,75 @@
+@use 'sass:color';
+@use '../config' as *;
+@use '../mixins' as *;
+
+// Define a default height or max-height for the scrollable area
+$default-scroll-height: 400px;
+
+.infinite-scroll-wrapper {
+  // --- Layout/Container Styling (Non-Glass) ---
+  width: 100%;
+  // Use CSS variable if passed, otherwise default height
+  height: var(--list-height, $default-scroll-height);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+
+  // Non-Glass Visuals (using theme properties for non-glass look)
+  // border-radius: $glass-border-radius; // Assuming this variable exists for corner radius
+  padding: 1rem;
+
+  // Replacing glass theme with a simple, solid, opaque background and a clear border/shadow
+  // background-color: white; // Simple opaque background for light mode
+  // border: 1px solid #ddd; // Simple light border
+  // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Simple lift shadow
+}
+
+.dark-mode .infinite-scroll-wrapper {
+  // background-color: #2c2c2c; // Simple opaque background for dark mode
+  // border: 1px solid #444; // Simple dark border
+  // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.infinite-scroll-content {
+  // --- Scrolling/Content Layout ---
+  flex-grow: 1; // Allows it to take up all available vertical space in the wrapper
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  // CRITICAL: Makes the content area scrollable
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  // Custom Scrollbar (optional, retains layout/usability style)
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #bbb; // Light scrollbar for light mode
+    border-radius: 3px;
+  }
+
+  .dark-mode &::-webkit-scrollbar-thumb {
+    background: #666; // Dark scrollbar for dark mode
+  }
+}
+
+.infinite-scroll-loading,
+.infinite-scroll-end {
+  padding: 1rem;
+  text-align: center;
+  flex-shrink: 0; // Prevents the loading/end message from being compressed
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.infinite-scroll-end {
+  // Style for the "All items loaded" message
+  // border-top: 1px solid #eee;
+  .dark-mode & {
+    // border-top: 1px solid #333;
+  }
+}

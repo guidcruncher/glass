@@ -1,0 +1,253 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+@use 'sass:color';
+
+// --- 1. Global Modal & Backdrop ---
+.modal-open {
+  overflow: hidden; /* Prevents background scrolling */
+}
+
+.glass-modal__backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9998;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// --- 2. Modal Container Theming ---
+@mixin modal-theme($theme) {
+  $bg-panel: theme-prop($theme, bg-panel);
+  $ui-border-color: theme-prop($theme, ui-border-color);
+  $shadow-lift: theme-prop($theme, shadow-lift);
+  $ui-text-color: theme-prop($theme, ui-text-color);
+
+  background: $bg-panel;
+  border: 1px solid $ui-border-color;
+  box-shadow: $shadow-lift;
+  color: $ui-text-color;
+
+  .glass-modal__close-btn {
+    color: $ui-text-color;
+  }
+
+  .glass-modal__traffic-light-btn {
+    opacity: 0.5;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .glass-modal__header {
+    border-bottom: 1px solid $ui-border-color;
+  }
+  .glass-modal__footer {
+    border-top: 1px solid $ui-border-color;
+  }
+}
+
+// --- 3. Modal Controls (Traffic Lights) ---
+.glass-modal__controls {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+
+  // Traffic light buttons
+  .control-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    opacity: 0.7;
+    transition:
+      opacity 0.2s,
+      background-color 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .close-btn {
+    background-color: $color-traffic-close;
+  }
+  .minimize-btn {
+    background-color: $color-traffic-minimize;
+  }
+  .zoom-btn {
+    background-color: $color-traffic-zoom;
+  }
+}
+
+// --- 4. Base Modal Structure ---
+.glass-modal {
+  // Base glassmorphic effects (blur)
+  backdrop-filter: blur($glass-blur-desktop);
+  -webkit-backdrop-filter: blur($glass-blur-desktop);
+  border-radius: $glass-border-radius;
+  z-index: 9999;
+  overflow: hidden; // Ensures content respects border-radius
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+
+  // Apply default (light) theme
+  @include modal-theme(light);
+
+  // Dark mode override
+  .dark-mode & {
+    @include modal-theme(dark);
+  }
+}
+
+.glass-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  flex-shrink: 0; // Prevent header from shrinking
+}
+
+.glass-modal__title {
+  // Position the title text on the same vertical line as the controls
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  // Configuration to prevent overlap with the controls
+  // Adjust 150px as needed, but it provides ample space (75px on each side)
+  max-width: calc(100% - 150px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  // Aesthetics
+  font-size: 1rem;
+  font-weight: 500;
+  z-index: 50;
+  user-select: none;
+  pointer-events: none; /* Allows clicks to pass through to the modal body */
+}
+
+.glass-modal__body {
+  padding: 1rem;
+  flex-grow: 1; // Allows body to fill remaining space
+  overflow-y: auto; // Content within the modal body is scrollable
+}
+
+.glass-modal__footer {
+  padding: 1rem;
+  text-align: right;
+  flex-shrink: 0; // Prevent footer from shrinking
+}
+
+// --- 5. Close Button (X button) ---
+.glass-modal__close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0;
+  margin-left: 1rem;
+}
+
+// --- 5. Traffic Light Buttons (Mac Style) ---
+.glass-modal__traffic-light-container {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.glass-modal__traffic-light-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  position: relative;
+}
+
+.traffic-close {
+  background-color: $color-traffic-close;
+}
+.traffic-minimize {
+  background-color: $color-traffic-minimize;
+}
+.traffic-zoom {
+  background-color: $color-traffic-zoom;
+}
+
+// --- 6. Transitions for Open/Close and Windowed/Fullscreen ---
+
+/* Backdrop Fade Transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Windowed Transition (Appears from the center) */
+.modal-windowed-enter-active,
+.modal-windowed-leave-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.modal-windowed-enter-from,
+.modal-windowed-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.7) !important;
+}
+
+/* Fullscreen Transition (Slides from top/bottom) */
+.modal-full-enter-active,
+.modal-full-leave-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.modal-full-enter-from,
+.modal-full-leave-to {
+  opacity: 0;
+  transform: translateY(100vh); // Slide from bottom
+}
+
+.modal-full-leave-to {
+  transform: translateY(-100vh); // Slide to top on close
+}
+
+// --- 7. Windowed vs Fullscreen Modal Styles ---
+
+.glass-modal--windowed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  min-height: 200px;
+}
+
+.glass-modal--fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0; // No border-radius in full screen
+}

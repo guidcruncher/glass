@@ -1,0 +1,75 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+
+.glass-sidebar {
+  /* Positioning/Structural */
+  position: fixed; // Fixed position relative to the viewport
+  top: $glass-appbar-height;
+  left: 0;
+  bottom: 0;
+  z-index: 990;
+  width: $glass-sidebar-width;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem 0;
+  transition:
+    width 0.3s ease,
+    transform 0.3s ease;
+  box-sizing: border-box;
+
+  // Apply theming and state logic via mixin
+  @include apply-glass-sidebar-theme(light);
+
+  .dark-mode & {
+    @include apply-glass-sidebar-theme(dark);
+  }
+
+  // --- Structural Modifiers ---
+
+  &--collapsed {
+    width: $glass-sidebar-collapsed-width;
+
+    .sidebar-header,
+    .sidebar-link-text {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .sidebar-link {
+      justify-content: center;
+    }
+    .sidebar-link i {
+      min-width: auto;
+    }
+  }
+}
+
+.sidebar-header {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: opacity 0.3s ease;
+  flex-shrink: 0;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+
+  i {
+    font-size: 1.1rem;
+    min-width: 25px;
+  }
+  .sidebar-link-text {
+    margin-left: 0.75rem;
+    transition: opacity 0.3s ease;
+  }
+}

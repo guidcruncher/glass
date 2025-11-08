@@ -1,0 +1,152 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+@use 'sass:color';
+
+$panel-width: 280px;
+
+.glass-timepicker-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  min-width: 150px;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+// The visual input field that displays the selected time
+.glass-input.time-display {
+  @include apply-input-theme(light);
+  width: 100%;
+  padding: 0.75rem 3rem 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+// Icon next to the input field
+.time-icon {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  color: theme-prop(light, ui-accent-color);
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &.is-open {
+    color: color.adjust(theme-prop(light, ui-accent-color), $lightness: -10%);
+  }
+}
+
+// The dropdown panel containing the scrollable time selectors
+.time-dropdown {
+  position: absolute;
+  z-index: 950;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: $panel-width;
+  max-width: 95vw;
+  margin-top: 10px;
+
+  @include apply-glass-theme(light);
+
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.time-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+}
+
+.separator {
+  display: inline;
+  float: left;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+// Hour, Minute, Second Scroller Containers
+.time-scroller {
+  height: 150px;
+  width: 80px;
+  overflow-y: scroll;
+  display: inline;
+  float: left;
+  padding: 10px 0;
+  // Hide scrollbar but allow scrolling
+  &::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  scrollbar-width: none; // Firefox
+}
+
+// AM/PM Scroller Container
+.ampm-scroller {
+  padding: 10px 0;
+  display: inline;
+  float: left;
+  gap: 5px;
+  width: 50px;
+}
+
+.time-option {
+  padding: 5px 0;
+  text-align: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 4px;
+
+  &:hover {
+    background: rgba(theme-prop(light, ui-accent-color), 0.1);
+  }
+
+  &.is-selected {
+    background: theme-prop(light, ui-accent-color);
+    color: white;
+  }
+}
+
+.timepicker-footer,
+.time-footer {
+  border-top: 1px solid theme-prop(light, ui-border-color);
+  padding-top: 10px;
+  text-align: right;
+}
+
+// --- Dark Mode Overrides ---
+.dark-mode {
+  // Input field override
+  .glass-input.time-display {
+    @include apply-input-theme(dark);
+  }
+
+  // Dropdown panel override
+  .time-dropdown {
+    @include apply-glass-theme(dark);
+  }
+
+  // Footer separator override
+  .timepicker-footer,
+  .time-footer {
+    border-top: 1px solid theme-prop(dark, ui-border-color);
+  }
+
+  // Time Option hover/selected states
+  .time-option {
+    &:hover {
+      background: rgba(theme-prop(dark, ui-accent-color), 0.1);
+    }
+
+    &.is-selected {
+      background: theme-prop(dark, ui-accent-color);
+    }
+  }
+}

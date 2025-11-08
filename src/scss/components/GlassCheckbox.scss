@@ -1,0 +1,56 @@
+@use '../config' as *;
+@use '../mixins' as *;
+@use '../_glass-theme.mixin' as *;
+
+.glass-checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 10px;
+
+  // Apply all theming and state logic to the wrapper
+  @include apply-glass-checkbox-theme(light);
+
+  .dark-mode & {
+    @include apply-glass-checkbox-theme(dark);
+  }
+}
+
+.glass-checkbox-label {
+  margin-left: 0.75rem;
+  font-size: 1rem;
+  // Color style moved to mixin
+}
+
+.glass-checkbox {
+  // Hide the native checkbox
+  opacity: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.custom-checkbox {
+  // Theming moved to mixin
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+
+  // Checkmark style (hidden by default)
+  &::after {
+    content: '\2713'; // Checkmark symbol
+    font-size: 14px;
+    // Color moved to mixin
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.2s ease;
+    font-weight: bold;
+  }
+}
+// All state selectors (:checked, :hover) are moved inside the mixin.

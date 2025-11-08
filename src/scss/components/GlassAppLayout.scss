@@ -1,0 +1,114 @@
+@use '../config' as *;
+
+// --- Assumed Variables in _config.scss ---
+// $glass-appbar-height: 60px;
+// $glass-footer-height: 50px;
+// $glass-sidebar-width: 260px;
+// $glass-sidebar-collapsed-width: 60px;
+
+// 1. Global Reset for Fixed Layout
+// ----------------------------------------------------
+body {
+  height: 100vh;
+  overflow: hidden; // CRITICAL: Prevents the body from scrolling
+}
+
+.glass-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden; // Main app container must not scroll
+  position: relative; // Context for fixed/absolute children
+}
+
+// 2. Scrollable Body Container (THE FIX)
+// ----------------------------------------------------
+// This container holds the sidebar and main content, taking up the space
+// between the fixed header and fixed footer.
+.glass-app__body {
+  position: relative;
+  flex-grow: 1;
+  display: flex; // To align sidebar and content horizontally
+  overflow: hidden; // Ensure this wrapper itself does not scroll
+
+  // Padding accounts for the fixed Appbar and fixed Footer heights
+  padding-bottom: calc($glass-appbar-height + $glass-footer-height + (2 * $glass-footer-padding-y));
+}
+
+.glass-app__padding_top {
+  padding-top: $glass-appbar-height;
+}
+
+.glass-app__padding_bottom {
+  padding-bottom: calc($glass-appbar-height + $glass-footer-height + (2 * $glass-footer-padding-y));
+}
+
+// 3. Sidebar Positioning and Transition
+// ----------------------------------------------------
+.glass-app__sidebar {
+  // Positioning is absolute within the glass-app__body wrapper
+  position: absolute;
+  top: $glass-appbar-height; // Starts below the Appbar (if appbar wasn't fixed)
+  bottom: $glass-footer-height; // Ends above the Footer
+  left: 0;
+  width: $glass-sidebar-width;
+  z-index: 99;
+
+  // Allows scrolling within the sidebar content if it exceeds its height
+  overflow-y: auto;
+
+  // Initial state: Pushed off-screen to the left (hidden)
+  transform: translateX(-$glass-sidebar-width);
+
+  // Transition for slide in/out
+  transition:
+    transform 0.3s ease,
+    width 0.3s ease;
+}
+
+// 4. Scrollable Main Content Area
+// ----------------------------------------------------
+.glass-app__main-content {
+  flex-grow: 1;
+
+  // CRITICAL FIX: Prevents horizontal overflow/flex sizing issues on mobile
+  min-width: 0;
+
+  // Makes the content area scrollable *within* the visible area
+  overflow-y: auto;
+
+  // Base padding/gutters
+  padding: 20px;
+
+  // Transition for sidebar push/pull
+  transition: margin-left 0.3s ease;
+}
+
+// 5. Layout Modifiers (Sidebar Expand/Collapse)
+// ----------------------------------------------------
+
+// Expanded State
+.glass-app--sidebar-left:not(.glass-app--sidebar-collapsed) {
+  .glass-app__sidebar {
+    // Slide into view
+    transform: translateX(0);
+  }
+  .glass-app__main-content {
+    // Push content right by the full sidebar width
+    margin-left: $glass-sidebar-width;
+  }
+}
+
+// Collapsed State
+.glass-app--sidebar-left.glass-app--sidebar-collapsed {
+  .glass-app__sidebar {
+    // Change width to collapsed size and slide into view
+    width: $glass-sidebar-collapsed-width;
+    transform: translateX(0);
+  }
+  .glass-app__main-content {
+    // Content pushed by the collapsed width
+    margin-left: $glass-sidebar-collapsed-width;
+  }
+}

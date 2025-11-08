@@ -1,0 +1,70 @@
+@use 'sass:map';
+@use 'config' as *;
+
+// _mixins.scss
+
+// Function to retrieve a theme property
+@function theme-prop($theme-name, $prop-name) {
+  @if map.has-key($themes, $theme-name) {
+    $theme: map.get($themes, $theme-name);
+    @if map.has-key($theme, $prop-name) {
+      @return map.get($theme, $prop-name);
+    } @else {
+      @warn "Property '#{$prop-name}' not found in theme '#{$theme-name}'.";
+      @return #ff0000;
+    }
+  } @else {
+    @warn "Theme '#{$theme-name}' not found.";
+    @return #ff0000;
+  }
+}
+
+// Responsive media query mixin (Remains the same)
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == tablet {
+    @media (min-width: $breakpoint-tablet) {
+      @content;
+    }
+  } @else if $breakpoint == desktop {
+    @media (min-width: $breakpoint-desktop) {
+      @content;
+    }
+  }
+}
+
+// New mixin to apply base text/background colors to an element
+@mixin apply-theme-base($theme) {
+  color: theme-prop($theme, ui-text-color);
+  background: theme-prop($theme, bg-gradient);
+}
+
+@mixin liquid-glass($theme, $mobile-blur: $glass-blur-mobile) {
+  // Defaulting mobile blur
+  $bg: theme-prop($theme, bg-surface);
+  $border: theme-prop($theme, ui-border-color);
+  $shadow: theme-prop($theme, shadow-depth);
+  $inset: theme-prop($theme, shadow-inset);
+
+  // Standard glass properties
+  background: $bg;
+  border: 1px solid $border;
+  border-radius: $glass-border-radius;
+
+  // Combine depth shadow and illumination inset shadow
+  box-shadow: $shadow, $inset;
+
+  // The core glass effect (Mobile default)
+  backdrop-filter: blur($mobile-blur);
+  -webkit-backdrop-filter: blur($mobile-blur);
+
+  // Override for desktop
+  @include respond-to(tablet) {
+    backdrop-filter: blur($glass-blur-desktop);
+    -webkit-backdrop-filter: blur($glass-blur-desktop);
+  }
+
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    color 0.3s ease;
+}
