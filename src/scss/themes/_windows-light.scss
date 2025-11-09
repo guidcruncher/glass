@@ -1,0 +1,176 @@
+// styles/themes/_windows-light.scss
+
+$theme-windows-light-map: (
+  // ---------------- CORE UI COLORS -----------------
+  // Near-opaque white for surfaces
+  bg-surface: #f3f3f3,
+  // Fully opaque for panels/containers
+  bg-panel: #ffffff,
+  // Subtle blue/gray for focus states
+  bg-input-focus: rgba(0, 120, 215, 0.1),
+  // Subtle gray for hover states
+  bg-hover: rgba(0, 0, 0, 0.04),
+  // Windows-style accent gradient (subtle and direct)
+  bg-accent-gradient: linear-gradient(to right, #0078d7, #005a9e),
+  // Subtle, light background gradient
+  bg-gradient: linear-gradient(135deg, #f7f7f7 0%, #e0e0e0 100%),
+  // ---------------- STANDARD UI PROPERTIES -----------------
+  // Standard black text
+  'ui-text-color': #000000,
+  // Light, near-opaque border
+  'ui-border-color': #cccccc,
+  // Dark gray for icons
+  'ui-close-icon-color': #333333,
+  // Windows System Blue
+  'ui-accent-color': #0078d7,
+  // Primary non-system accent color
+  link-color: #0063b1,
+
+  // Windows Link Blue
+  // Subtle elevation for lift
+  shadow-lift: 0 4px 8px rgba(0, 0, 0, 0.15),
+  // Very subtle depth shadow
+  shadow-depth: 0 1px 3px rgba(0, 0, 0, 0.1),
+  // Minimal inner shadow for highlights
+  shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.5),
+  // ---------------- BUTTON/SYSTEM COLORS -----------------
+  // Standard opaque button background
+  'ui-button-bg-default': #ffffff,
+  // Subtle hover state
+  'ui-button-bg-hover': #f3f3f3,
+  // Primary button uses Windows Blue
+  'ui-primary-button-bg': #0078d7,
+  // White text for primary button
+  'ui-primary-button-text': #ffffff,
+  // White text for system red
+  ui-system-red-button-text: #ffffff,
+  // Windows/System Red (Danger)
+  ui-system-red-button-bg: #e81123,
+  // Windows/System Green (Success)
+  ui-system-green-bg: #107c10,
+
+  // ---------------- SELECTED/ACTIVE STATE PROPERTIES -----------------
+  // White text on accent color
+  'ui-selected-text-color': #ffffff,
+  // Selected background is Windows Blue
+  'ui-selected-bg': #0078d7,
+  // More prominent hover for list items, etc.
+  'ui-hover-bg-subtle': rgba(0, 0, 0, 0.08),
+  // ---------------- CHECKBOX PROPERTIES -----------------
+  // Checked background is Windows Blue
+  'ui-checkbox-checked-bg': #0078d7,
+  // White checkmark
+  'ui-checkbox-checkmark-color': #ffffff,
+
+  // ---------------- CLOCK PROPERTIES -----------------
+  // Subtle off-segment color
+  'clock-segment-off': rgba(0, 0, 0, 0.1),
+  // Windows-like orange for 'on' segment
+  'clock-segment-on': #ff8c00,
+  // Subtle glow
+  'clock-segment-glow': rgba(255, 140, 0, 0.4),
+  // Bright red second hand
+  'clock-second-hand-color': #e81123,
+  // Black hands
+  'clock-hand-color': #000000,
+
+  // ---------------- SLIDER/PROGRESS/SWITCH PROPERTIES -----------------
+  // Windows Blue for active elements
+  'slider-primary-color': #0078d7,
+  // Subtle, light track background
+  'slider-track-bg': #e0e0e0,
+  // Windows Blue handle
+  'slider-handle-color': #0078d7,
+  // Gray for disabled handle
+  'slider-handle-disabled-color': #a6a6a6,
+  // Lighter gray for disabled track
+  'slider-track-disabled-color': #f0f0f0,
+  // Subtle shadow for progress bar
+  progress-bar-shadow-color: rgba(0, 0, 0, 0.1),
+  // Progress bar fill using Windows Green/Blue
+  progress-bar-fill-gradient: linear-gradient(90deg, #0078d7, #107c10),
+  // Switch 'on' color is Windows Green
+  'switch-on-bg': #107c10,
+  // Subtle gray for 'off' switch
+  'switch-off-bg': #dadada,
+  // White thumb
+  'thumb-color': #fff,
+
+  // ---------------- GLASS/PICKER PROPERTIES -----------------
+  // "Acrylic" style translucent overlay
+  'glass-overlay': rgba(255, 255, 255, 0.7),
+  // Light, near-opaque background
+  color-picker-background-color: #ffffff,
+  // Subtle border
+  color-picker-border-color: #cccccc,
+  // Subtle shadow
+  color-picker-shadow: rgba(0, 0, 0, 0.1),
+  // Black text
+  color-picker-text-color: #000000,
+  // Light border for handle
+  color-picker-handle-border: #f0f0f0,
+  // --- Audioplayer ---
+  // Global root/page background (standard light gray)
+  'system-background': #f0f0f0,
+  // Primary text (Title) - Standard Black
+  'label': #000000,
+  // Secondary text (Artist, Time) - Dark Gray
+  'secondary-label': #666666,
+  // Static background of the progress bar track - Light Gray
+  'separator': #e0e0e0
+);
+
+// _windows-colors-light.scss
+// Adapting system colors to Windows standard shades
+
+$system-colors-windows-light: (
+  // MARK: Accent Colors (Windows)
+  // Windows Blue (Default Accent)
+  'system-blue': #0078d7,
+  'system-blue-darken': #005a9e,
+  'system-indigo': #6639b7,
+  'system-purple': #a800e8,
+  'system-pink': #ff68a7,
+  'system-red': #e81123,
+  'system-orange': #ff8c00,
+  'system-yellow': #ffb900,
+  'system-green': #107c10,
+  'system-teal': #00b294,
+  'system-cyan': #00d7dd,
+
+  // MARK: Grayscale / UI Colors
+  'system-gray': #858585,
+  'system-gray2': #a6a6a6,
+  'system-gray3': #cccccc,
+  'system-gray4': #e6e6e6,
+  'system-gray5': #f3f3f3,
+  'system-gray6': #fafafa,
+
+  // MARK: Semantic Background Colors
+  // Full-screen background (Light gray)
+  'system-background': #f0f0f0,
+  // Layered content within primary (White)
+  'secondary-system-background': #ffffff,
+  // Further layered content (Lightest gray)
+  'tertiary-system-background': #f3f3f3,
+
+  // Semantic Background Colors (Grouped Views - less distinct in Windows)
+  'system-grouped-background': #f0f0f0,
+  'secondary-system-grouped-background': #ffffff,
+  'tertiary-system-grouped-background': #f3f3f3,
+
+  // MARK: Semantic Label Colors (Text)
+  // Primary text (Black)
+  'label': #000000,
+  // Secondary text (Dark Gray)
+  'secondary-label': #666666,
+  // Placeholder/metadata (Medium Gray)
+  'tertiary-label': #999999,
+  // Lowest emphasis (Light Gray)
+  'quaternary-label': #cccccc,
+  // MARK: Semantic Separator Colors
+  // Subtle separator line (Light Gray)
+  'separator': #e0e0e0,
+  // Opaque separator line (Medium Gray)
+  'opaque-separator': #cccccc
+);

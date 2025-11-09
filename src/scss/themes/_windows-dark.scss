@@ -1,0 +1,176 @@
+// styles/themes/_windows-dark.scss
+
+$theme-windows-dark-map: (
+  // ---------------- CORE UI COLORS -----------------
+  // Deep charcoal/near-black for main surfaces
+  bg-surface: #202020,
+  // Slightly lighter dark gray for panels/containers
+  bg-panel: #2d2d2d,
+  // Subtle blue focus state
+  bg-input-focus: rgba(0, 120, 215, 0.2),
+  // Subtle light gray hover state
+  bg-hover: rgba(255, 255, 255, 0.08),
+  // Dark mode accent gradient
+  bg-accent-gradient: linear-gradient(to right, #0078d7, #005a9e),
+  // Subtle dark background gradient
+  bg-gradient: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%),
+  // ---------------- STANDARD UI PROPERTIES -----------------
+  // Standard white/light gray text
+  'ui-text-color': #ffffff,
+  // Subtle dark border
+  'ui-border-color': #444444,
+  // Light gray for icons
+  'ui-close-icon-color': #cccccc,
+  // Windows System Blue
+  'ui-accent-color': #0078d7,
+  // Primary non-system accent color
+  link-color: #49b4ff,
+
+  // Windows Link Blue (lighter for contrast)
+  // Subtle elevation for lift on dark backgrounds
+  shadow-lift: 0 4px 8px rgba(0, 0, 0, 0.4),
+  // Very subtle depth shadow
+  shadow-depth: 0 1px 3px rgba(0, 0, 0, 0.3),
+  // Minimal inner shadow for highlights (subtle dark separation)
+  shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+  // ---------------- BUTTON/SYSTEM COLORS -----------------
+  // Dark gray for default button background
+  'ui-button-bg-default': #3a3a3a,
+  // Subtle hover state
+  'ui-button-bg-hover': #444444,
+  // Primary button uses Windows Blue
+  'ui-primary-button-bg': #0078d7,
+  // White text for primary button
+  'ui-primary-button-text': #ffffff,
+  // White text for system red
+  ui-system-red-button-text: #ffffff,
+  // Windows/System Red (Danger)
+  ui-system-red-button-bg: #e81123,
+  // Windows/System Green (Success)
+  ui-system-green-bg: #107c10,
+
+  // ---------------- SELECTED/ACTIVE STATE PROPERTIES -----------------
+  // White text on accent color
+  'ui-selected-text-color': #ffffff,
+  // Selected background is Windows Blue
+  'ui-selected-bg': #0078d7,
+  // More prominent hover for list items, etc.
+  'ui-hover-bg-subtle': rgba(255, 255, 255, 0.12),
+  // ---------------- CHECKBOX PROPERTIES -----------------
+  // Checked background is Windows Blue
+  'ui-checkbox-checked-bg': #0078d7,
+  // White checkmark
+  'ui-checkbox-checkmark-color': #ffffff,
+
+  // ---------------- CLOCK PROPERTIES -----------------
+  // Subtle off-segment color
+  'clock-segment-off': rgba(255, 255, 255, 0.1),
+  // Windows-like orange for 'on' segment
+  'clock-segment-on': #ff8c00,
+  // Subtle glow
+  'clock-segment-glow': rgba(255, 140, 0, 0.3),
+  // Bright red second hand
+  'clock-second-hand-color': #ff4d4d,
+  // Light hands
+  'clock-hand-color': #ffffff,
+
+  // ---------------- SLIDER/PROGRESS/SWITCH PROPERTIES -----------------
+  // Windows Blue for active elements
+  'slider-primary-color': #0078d7,
+  // Subtle, dark track background
+  'slider-track-bg': #444444,
+  // Windows Blue handle
+  'slider-handle-color': #0078d7,
+  // Gray for disabled handle
+  'slider-handle-disabled-color': #777777,
+  // Darker gray for disabled track
+  'slider-track-disabled-color': #222222,
+  // Subtle shadow for progress bar
+  progress-bar-shadow-color: rgba(0, 0, 0, 0.2),
+  // Progress bar fill using Windows Green/Blue
+  progress-bar-fill-gradient: linear-gradient(90deg, #0078d7, #107c10),
+  // Switch 'on' color is Windows Green
+  'switch-on-bg': #107c10,
+  // Subtle gray for 'off' switch
+  'switch-off-bg': #555555,
+  // Light thumb
+  'thumb-color': #eeeeee,
+
+  // ---------------- GLASS/PICKER PROPERTIES -----------------
+  // "Acrylic" style translucent dark overlay
+  'glass-overlay': rgba(45, 45, 45, 0.8),
+  // Dark, near-opaque background
+  color-picker-background-color: #2d2d2d,
+  // Subtle dark border
+  color-picker-border-color: #444444,
+  // Subtle shadow
+  color-picker-shadow: rgba(0, 0, 0, 0.3),
+  // White text
+  color-picker-text-color: #ffffff,
+  // Dark border for handle
+  color-picker-handle-border: #3a3a3a,
+  // --- Audioplayer ---
+  // Global root/page background (Deep gray)
+  'system-background': #1a1a1a,
+  // Primary text (Title) - Standard White
+  'label': #ffffff,
+  // Secondary text (Artist, Time) - Light Gray
+  'secondary-label': #aaaaaa,
+  // Static background of the progress bar track - Dark Gray
+  'separator': #444444
+);
+
+// _windows-colors-dark.scss
+// Adapting system colors to Windows standard dark mode shades
+
+$system-colors-windows-dark: (
+  // MARK: Accent Colors (Windows)
+  // Windows Blue (Default Accent)
+  'system-blue': #0078d7,
+  'system-blue-darken': #005a9e,
+  'system-indigo': #6639b7,
+  'system-purple': #a800e8,
+  'system-pink': #ff68a7,
+  'system-red': #e81123,
+  'system-orange': #ff8c00,
+  'system-yellow': #ffb900,
+  'system-green': #107c10,
+  'system-teal': #00b294,
+  'system-cyan': #00d7dd,
+
+  // MARK: Grayscale / UI Colors
+  'system-gray': #858585,
+  'system-gray2': #777777,
+  'system-gray3': #555555,
+  'system-gray4': #3a3a3a,
+  'system-gray5': #2d2d2d,
+  'system-gray6': #202020,
+
+  // MARK: Semantic Background Colors
+  // Full-screen background (Deepest dark gray)
+  'system-background': #1a1a1a,
+  // Layered content within primary (Slightly lighter)
+  'secondary-system-background': #2d2d2d,
+  // Further layered content (A bit lighter still)
+  'tertiary-system-background': #3a3a3a,
+
+  // Semantic Background Colors (Grouped Views)
+  'system-grouped-background': #1a1a1a,
+  'secondary-system-grouped-background': #2d2d2d,
+  'tertiary-system-grouped-background': #3a3a3a,
+
+  // MARK: Semantic Label Colors (Text)
+  // Primary text (White)
+  'label': #ffffff,
+  // Secondary text (Light Gray)
+  'secondary-label': #cccccc,
+  // Placeholder/metadata (Medium Gray)
+  'tertiary-label': #999999,
+  // Lowest emphasis (Darker Gray)
+  'quaternary-label': #777777,
+  // MARK: Semantic Separator Colors
+  // Subtle separator line (Dark Gray)
+  'separator': #555555,
+  // Opaque separator line (Darker Gray)
+  'opaque-separator': #444444
+);
