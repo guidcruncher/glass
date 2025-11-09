@@ -230,18 +230,11 @@ onUnmounted(() => {
       <!-- The src attribute automatically updates when currentTrackData.src changes -->
       <audio ref="audioElement" :src="currentTrackData.src" preload="metadata"></audio>
 
-      <div class="audio-player-wrapper">
+      <div class="audio-player-wrapper" style="overflow: hidden">
         <div class="track-info">
-          <div class="track-icon">
-            <!-- Music Note Icon SVG -->
-            <svg viewBox="0 0 24 24" fill="var(--label)" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M12 3v10.55a4 4 0 1 1-2-3.46V7h4V5h-6V3h8M10 19a2 2 0 1 0 4 0 2 2 0 1 0-4 0z"
-              />
-            </svg>
-          </div>
           <div class="track-details">
-            <span class="track-title">{{ currentTrackData.title || 'No Track Loaded' }}</span>
+            <span class="track-title">{{ currentTrackData.title || 'No Track Loaded' }}</span
+            ><br />
             <span class="track-artist">{{ currentTrackData.artist || 'N/A' }}</span>
           </div>
         </div>
@@ -313,7 +306,11 @@ onUnmounted(() => {
 
         <!--  Volume Slider -->
         <div class="volume-control">
-          <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 opacity-70">
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            style="width: 48px; height: 48px; opacity: 0.7"
+          >
             <path d="M3 9v6h4l5 5V4L7 9z" />
           </svg>
           <input
@@ -325,7 +322,11 @@ onUnmounted(() => {
             class="glass-slider"
             title="Volume Control"
           />
-          <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 opacity-70">
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            style="width: 48px; height: 48px; opacity: 0.7"
+          >
             <path
               d="M14 3.23v2.06c2.89.81 5 3.53 5 6.71s-2.11 5.9-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zM12 9L7 4v16l5-5z"
             />
