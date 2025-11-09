@@ -5,7 +5,7 @@
       :checked="isChecked"
       :disabled="disabled"
       @change="handleChange"
-      class="visually-hidden"
+	      class="visually-hidden"
     />
     <span class="box-container">
       <span :class="['glass-box', { 'is-checked': isChecked }]">
@@ -22,7 +22,7 @@
         </svg>
       </span>
     </span>
-    <slot></slot>
+    <slot><span style="color: baseVars['--text-color']" >{{label}}</span></slot>
   </label>
 </template>
 
@@ -41,10 +41,23 @@ const themeLightMap = {
   'shadow-depth': '0 4px 12px rgba(0, 0, 0, 0.1)',
 }
 
+const themeDarkMap = {
+  'ui-text-color': '#ffffff',
+  'secondary-label': 'rgba(0, 0, 0, 0.55)',
+  'ui-checkbox-checked-bg': '#6200ee',
+  'ui-checkbox-checkmark-color': '#ffffff',
+  'ui-border-color': 'rgba(255, 255, 255, 0.3)',
+  'glass-overlay': 'rgba(255, 255, 255, 0.4)',
+  'shadow-depth': '0 4px 12px rgba(0, 0, 0, 0.1)',
+}
+
 /** @param {string} theme @param {string} prop */
 const themeProp = (theme, prop) => {
   if (theme === 'light') {
     return themeLightMap[prop] || 'initial'
+  }
+  if (theme === 'dark') {
+    return themeDarkMap[prop] || 'initial'
   }
   return 'initial'
 }
@@ -57,6 +70,7 @@ const props = defineProps({
     default: 'medium',
     validator: (val) => ['small', 'medium', 'large'].includes(val),
   },
+  label: {type: String, default:''},
   disabled: { type: Boolean, default: false },
 })
 
