@@ -273,8 +273,10 @@ w
           </p>
 
           <GlassAudioPlayer
-            @control-action="handlePlayerControl"
+            :tracklist="allTracks"
+            :currentTrackId="selectedTrackId"
             @track-change="handleTrackChange"
+            @control-action="handlePlayerControl"
             @seek="handleSeek"
           />
 
@@ -356,6 +358,29 @@ import GlassThemeChooser from '@/components/GlassThemeChooser.vue'
 import GlassTimePicker from '@/components/GlassTimePicker.vue'
 import GlassToggle from '@/components/GlassToggle.vue'
 import GlassWindow from '@/components/GlassWindow.vue'
+
+// --- tracks ---
+const allTracks = ref([
+  // Note: 'src' must be a valid, loadable audio file URL
+  {
+    id: 1,
+    title: 'SoundHelix Song 2',
+    artist: 'SoundHelix (CC)',
+    src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+  },
+  {
+    id: 2,
+    title: 'Lost in the Ether',
+    artist: 'Acoustic Dreams',
+    src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+  },
+  {
+    id: 3,
+    title: 'Midnight Cityscape',
+    artist: 'Neon Voyager',
+    src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+  },
+])
 
 // --- Mock Data Setup ---
 let totalItems = 100
