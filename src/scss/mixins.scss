@@ -3,6 +3,21 @@
 
 // _mixins.scss
 
+@function color-prop($color-name, $prop-name) {
+  @if map.has-key($colors, $color-name) {
+    $color: map.get($colors, $color-name);
+    @if map.has-key($color, $prop-name) {
+      @return map.get($color, $prop-name);
+    } @else {
+      @warn "Property '#{$prop-name}' not found in colors '#{$color-name}'.";
+      @return #ff0000;
+    }
+  } @else {
+    @warn "Colors '#{$color-name}' not found.";
+    @return #ff0000;
+  }
+}
+
 // Function to retrieve a theme property
 @function theme-prop($theme-name, $prop-name) {
   @if map.has-key($themes, $theme-name) {

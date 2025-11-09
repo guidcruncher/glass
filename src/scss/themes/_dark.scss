@@ -64,12 +64,21 @@ $theme-dark-map: (
   color-picker-border-color: rgba(100, 100, 100, 0.4),
   color-picker-shadow: rgba(0, 0, 0, 0.3),
   color-picker-text-color: #ffffff,
-  color-picker-handle-border: rgba(0, 0, 0, 0.8)
+  color-picker-handle-border: rgba(0, 0, 0, 0.8),
+  // --- Audioplayer ---
+  'system-background': #1c1c1e,
+  // Global root/page background
+  'label': rgba(255, 255, 255, 0.95),
+  // Primary text (Title)
+  'secondary-label': rgba(235, 235, 245, 0.6),
+  // Secondary text (Artist, Time)
+  'separator': rgba(84, 84, 88, 0.6) // Static background of the progress bar track
 );
 
 $system-colors-dark: (
   // MARK: Accent Colors (Brighter for contrast)
   'system-blue': #0a84ff,
+  'system-blue-darken': #086bcc,
   'system-indigo': #5e5ce6,
   'system-purple': #bf5af2,
   'system-pink': #ff375f,

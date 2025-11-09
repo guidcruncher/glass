@@ -64,7 +64,15 @@ $theme-light-map: (
   color-picker-border-color: rgba(255, 255, 255, 0.4),
   color-picker-shadow: rgba(0, 0, 0, 0.05),
   color-picker-text-color: #000000,
-  color-picker-handle-border: rgba(255, 255, 255, 0.8)
+  color-picker-handle-border: rgba(255, 255, 255, 0.8),
+  // --- Audioplayer ---
+  'system-background': #ffffff,
+  // Global root/page background
+  'label': rgba(0, 0, 0, 0.85),
+  // Primary text (Title)
+  'secondary-label': rgba(0, 0, 0, 0.55),
+  // Secondary text (Artist, Time)
+  'separator': rgba(60, 60, 67, 0.29) // Static background of the progress bar track
 );
 
 // _colors-light.scss
@@ -72,6 +80,7 @@ $theme-light-map: (
 $system-colors-light: (
   // MARK: Accent Colors
   'system-blue': #007aff,
+  'system-blue-darken': #0060c5,
   'system-indigo': #5856d6,
   'system-purple': #af52de,
   'system-pink': #ff2d55,

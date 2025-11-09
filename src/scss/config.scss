@@ -11,6 +11,11 @@ $themes: (
   dark: $theme-dark-map,
 );
 
+$colors: (
+  light: $system-colors-light,
+  dark: $system-colors-dark,
+);
+
 // --- GLOBAL VARIABLES (Non-Theme Specific) ---
 
 // 📝 Typography
@@ -72,6 +77,12 @@ $breakpoint-desktop: 1024px;
 // Helper mixin to apply theme variables as CSS Custom Properties (CSS variables)
 @mixin apply-theme($theme-name) {
   $theme-map: map-get($themes, $theme-name);
+  $colors-map: map-get($colors, $theme-name);
+
+  @each $key, $value in $colors-map {
+    // Output a CSS custom property (variable) for each theme property
+    --#{$key}: #{$value};
+  }
 
   @each $key, $value in $theme-map {
     // Output a CSS custom property (variable) for each theme property
