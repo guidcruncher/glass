@@ -182,10 +182,15 @@ const pageColor = ref('#1E90FF')
 
 // Updated tab items with required 'icon' property for the new component
 const tabItems = ref([
-  { id: "inputs_pickers", name: "inputs_pickers", label: "Inputs & Pickers", icon: "sliders" }, // Using sliders for inputs
-  { id: "displays_indicators", name: "displays_indicators", label: "Displays & Indicators", icon: "tv" }, // Using tv for displays
-  { id: "clocks_geo", name: "clocks_geo", label: "Clocks & Geo", icon: "globe" }, // Using globe for geo/clocks
-]);
+  { id: 'inputs_pickers', name: 'inputs_pickers', label: 'Inputs & Pickers', icon: 'sliders' }, // Using sliders for inputs
+  {
+    id: 'displays_indicators',
+    name: 'displays_indicators',
+    label: 'Displays & Indicators',
+    icon: 'tv',
+  }, // Using tv for displays
+  { id: 'clocks_geo', name: 'clocks_geo', label: 'Clocks & Geo', icon: 'globe' }, // Using globe for geo/clocks
+])
 
 // Note: The TimePicker, GlassDropdown, GlassCalendar, GlassGauge,
 // and GlassFlipClock components manage their own internal state.

@@ -9,14 +9,7 @@
           :class="{ 'rotate-180': !isLeftOpen }"
           aria-label="Toggle left sidebar"
         >
-          <svg class="toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M11 15l-3-3m0 0l3-3m-3 3h8m-14 3h16"
-            ></path>
-          </svg>
+          <i class="fa-solid fa-arrow-right-arrow-left"></i>
         </button>
         <h1 class="header-title">{{ title }}</h1>
       </div>
@@ -27,7 +20,6 @@
         </nav>
 
         <ThemeToggle />
-        {{ toggleRight }}
         <button
           v-if="toggleRight && isRightOpen !== undefined"
           @click="toggleRight"
@@ -35,14 +27,7 @@
           :class="{ 'rotate-180': !isRightOpen }"
           aria-label="Toggle right sidebar"
         >
-          <svg class="toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 9l3 3m0 0l-3 3m3-3H6m14-3H4"
-            ></path>
-          </svg>
+          <i class="fa-solid fa-arrow-right-arrow-left"></i>
         </button>
       </div>
     </div>

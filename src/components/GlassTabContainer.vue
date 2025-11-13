@@ -1,38 +1,37 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue'
 
 // Define the structure for a single tab item
 interface TabItem {
-  label: string;
-  name: string; // The unique name, used for v-model and slot name
-  icon: string; // FA class suffix (e.g., 'house', 'gear')
+  label: string
+  name: string // The unique name, used for v-model and slot name
+  icon: string // FA class suffix (e.g., 'house', 'gear')
 }
 
 // Define component props using Vue's runtime declaration
 const props = defineProps<{
-  modelValue: string; // The currently active tab name
-  tabs: TabItem[]; // The list of tabs
-  fullWidth?: boolean; // Controls whether to expand to full width or be contained
-}>();
+  modelValue: string // The currently active tab name
+  tabs: TabItem[] // The list of tabs
+  fullWidth?: boolean // Controls whether to expand to full width or be contained
+}>()
 
 // Define emitted events
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void;
-}>();
+  (e: 'update:modelValue', value: string): void
+}>()
 
 // Computed property for the currently selected tab name
 const selectedTabName = computed({
   get: () => props.modelValue,
   set: (val) => emit('update:modelValue', val),
-});
+})
 
 // Function to handle tab click
 const selectTab = (name: string) => {
   if (name !== selectedTabName.value) {
-    selectedTabName.value = name;
+    selectedTabName.value = name
   }
-};
-
+}
 </script>
 
 <template>
@@ -48,13 +47,13 @@ const selectTab = (name: string) => {
           :aria-selected="tab.name === selectedTabName"
           role="tab"
           :tabindex="tab.name === selectedTabName ? 0 : -1"
-          :class="[
-            'tab-item',
-            tab.name === selectedTabName ? 'active-tab' : 'inactive-tab'
-          ]"
+          :class="['tab-item', tab.name === selectedTabName ? 'active-tab' : 'inactive-tab']"
         >
           <!-- Font Awesome <i> tag replacement -->
-          <i :class="['fa-solid', `fa-${tab.icon}`, 'w-4', 'h-4', 'flex-shrink-0']" aria-hidden="true"></i>
+          <i
+            :class="['fa-solid', `fa-${tab.icon}`, 'w-4', 'h-4', 'flex-shrink-0']"
+            aria-hidden="true"
+          ></i>
 
           <!-- Use flex-grow for responsive label width but ensure it's min-width is zero -->
           <span class="text-sm font-medium whitespace-nowrap min-w-0">{{ tab.label }}</span>
@@ -75,8 +74,8 @@ const selectTab = (name: string) => {
 <style scoped>
 /* Custom utility to hide the horizontal scrollbar but allow scrolling */
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
@@ -101,10 +100,10 @@ const selectTab = (name: string) => {
   align-items: center;
   gap: 8px;
   /* Retained 4px vertical padding (4px top + 4px bottom) + 16px icon = 24px total height */
-  padding: 4px 12px; 
+  padding: 4px 12px;
   cursor: pointer;
-  float:left;
-  height:40px;
+  float: left;
+  height: 40px;
   transition: all 0.2s ease-in-out;
   /* CHANGE: Applied radius only to top corners for square bottom */
   border-radius: 1rem 1rem 0 0;
@@ -144,4 +143,3 @@ const selectTab = (name: string) => {
   border-radius: 1rem; /* Rounded corners for the content panel */
 }
 </style>
-
