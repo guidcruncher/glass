@@ -1,0 +1,58 @@
+/* Glassmorphic Base Styles */
+.glass-light {
+  background: var(--glassLight); /* rgba(255, 255, 255, 0.65) */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glassLightBorder); /* rgba(255, 255, 255, 0.8) */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+.glass-dark {
+  background: var(--glassDark); /* rgba(30, 30, 30, 0.4) */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glassDarkBorder); /* rgba(255, 255, 255, 0.15) */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Fixed Background - Assuming the image URL remains the same */
+.fixed-bg {
+  background: url(var(--backgroundUrl)) center center / cover no-repeat fixed;
+}
+
+/* Calendar Grid (from page1.html) */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  text-align: center;
+  font-size: 0.875rem;
+}
+.calendar-day {
+  /* ... rest of .calendar-day styles ... */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+/* ... other calendar-day pseudo-classes and light mode styles ... */
+
+/* Time Picker, Dropdown, Toggle, Progress, Gauge, Slider styles */
+/* The complex styles for these components are best kept in the component's <style> block, as they involve scoped custom selectors like ::-webkit-slider-thumb or specific animation keyframes. */
+/* *Note: The base toggle-switch, slider, and input styles have been moved to the Vue components for encapsulation.* */
+
+/* Smooth transitions from index.html */
+*,
+*::before,
+*::after {
+  transition:
+    background 0.4s ease,
+    border 0.4s ease,
+    color 0.4s ease,
+    box-shadow 0.4s ease,
+    transform 0.3s ease;
+}

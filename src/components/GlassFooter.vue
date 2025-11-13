@@ -1,47 +1,33 @@
 <template>
-  <footer :class="footerClasses">
-    <div class="glass-footer__content glass-footer__content--left">
-      <slot name="left"></slot>
-    </div>
-
-    <div class="glass-footer__content glass-footer__content--center">
-      <slot name="center"></slot>
-    </div>
-
-    <div class="glass-footer__content glass-footer__content--right">
-      <slot name="right"></slot>
-    </div>
-  </footer>
+  <div class="glass-footer">
+    <p class="text-sm opacity-70">
+      <slot> &copy§§; 2024 Glass UI Demo. All rights reserved. </slot>
+    </p>
+  </div>
 </template>
 
-<script>
-import { computed } from 'vue'
-
-export default {
-  name: 'GlassFooter',
-  props: {
-    // Controls whether the footer sticks to the bottom of the viewport
-    isFixed: {
-      type: Boolean,
-      default: true,
-    },
-    // Optional: Controls a higher z-index for fixed footers
-    zIndex: {
-      type: [Number, String],
-      default: 900,
-    },
-  },
-  setup(props) {
-    const footerClasses = computed(() => ['glass-footer', { 'glass-footer--fixed': props.isFixed }])
-
-    const footerStyles = computed(() => ({
-      zIndex: props.zIndex,
-    }))
-
-    return {
-      footerClasses,
-      footerStyles,
-    }
-  },
-}
+<script setup>
+// No script needed
 </script>
+
+<style scoped lang="scss">
+// Assumes global theme variables are set on :root or .dark/.light classes
+@mixin glass-footer(
+  $bg: var(--glass-bg-base, rgba(30, 30, 30, 0.4)),
+  $border: var(--glass-border-color, rgba(255, 255, 255, 0.15))
+) {
+  background-color: $bg;
+  border-top: 1px solid $border;
+  backdrop-filter: blur(var(--glass-blur, 14px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 14px));
+}
+
+.glass-footer {
+  @include glass-footer;
+  height: var(--footer-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+}
+</style>

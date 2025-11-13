@@ -1,102 +1,132 @@
 <template>
-  <div
-    class="glass-datepicker-wrapper"
-    :class="{ 'is-disabled': disabled }"
-    v-click-outside="closeDropdown"
-  >
-    <input
-      type="text"
-      :value="formattedDate"
-      @click="toggleDropdown"
-      readonly
-      :placeholder="placeholder"
-      :disabled="disabled"
-      class="glass-input date-display"
-    />
+  <GlassDropdownContainer class="glass-date-picker">
+    <template #selected>
+      <span v-if="formattedDate" class="selected-date-text">
+        {{ formattedDate }}
+      </span>
+      <span v-else class="placeholder-text"> Select a date... </span>
+    </template>
 
-    <i
-      :class="['fas fa-calendar-alt date-icon', { 'is-open': isDropdownOpen }]"
-      @click.stop="toggleDropdown"
-      aria-hidden="true"
-    ></i>
-
-    <div v-if="isDropdownOpen" class="date-dropdown glass-content-panel">
-      <GlassCalendar :modelValue="internalDate" @update:modelValue="selectDate" />
-
-      <div class="datepicker-footer">
-        <GlassButton @click="closeDropdown" size="sm">Done</GlassButton>
+    <template #dropdown="{ close: closeDropdown }">
+      <div class="calendar-wrapper">
+        <GlassCalendar
+          :show-borders="false"
+          :modelValue="dateValue"
+          @update:modelValue="handleDateSelect($event, closeDropdown)"
+          @date-selected="handleDateSelect($event, closeDropdown)"
+        />
       </div>
-    </div>
-  </div>
+    </template>
+  </GlassDropdownContainer>
 </template>
 
-<script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import GlassButton from './GlassButton.vue'
-import GlassCalendar from './GlassCalendar.vue'
+<script setup>
+import { computed, defineAsyncComponent } from "vue";
+// Assuming GlassDropdownContainer is imported from its file path
+import GlassDropdownContainer from "./GlassDropdownContainer.vue";
 
-interface Props {
-  modelValue?: string | null // Expected format: YYYY-MM-DD
-  placeholder?: string
-  disabled?: boolean
-}
+// --- Placeholder for GlassCalendar (replace with actual component) ---
+// For a real app, this should be the actual calendar component
+const GlassCalendar = defineAsyncComponent(() =>
+  import("./GlassCalendar.vue").catch(() => ({
+    template: `
+        <div class="glass-calendar-placeholder p-4 text-center text-sm">
+            <p>GlassCalendar Placeholder</p>
+            <button @click="$emit('date-selected', new Date().toISOString().split('T')[0])" 
+                    class="mt-2 p-2 bg-blue-500 text-white rounded">
+                Select Today
+            </button>
+        </div>
+    `,
+    emits: ["update:modelValue", "date-selected"],
+  })),
+);
 
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: null,
-  placeholder: 'Select Date',
-  disabled: false,
-})
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', date: string | null): void
-}>()
-
-const isDropdownOpen = ref(false)
-const internalDate = ref(props.modelValue)
-
-const formattedDate = computed(() => {
-  if (!internalDate.value) return ''
-  try {
-    const dateObj = new Date(internalDate.value + 'T00:00:00') // Append T00:00:00 to avoid timezone issues with YYYY-MM-DD
-    if (isNaN(dateObj.getTime())) return internalDate.value
-
-    // Use the user's local timezone for display formatting
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit',
-      weekday: 'short',
-    }).format(dateObj)
-  } catch (e) {
-    console.error('Date formatting failed:', e)
-    return internalDate.value
-  }
-})
-
-const selectDate = (date: string) => {
-  internalDate.value = date
-  emit('update:modelValue', date)
-  // You might choose to close the dropdown immediately here, or keep it open until 'Done' is clicked.
-  // Keeping it open until 'Done' is more user-friendly for calendar selection.
-}
-
-const closeDropdown = () => {
-  isDropdownOpen.value = false
-}
-
-const toggleDropdown = () => {
-  if (!props.disabled) {
-    isDropdownOpen.value = !isDropdownOpen.value
-  }
-}
-
-// Sync internalDate when modelValue prop changes
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    if (newVal !== internalDate.value) {
-      internalDate.value = newVal
-    }
+// --- PROPS and EMITS (v-model for selected date) ---
+const props = defineProps({
+  // modelValue can be a Date object, ISO string, or null
+  modelValue: {
+    type: [Date, String, null],
+    default: null,
   },
-)
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+// Use the computed property for V-model
+const dateValue = computed({
+  get: () => props.modelValue,
+  set: (val) => emit("update:modelValue", val),
+});
+
+// --- DATE LOGIC ---
+
+/**
+ * Formats the modelValue for display in the button.
+ * Uses a default locale date string.
+ */
+const formattedDate = computed(() => {
+  if (!dateValue.value) return null;
+
+  let dateObj;
+  if (dateValue.value instanceof Date) {
+    dateObj = dateValue.value;
+  } else if (typeof dateValue.value === "string") {
+    // Attempt to parse ISO string or similar
+    dateObj = new Date(dateValue.value);
+  }
+
+  if (dateObj && !isNaN(dateObj)) {
+    // Example format: "Thu, Nov 13, 2025"
+    return dateObj.toLocaleDateString(undefined, {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
+  return null;
+});
+
+/**
+ * Handles the selection of a date from the calendar.
+ * @param {Date | String} date - The newly selected date.
+ * @param {Function} closeDropdown - Function provided by GlassDropdownContainer slot.
+ */
+const handleDateSelect = (date, closeDropdown) => {
+  // Update the modelValue to reflect the new selection
+  dateValue.value = date;
+
+  // Close the dropdown immediately after selection
+  closeDropdown();
+};
 </script>
+
+<style scoped>
+/* Scoped styles specific to the Date Picker */
+
+/* Styles for the visible selected text */
+.selected-date-text {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.placeholder-text {
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* Wrapper for the calendar to apply any necessary spacing/sizing */
+.calendar-wrapper {
+  /* Ensure the calendar takes up the full width provided by the container */
+  width: 100%;
+  padding: 0.5rem; /* Add padding inside the dropdown panel */
+}
+
+/* Optional: Placeholder for a dark theme if needed */
+.glass-calendar-placeholder {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #111827;
+  border-radius: 0.5rem;
+}
+</style>

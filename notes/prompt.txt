@@ -1,0 +1,6 @@
+
+
+Create a third followig same tailwind css layout and style structures in Apple GLassmorphic style 
+showing a progress bar, slider control and a SVG gauge control.
+
+

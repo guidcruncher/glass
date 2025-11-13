@@ -1,0 +1,88 @@
+// ==========================================================
+// 1. GLOBAL LAYOUT VARIABLES (CSS Variables)
+//    These variables MUST be placed in a global stylesheet
+//    (e.g., your main.scss or App.vue <style lang="scss">)
+// ==========================================================
+:root {
+  // --- LAYOUT Sizing ---
+  --header-height: 4rem; // 64px
+  --footer-height: 3rem; // 48px
+  --sidebar-width-mobile: 0; // Hidden by default
+  --sidebar-width-sm: 14rem; // Small desktop screens (224px)
+  --sidebar-width-md: 16rem; // Medium desktop screens (256px)
+
+  // --- GLASSMOPHISM Theming (DARK MODE DEFAULTS) ---
+  --glass-blur: 14px;
+  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --glass-bg-base: rgba(30, 30, 30, 0.4);
+  --glass-border-color: rgba(255, 255, 255, 0.15);
+  --accent-color: #007aff;
+  --text-color-base: #f9fafb; // Light text
+}
+
+.light {
+  // LIGHT MODE OVERRIDES
+  --glass-bg-base: rgba(255, 255, 255, 0.65);
+  --glass-border-color: rgba(0, 0, 0, 0.15);
+  --glass-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  --text-color-base: #111827; // Dark text
+  --accent-color: #007aff; // Accent color remains the same
+}
+
+// ==========================================================
+// 2. CORE GLASSMOPHISM MIXIN
+//    Used by ALL glass components (Slider, TabStrip, Panel, etc.)
+// ==========================================================
+
+@mixin glass-base(
+  $bg: var(--glass-bg-base),
+  $border: var(--glass-border-color),
+  $shadow: var(--glass-shadow),
+  $blur: var(--glass-blur)
+) {
+  background-color: $bg;
+  border: 1px solid $border;
+  box-shadow: $shadow;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  transition: all 0.4s ease;
+}
+
+// ==========================================================
+// 3. LAYOUT & STRUCTURE MIXINS (Used by GlassAppView)
+// ==========================================================
+
+@mixin app-full-layout {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin app-header-footer-base {
+  @include glass-base;
+  flex-shrink: 0;
+  width: 100%;
+  z-index: 50;
+  // Remove the 1px border from glass-base and apply to specific sides
+  border: none;
+}
+
+@mixin app-sidebar-layout {
+  // Default (Mobile: collapsed)
+  width: var(--sidebar-width-mobile);
+  flex-shrink: 0;
+  overflow-y: auto;
+  @include glass-base;
+  border-right: 1px solid var(--glass-border-color); // Border on the right edge
+  // Transition is vital for the visual collapse/expand animation
+  transition: width 0.3s ease;
+
+  // Apply responsive widths from the CSS variables
+  @media (min-width: 640px) {
+    width: var(--sidebar-width-sm);
+  }
+  @media (min-width: 768px) {
+    width: var(--sidebar-width-md);
+  }
+}

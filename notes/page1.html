@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Glassmorphic Calendar & Time Picker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              glassLight: "rgba(255, 255, 255, 0.65)",
+              glassLightBorder: "rgba(255, 255, 255, 0.8)",
+              glassDark: "rgba(30, 30, 30, 0.4)",
+              glassDarkBorder: "rgba(255, 255, 255, 0.15)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      /* Glassmorphic */
+      .glass-light {
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      }
+      .glass-dark {
+        background: rgba(30, 30, 30, 0.4);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Fixed Background */
+      .fixed-bg {
+        background: url("https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=2940&auto=format&fit=crop")
+          center center / cover no-repeat fixed;
+      }
+
+      /* Calendar Grid - Fixed with Tailwind classes */
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 4px;
+        text-align: center;
+        font-size: 0.875rem;
+      }
+      .calendar-day {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        border-radius: 9999px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .calendar-day:hover {
+        transform: scale(1.1);
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .light .calendar-day:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+      .calendar-day.today {
+        background: #007aff;
+        color: white;
+        font-weight: bold;
+      }
+      .calendar-day.selected {
+        background: rgba(255, 255, 255, 0.4);
+        color: white;
+        font-weight: bold;
+        box-shadow: 0 0 0 2px white;
+      }
+      .light .calendar-day.selected {
+        background: rgba(0, 0, 0, 0.4);
+        color: #111;
+        box-shadow: 0 0 0 2px #333;
+      }
+
+      /* Time Picker */
+      .time-segment {
+        width: 64px;
+        text-align: center;
+        padding: 12px 8px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(30, 30, 30, 0.4);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        color: white;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      }
+      .light .time-segment {
+        background: rgba(255, 255, 255, 0.65);
+        border-color: rgba(0, 0, 0, 0.2);
+        color: #111;
+      }
+      .time-segment:focus {
+        outline: none;
+        ring: 2px solid white;
+        ring-opacity: 50%;
+      }
+
+      /* Dropdown */
+      .dropdown-btn {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(30, 30, 30, 0.4);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      }
+      .light .dropdown-btn {
+        background: rgba(255, 255, 255, 0.65);
+        border-color: rgba(0, 0, 0, 0.2);
+        color: #111;
+      }
+      .dropdown-btn:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+      }
+      .dropdown-panel {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin-top: 8px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(30, 30, 30, 0.4);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        max-height: 240px;
+        overflow-y: auto;
+        z-index: 50;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        display: none;
+      }
+      .light .dropdown-panel {
+        background: rgba(255, 255, 255, 0.65);
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+      .dropdown-item {
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+      .dropdown-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .light .dropdown-item:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      /* Toggle Switch */
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 52px;
+        height: 32px;
+      }
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        transition: 0.4s;
+        border-radius: 34px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 3px;
+        bottom: 3px;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider {
+        background-color: #007aff;
+        border-color: #007aff;
+        box-shadow: 0 0 12px rgba(0, 122, 255, 0.5);
+      }
+      input:checked + .slider:before {
+        transform: translateX(20px);
+      }
+      .light .slider {
+        background-color: rgba(0, 0, 0, 0.15);
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+      .light input:checked + .slider {
+        background-color: #34c759;
+        border-color: #34c759;
+        box-shadow: 0 0 12px rgba(52, 199, 89, 0.5);
+      }
+    </style>
+  </head>
+  <body class="h-full font-sans antialiased text-base">
+    <!-- Fixed Background -->
+    <div class="fixed-bg fixed inset-0 -z-10"></div>
+    <div
+      id="overlay"
+      class="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm -z-10 transition-all duration-500"
+    ></div>
+
+    <div id="app" class="min-h-screen flex flex-col">
+      <!-- Header -->
+      <header
+        class="glass-dark border-b border-white border-opacity-15 backdrop-blur-xl sticky top-0 z-50"
+      >
+        <div
+          class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
+        >
+          <h1 class="text-2xl font-semibold tracking-tight">Calendar & Time</h1>
+          <div class="flex items-center space-x-6">
+            <nav class="hidden md:flex space-x-6">
+              <a href="#" class="hover:opacity-70 transition">Home</a>
+              <a href="#" class="hover:opacity-70 transition">Events</a>
+              <a href="#" class="hover:opacity-70 transition">Settings</a>
+            </nav>
+            <label class="toggle-switch">
+              <input type="checkbox" id="theme-toggle-input" />
+              <span class="slider"></span>
+            </label>
+          </div>
+          27
+        </div>
+      </header>
+
+      <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside
+          class="glass-dark w-64 flex-shrink-0 border-r border-white border-opacity-15 hidden md:block"
+        >
+          <div class="p-6 space-y-6">
+            <h2 class="text-lg font-medium opacity-80">Quick Actions</h2>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="block px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition"
+                  >New Event</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="block px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition"
+                  >Today</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="block px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition"
+                  >Week View</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="block px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition"
+                  >Sync</a
+                >
+              </li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+          <div class="max-w-4xl mx-auto space-y-12">
+            <!-- Calendar Control -->
+            <section class="glass-dark rounded-2xl p-8 space-y-6">
+              <h2 class="text-2xl font-semibold">Calendar</h2>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between px-4">
+                  <button
+                    onclick="prevMonth()"
+                    class="p-2 rounded-full hover:bg-white hover:bg-opacity-10 transition"
+                  >
+                    Previous
+                  </button>
+                  <h3 id="month-year" class="font-medium text-lg"></h3>
+                  <button
+                    onclick="nextMonth()"
+                    class="p-2 rounded-full hover:bg-white hover:bg-opacity-10 transition"
+                  >
+                    Next
+                  </button>
+                </div>
+
+                <!-- Weekday Headers -->
+                <div class="calendar-grid font-medium text-xs opacity-70">
+                  <div>S</div>
+                  <div>M</div>
+                  <div>T</div>
+                  <div>W</div>
+                  <div>T</div>
+                  <div>F</div>
+                  <div>S</div>
+                </div>
+
+                <!-- Calendar Days -->
+                <div id="calendar-days" class="calendar-grid"></div>
+              </div>
+            </section>
+
+            <!-- Time Picker -->
+            <section class="glass-dark rounded-2xl p-8 space-y-6">
+              <h2 class="text-2xl font-semibold">Time Picker</h2>
+              <div class="flex items-center justify-center space-x-3">
+                <input
+                  type="number"
+                  min="0"
+                  max="23"
+                  value="14"
+                  class="time-segment"
+                  id="hour"
+                  placeholder="14"
+                />
+                <span class="text-2xl">:</span>
+                <input
+                  type="number"
+                  min="0"
+                  max="59"
+                  value="30"
+                  class="time-segment"
+                  id="minute"
+                  placeholder="30"
+                />
+              </div>
+            </section>
+
+            <!-- Dropdown Control -->
+            <section class="glass-dark rounded-2xl p-8 space-y-6">
+              <h2 class="text-2xl font-semibold">Dropdown List</h2>
+              <div class="relative">
+                <button id="dropdown-btn" class="dropdown-btn">
+                  <span id="selected-value">Select an option...</span>
+                  <svg
+                    class="w-5 h-5 ml-2 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                <div id="dropdown-panel" class="dropdown-panel">
+                  <div class="dropdown-item" onclick="selectOption('Meeting')">
+                    Meeting
+                  </div>
+                  <div class="dropdown-item" onclick="selectOption('Call')">
+                    Call
+                  </div>
+                  <div class="dropdown-item" onclick="selectOption('Task')">
+                    Task
+                  </div>
+                  <div class="dropdown-item" onclick="selectOption('Reminder')">
+                    Reminder
+                  </div>
+                  <div class="dropdown-item" onclick="selectOption('Birthday')">
+                    Birthday
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+
+      <!-- Footer -->
+      <footer
+        class="glass-dark border-t border-white border-opacity-15 mt-auto"
+      >
+        <div class="max-w-7xl mx-auto px-6 py-4 text-center text-sm opacity-70">
+          © 2025 Glassmorphic UI – Calendar Module
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // === Theme Toggle ===
+      const toggleInput = document.getElementById("theme-toggle-input");
+      const app = document.getElementById("app");
+      const overlay = document.getElementById("overlay");
+      const savedTheme = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
+
+      function setTheme(theme) {
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+          app.classList.replace("light", "dark");
+          overlay.classList.replace("bg-white", "bg-black");
+          overlay.classList.replace("bg-opacity-20", "bg-opacity-40");
+          toggleInput.checked = true;
+        } else {
+          document.documentElement.classList.remove("dark");
+          app.classList.replace("dark", "light");
+          overlay.classList.replace("bg-black", "bg-white");
+          overlay.classList.replace("bg-opacity-40", "bg-opacity-20");
+          toggleInput.checked = false;
+        }
+        localStorage.setItem("theme", theme);
+      }
+
+      if (savedTheme) setTheme(savedTheme);
+      else if (prefersDark) setTheme("dark");
+      else setTheme("light");
+
+      toggleInput.addEventListener("change", () => {
+        const current =
+          localStorage.getItem("theme") || (prefersDark ? "dark" : "light");
+        setTheme(current === "dark" ? "light" : "dark");
+      });
+
+      // === Calendar ===
+      const monthYear = document.getElementById("month-year");
+      const calendarDays = document.getElementById("calendar-days");
+      let currentDate = new Date();
+
+      function renderCalendar() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        const today = new Date();
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        monthYear.textContent = currentDate.toLocaleDateString("en-GB", {
+          month: "long",
+          year: "numeric",
+        });
+
+        calendarDays.innerHTML = "";
+
+        // Empty cells for days before month start
+        for (let i = 0; i < firstDay; i++) {
+          calendarDays.innerHTML += `<div></div>`;
+        }
+
+        // Days of the month
+        for (let day = 1; day <= daysInMonth; day++) {
+          const isToday =
+            day === today.getDate() &&
+            month === today.getMonth() &&
+            year === today.getFullYear();
+          const classes = `calendar-day ${isToday ? "today" : ""}`;
+          calendarDays.innerHTML += `<div class="${classes}" onclick="selectDay(this, ${day})">${day}</div>`;
+        }
+      }
+
+      function prevMonth() {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+      }
+
+      function nextMonth() {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+      }
+
+      function selectDay(el, day) {
+        document
+          .querySelectorAll(".calendar-day")
+          .forEach((d) => d.classList.remove("selected"));
+        el.classList.add("selected");
+      }
+
+      renderCalendar();
+
+      // === Dropdown ===
+      const dropdownBtn = document.getElementById("dropdown-btn");
+      const dropdownPanel = document.getElementById("dropdown-panel");
+      const selectedValue = document.getElementById("selected-value");
+      const arrow = dropdownBtn.querySelector("svg");
+
+      dropdownBtn.addEventListener("click", () => {
+        const isHidden =
+          dropdownPanel.style.display === "none" ||
+          !dropdownPanel.style.display;
+        dropdownPanel.style.display = isHidden ? "block" : "none";
+        arrow.style.transform = isHidden ? "rotate(180deg)" : "rotate(0deg)";
+      });
+
+      function selectOption(value) {
+        selectedValue.textContent = value;
+        dropdownPanel.style.display = "none";
+        arrow.style.transform = "rotate(0deg)";
+      }
+
+      // Close on outside click
+      document.addEventListener("click", (e) => {
+        if (
+          !dropdownBtn.contains(e.target) &&
+          !dropdownPanel.contains(e.target)
+        ) {
+          dropdownPanel.style.display = "none";
+          arrow.style.transform = "rotate(0deg)";
+        }
+      });
+    </script>
+  </body>
+</html>

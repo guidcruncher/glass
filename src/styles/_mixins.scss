@@ -1,0 +1,81 @@
+// Core Glassmorphism Mixin (Assumed to be defined in each component for self-containment)
+@mixin glass-base(
+  $bg: var(--glass-bg-base),
+  $border: var(--glass-border-color),
+  $shadow: var(--glass-shadow),
+  $blur: var(--glass-blur)
+) {
+  background-color: $bg;
+  border: 1px solid $border;
+  box-shadow: $shadow;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+}
+
+// ====================================================================
+// SASS UTILITY MIXINS
+// Contains functions for variable generation, theme switching, and material effects
+// ====================================================================
+
+/// Converts a Sass map of colors into CSS custom properties (variables).
+/// @param {Map} $map - The map containing color names and hex values.
+/// @param {String} $prefix [sys] - The prefix for the generated CSS variables.
+@mixin map-to-css-vars($map, $prefix: "sys") {
+  @each $key, $value in $map {
+    --#{$prefix}-#{$key}: #{$value};
+  }
+}
+
+/// @mixin generate-theme-css
+/// Creates the necessary CSS variables for theme switching (System preference + class override).
+/// @param {Map} $light-map - The map for the light theme.
+/// @param {Map} $dark-map - The map for the dark theme.
+/// @param {String} $dark-class [dark-mode] - The class name used to force dark mode.
+@mixin generate-theme-css($light-map, $dark-map, $dark-class: "dark-mode") {
+  // 1. Default Variables (Light Mode) on the root element
+  :root {
+    @include map-to-css-vars($light-map);
+  }
+
+  // 2. System Preference Override (Dark Mode)
+  @media (prefers-color-scheme: dark) {
+    :root {
+      @include map-to-css-vars($dark-map);
+    }
+  }
+
+  // 3. User-Forced Override (Class-Based Dark Mode)
+  // This allows JS to toggle a class on the body/html to override the system preference
+  :root.#{$dark-class},
+  .#{$dark-class} {
+    @include map-to-css-vars($dark-map);
+  }
+}
+
+// ====================================================================
+// SASS MIXIN FOR MATERIAL/GLASSMOPHISM EFFECTS
+// ====================================================================
+
+/// Applies standard iPadOS-style thin or thick material (blur + semi-transparent background).
+/// Uses the generated CSS variables: --sys-system-material-base and --sys-system-material-opaque
+/// @param {String} $type [thin] - 'thin' or 'thick'
+/// @param {Length} $radius [12px] - Optional border-radius override.
+@mixin apply-glass-material($type: thin, $radius: 12px) {
+  border-radius: $radius;
+  // A subtle, diffused shadow common in Apple UI
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  @if $type == thin {
+    // Thin material (more transparent, more blur)
+    background-color: var(--sys-system-material-base);
+    opacity: 0.7;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  } @else {
+    // Thick material (less transparent, less blur)
+    background-color: var(--sys-system-material-opaque);
+    opacity: 0.9;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}

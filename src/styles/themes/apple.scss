@@ -1,0 +1,68 @@
+// ====================================================================
+// THEME MAPS: APPLE SYSTEM COLORS
+// Standardized colors for Light and Dark appearance (configuration)
+// ====================================================================
+
+// --- 1. Light Mode Color Map ---
+$apple-colors-light: (
+  // MARK: Primary System Colors (Vibrant Hues)
+  system-blue: #007aff,
+  system-indigo: #5856d6,
+  system-purple: #af52de,
+  system-pink: #ff2d55,
+  system-red: #ff3b30,
+  system-orange: #ff9500,
+  system-yellow: #ffcc00,
+  system-green: #34c759,
+  system-teal: #30d5c8,
+  system-cyan: #39d1c0,
+  system-brown: #a2845e,
+  system-mint: #00c7be,
+
+  // MARK: Background and Separators
+  system-background: #ffffff,
+  system-secondary-background: #f2f2f7,
+  system-tertiary-background: #ffffff,
+  system-separator: #c6c6c8,
+
+  // MARK: Material Base for Glassmorphism/Blurs
+  system-material-base: #ffffff,
+  system-material-opaque: #f7f7f7,
+
+  // MARK: Label/Text Colors
+  system-label: #000000,
+  system-secondary-label: #3c3c43,
+  system-tertiary-label: #8e8e93
+);
+
+// --- 2. Dark Mode Color Map ---
+$apple-colors-dark: (
+  // MARK: Primary System Colors (Vibrant Hues)
+  system-blue: #0a84ff,
+  system-indigo: #5e5ce6,
+  system-purple: #bf5af2,
+  system-pink: #ff375f,
+  system-red: #ff453a,
+  system-orange: #ff9f0a,
+  system-yellow: #ffd60a,
+  system-green: #32d74b,
+  system-teal: #40c8c8,
+  system-cyan: #40c9c8,
+  system-brown: #ac8e68,
+  system-mint: #63e6e2,
+
+  // MARK: Background and Separators
+  system-background: #000000,
+  system-secondary-background: #1c1c1e,
+  system-tertiary-background: #2c2c2e,
+  system-separator: #38383a,
+
+  // MARK: Material Base for Glassmorphism/Blurs
+  system-material-base: #1c1c1e,
+  system-material-opaque: #2c2c2e,
+
+  // MARK: Label/Text Colors
+  system-label: #ffffff,
+  system-secondary-label: #ebebf5,
+  system-tertiary-label: #8e8e93
+);

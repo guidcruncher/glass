@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Glassmorphic Flip Clock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              glassLight: "rgba(255, 255, 255, 0.65)",
+              glassLightBorder: "rgba(255, 255, 255, 0.8)",
+              glassDark: "rgba(30, 30, 30, 0.4)",
+              glassDarkBorder: "rgba(255, 255, 255, 0.15)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      /* Glassmorphic */
+      .glass-light {
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      }
+      .glass-dark {
+        background: rgba(30, 30, 30, 0.4);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Fixed Background */
+      .fixed-bg {
+        background: url("https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=2940&auto=format&fit=crop")
+          center center / cover no-repeat fixed;
+      }
+
+      /* Flip Clock */
+      .flip-clock {
+        display: flex;
+        gap: 12px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-weight: 600;
+      }
+      .flip-digit {
+        width: 72px;
+        height: 120px;
+        position: relative;
+        perspective: 400px;
+      }
+      .flip-card {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+      }
+      .flip-card.flipping {
+        transform: rotateX(-180deg);
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .flip-face {
+        position: absolute;
+        width: 100%;
+        height: 50%;
+        left: 0;
+        overflow: hidden;
+        backface-visibility: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.2rem;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+      }
+      .flip-face.front {
+        top: 0;
+        background: linear-gradient(to bottom, #fff 0%, #f0f0f0 100%);
+        border-bottom: 1px solid #ccc;
+      }
+      .light .flip-face.front {
+        background: linear-gradient(to bottom, #fff 0%, #f8f8f8 100%);
+        border-bottom: 1px solid #ddd;
+      }
+      .flip-face.back {
+        bottom: 0;
+        background: linear-gradient(to top, #e0e0e0 0%, #d0d0d0 100%);
+        transform: rotateX(180deg);
+        border-top: 1px solid #aaa;
+      }
+      .light .flip-face.back {
+        background: linear-gradient(to top, #eee 0%, #e0e0e0 100%);
+        border-top: 1px solid #ccc;
+      }
+      .flip-face svg {
+        width: 100%;
+        height: 200%;
+      }
+      .flip-face text {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-weight: 600;
+        dominant-baseline: middle;
+        text-anchor: middle;
+        fill: #111;
+      }
+
+      /* Colon */
+      .flip-colon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 28px;
+        height: 120px;
+      }
+      .flip-colon-dot {
+        width: 12px;
+        height: 12px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+      .light .flip-colon-dot {
+        background: #111;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Toggle Switch */
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 52px;
+        height: 32px;
+      }
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-radius: 34px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: 0.4s;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 3px;
+        bottom: 3px;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider {
+        background-color: #007aff;
+        border-color: #007aff;
+        box-shadow: 0 0 12px rgba(0, 122, 255, 0.5);
+      }
+      input:checked + .slider:before {
+        transform: translateX(20px);
+      }
+      .light .slider {
+        background-color: rgba(0, 0, 0, 0.15);
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+      .light input:checked + .slider {
+        background-color: #34c759;
+        border-color: #34c759;
+        box-shadow: 0 0 12px rgba(52, 199, 89, 0.5);
+      }
+    </style>
+  </head>
+  <body class="h-full font-sans antialiased text-base">
+    <!-- Fixed Background -->
+    <div class="fixed-bg fixed inset-0 -z-10"></div>
+    <div
+      id="overlay"
+      class="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm -z-10 transition-all duration-500"
+    ></div>
+
+    <div id="app" class="min-h-screen flex flex-col light">
+      <!-- Header -->
+      <header
+        class="glass-dark border-b border-white border-opacity-15 backdrop-blur-xl sticky top-0 z-50"
+      >
+        <div
+          class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
+        >
+          <h1 class="text-2xl font-semibold tracking-tight">Flip Clock</h1>
+          <label class="toggle-switch">
+            <input type="checkbox" id="theme-toggle-input" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </header>
+
+      <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+        <div class="max-w-4xl mx-auto space-y-12">
+          <!-- Digital Flip Clock -->
+          <section class="glass-dark rounded-2xl p-8 space-y-6">
+            <h2 class="text-2xl font-semibold text-center">
+              Electromechanical Clock
+            </h2>
+            <div class="flex justify-center">
+              <div class="flip-clock">
+                <div id="digit-h1" class="flip-digit">
+                  <div class="flip-card">
+                    <div class="flip-face front">
+                      <svg><text x="36" y="60">0</text></svg>
+                    </div>
+                    <div class="flip-face back">
+                      <svg><text x="36" y="60">0</text></svg>
+                    </div>
+                  </div>
+                </div>
+                <div id="digit-h2" class="flip-digit">
+                  <div class="flip-card">
+                    <div class="flip-face front">
+                      <svg><text x="36" y="60">0</text></svg>
+                    </div>
+                    <div class="flip-face back">
+                      <svg><text x="36" y="60">0</text></svg>
+                    </div>
+                  </div>
+                </div>
+                <div class="flip-colon">
+                  <div class="flip-colon-dot"></div>
+                  <div class="flip-colon-dot"></div>
+                </div>
+                <div id="digit-m1" class="flip-digit">
+                  <div class="flip-card">
+                    <div class="flip-face front">
+                      <svg><text x="36" y="60">0</text></svg>
+                    </div>
+                    <div class="flip-face back">
+                      <svg><text x="36" y="60">0</text></svg>
+                    </div>
+                  </div>
+                </div>
+                <div id="digit-m2" class="flip-digit">
+                  <div class="flip-card">
+                    <div class="flip-face front">
+                      <svg><text x="36" y="60">0</text></svg>
+                    </div>
+                    <div class="flip-face back">
+                      <svg><text x="36" y="60">0</text></svg>
+                    </div>
+                  </div>
+                </div>
+                <div class="flip-colon">
+                  <div class="flip-colon-dot"></div>
+                  <div class="flip-colon-dot"></div>
+                </div>
+                <div id="digit-s1" class="flip-digit">
+                  <div class="flip-card">
+                    <div class="flip-face front">
+                      <svg><text x="36" y="60">0</text></svg>
+                    </div>
+                    <div class="flip-face back">
+                      <svg><text x="36" y="60">0</text></svg>
+                    </div>
+                  </div>
+                </div>
+                <div id="digit-s2" class="flip-digit">
+                  <div class="flip-card">
+                    <div class="flip-face front">
+                      <svg><text x="36" y="60">0</text></svg>
+                    </div>
+                    <div class="flip-face back">
+                      <svg><text x="36" y="60">0</text></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="text-center text-sm opacity-70" id="timezone-label">
+              London (GMT)
+            </p>
+          </section>
+
+          <!-- Timezone Selector -->
+          <section class="glass-dark rounded-2xl p-8 space-y-6">
+            <h2 class="text-2xl font-semibold">Select Timezone</h2>
+            <div class="relative max-w-xs mx-auto">
+              <button
+                id="tz-btn"
+                class="w-full px-4 py-3 rounded-xl glass-dark border border-white border-opacity-20 text-left flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 transition"
+              >
+                <span id="selected-tz">Europe/London</span>
+                <svg
+                  class="w-5 h-5 ml-2 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              <div
+                id="tz-panel"
+                class="absolute top-full left-0 right-0 mt-2 glass-dark border border-white border-opacity-20 rounded-xl shadow-xl max-h-60 overflow-y-auto z-50 hidden"
+              >
+                <div
+                  class="px-4 py-3 cursor-pointer hover:bg-white hover:bg-opacity-10 transition"
+                  onclick="setTimezone('Europe/London','London (GMT)')"
+                >
+                  Europe/London – London (GMT)
+                </div>
+                <div
+                  class="px-4 py-3 cursor-pointer hover:bg-white hover:bg-opacity-10 transition"
+                  onclick="setTimezone('America/New_York','New York (EST)')"
+                >
+                  America/New_York – New York (EST)
+                </div>
+                <div
+                  class="px-4 py-3 cursor-pointer hover:bg-white hover:bg-opacity-10 transition"
+                  onclick="setTimezone('Asia/Tokyo','Tokyo (JST)')"
+                >
+                  Asia/Tokyo – Tokyo (JST)
+                </div>
+                <div
+                  class="px-4 py-3 cursor-pointer hover:bg-white hover:bg-opacity-10 transition"
+                  onclick="setTimezone('Australia/Sydney','Sydney (AEDT)')"
+                >
+                  Australia/Sydney – Sydney (AEDT)
+                </div>
+                <div
+                  class="px-4 py-3 cursor-pointer hover:bg-white hover:bg-opacity-10 transition"
+                  onclick="setTimezone('UTC','UTC')"
+                >
+                  UTC – UTC
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer
+        class="glass-dark border-t border-white border-opacity-15 mt-auto"
+      >
+        <div class="max-w-7xl mx-auto px-6 py-4 text-center text-sm opacity-70">
+          © 2025 Glassmorphic UI – Flip Clock
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // === Theme Toggle ===
+      const toggleInput = document.getElementById("theme-toggle-input");
+      const app = document.getElementById("app");
+      const overlay = document.getElementById("overlay");
+      const savedTheme = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
+
+      function setTheme(theme) {
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+          app.classList.remove("light");
+          app.classList.add("dark");
+          overlay.classList.remove("bg-white", "bg-opacity-20");
+          overlay.classList.add("bg-black", "bg-opacity-40");
+          toggleInput.checked = true;
+        } else {
+          document.documentElement.classList.remove("dark");
+          app.classList.remove("dark");
+          app.classList.add("light");
+          overlay.classList.remove("bg-black", "bg-opacity-40");
+          overlay.classList.add("bg-white", "bg-opacity-20");
+          toggleInput.checked = false;
+        }
+        localStorage.setItem("theme", theme);
+      }
+      if (savedTheme) setTheme(savedTheme);
+      else if (prefersDark) setTheme("dark");
+      else setTheme("light");
+
+      toggleInput.addEventListener("change", () => {
+        const current =
+          localStorage.getItem("theme") || (prefersDark ? "dark" : "light");
+        setTheme(current === "dark" ? "light" : "dark");
+      });
+
+      // === Flip Clock Logic ===
+      let currentTz = "Europe/London";
+      let currentTzLabel = "London (GMT)";
+      const digits = ["h1", "h2", "m1", "m2", "s1", "s2"].map((id) => ({
+        id,
+        el: document.getElementById(`digit-${id}`),
+        front: null,
+        back: null,
+        card: null,
+        value: 0,
+        isFlipping: false,
+      }));
+
+      digits.forEach((d) => {
+        d.front = d.el.querySelector(".front text");
+        d.back = d.el.querySelector(".back text");
+        d.card = d.el.querySelector(".flip-card");
+        d.value = parseInt(d.front.textContent);
+      });
+
+      function flipDigit(digit, newVal) {
+        if (digit.value === newVal || digit.isFlipping) return;
+
+        digit.isFlipping = true;
+        const card = digit.card;
+
+        card.classList.add("flipping");
+
+        const onEnd = () => {
+          digit.front.textContent = newVal;
+          digit.back.textContent = newVal;
+          digit.value = newVal;
+          card.classList.remove("flipping");
+          digit.isFlipping = false;
+          card.removeEventListener("transitionend", onEnd);
+        };
+
+        card.addEventListener("transitionend", onEnd);
+      }
+
+      function updateClock() {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString("en-GB", {
+          timeZone: currentTz,
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
+
+        const [h, m, s] = timeStr.split(":");
+        const [h1, h2] = h.split("");
+        const [m1, m2] = m.split("");
+        const [s1, s2] = s.split("");
+
+        flipDigit(digits[0], +h1);
+        flipDigit(digits[1], +h2);
+        flipDigit(digits[2], +m1);
+        flipDigit(digits[3], +m2);
+        flipDigit(digits[4], +s1);
+        flipDigit(digits[5], +s2);
+
+        document.getElementById("timezone-label").textContent = currentTzLabel;
+      }
+
+      function setTimezone(tz, label) {
+        currentTz = tz;
+        currentTzLabel = label;
+        document.getElementById("selected-tz").textContent = tz;
+        document.getElementById("tz-panel").classList.add("hidden");
+        updateClock();
+      }
+
+      // Dropdown
+      const tzBtn = document.getElementById("tz-btn");
+      const tzPanel = document.getElementById("tz-panel");
+      const arrow = tzBtn.querySelector("svg");
+      tzBtn.addEventListener("click", () => {
+        tzPanel.classList.toggle("hidden");
+        arrow.style.transform = tzPanel.classList.contains("hidden")
+          ? "rotate(0deg)"
+          : "rotate(180deg)";
+      });
+      document.addEventListener("click", (e) => {
+        if (!tzBtn.contains(e.target) && !tzPanel.contains(e.target)) {
+          tzPanel.classList.add("hidden");
+          arrow.style.transform = "rotate(0deg)";
+        }
+      });
+
+      // Start
+      updateClock();
+      setInterval(updateClock, 100);
+    </script>
+  </body>
+</html>

@@ -1,11 +1,11 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+// src/main.ts
+import { createApp } from "vue";
+import App from "./App.vue";
 
-// 1. Import the Component Library Plugin
-import '@/scss/style.scss'
-import LiquidGlassUI from './components/index.js'
+import "./styles/style.scss";
+import LiquidGlassUI from "./components/index.js";
 
-const app = createApp(App)
-app.use(LiquidGlassUI)
+const app = createApp(App);
+app.use(LiquidGlassUI);
 
-app.mount('#app')
+app.mount("#app");

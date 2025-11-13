@@ -1,0 +1,62 @@
+// ====================================================================
+// MAIN STYLESHEET
+// Imports themes and mixins, and executes the theme generation
+// ====================================================================
+
+@use "./_app-layout.scss" as *;
+@use "./mixins.scss" as *;
+
+@use "./themes/apple.scss" as *;
+
+@import "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap";
+@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css";
+
+// 3. EXECUTION: Generate all necessary CSS variables
+// This mixin handles :root (light default), @media (dark system preference),
+// and .dark-mode (JS class override)
+@include generate-theme-css($apple-colors-light, $apple-colors-dark);
+
+// ====================================================================
+// APPLICATION STYLES (EXAMPLE USAGE)
+// ====================================================================
+
+body {
+  // Uses the CSS variable that switches automatically
+  background-color: var(--sys-system-background);
+  color: var(--sys-system-label);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+}
+
+.card {
+  // Example of using standard background and radius
+  background-color: var(--sys-system-secondary-background);
+  color: var(--sys-system-label);
+  padding: 24px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.glass-toolbar {
+  // Example of applying the glassmorphism effect
+  @include apply-glass-material(thin, 16px);
+  padding: 15px;
+  margin-top: 20px;
+  text-align: center;
+  position: sticky;
+  top: 20px;
+}
+
+.system-link {
+  color: var(--sys-system-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
