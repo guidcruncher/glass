@@ -23,24 +23,24 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { computed, onMounted, ref } from 'vue'
 
-const percent = ref(45); // Initial value from the original script
-const circumference = 2 * Math.PI * 80;
+const percent = ref(45) // Initial value from the original script
+const circumference = 2 * Math.PI * 80
 
 // Calculates the stroke dash offset for the SVG circle to represent the percentage
 const strokeDasharray = computed(() => {
-  const offset = circumference - (percent.value / 100) * circumference;
-  return `${circumference - offset}, ${circumference}`;
-});
+  const offset = circumference - (percent.value / 100) * circumference
+  return `${circumference - offset}, ${circumference}`
+})
 
 const setGauge = (p) => {
-  percent.value = p;
-};
+  percent.value = p
+}
 
 onMounted(() => {
-  setGauge(percent.value);
-});
+  setGauge(percent.value)
+})
 </script>
 
 <style scoped>

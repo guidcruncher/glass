@@ -9,12 +9,7 @@
           :class="{ 'rotate-180': !isLeftOpen }"
           aria-label="Toggle left sidebar"
         >
-          <svg
-            class="toggle-icon"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg class="toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -40,12 +35,7 @@
           :class="{ 'rotate-180': !isRightOpen }"
           aria-label="Toggle right sidebar"
         >
-          <svg
-            class="toggle-icon"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg class="toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -60,15 +50,15 @@
 </template>
 
 <script setup>
-import ThemeToggle from "./ThemeToggle.vue"; // Assuming ThemeToggle is a sibling component
+import ThemeToggle from './ThemeToggle.vue' // Assuming ThemeToggle is a sibling component
 
 const props = defineProps({
-  title: { type: String, default: "App Title" },
+  title: { type: String, default: 'App Title' },
   toggleLeft: { type: Function, required: false },
   isLeftOpen: { type: Boolean, required: false },
   toggleRight: { type: Function, required: false },
   isRightOpen: { type: Boolean, required: false },
-});
+})
 </script>
 
 <style scoped>

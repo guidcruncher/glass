@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { inject, computed } from "vue";
+import { computed, inject } from 'vue'
 
 // 1. Props
 const props = defineProps({
@@ -40,34 +40,34 @@ const props = defineProps({
   },
   label: {
     type: String,
-    default: "",
+    default: '',
   },
   disabled: {
     type: Boolean,
     default: false,
   },
-});
+})
 
 // 2. Inject context from GlassRadioGroup
-const group = inject("radioGroup");
+const group = inject('radioGroup')
 if (!group) {
-  console.error("GlassRadioItem must be used inside GlassRadioGroup.");
+  console.error('GlassRadioItem must be used inside GlassRadioGroup.')
 }
 
 // 3. Computed Properties from injected context
-const name = computed(() => group.name);
-const theme = computed(() => group.theme.value);
-const isDisabled = computed(() => props.disabled || group.groupDisabled.value);
+const name = computed(() => group.name)
+const theme = computed(() => group.theme.value)
+const isDisabled = computed(() => props.disabled || group.groupDisabled.value)
 
 // Check if the current item is selected
-const isChecked = computed(() => group.selectedValue.value === props.value);
+const isChecked = computed(() => group.selectedValue.value === props.value)
 
 // 4. Handler
 const handleChange = () => {
   if (!isDisabled.value) {
-    group.updateValue(props.value);
+    group.updateValue(props.value)
   }
-};
+}
 </script>
 
 <style scoped>
@@ -139,7 +139,7 @@ const handleChange = () => {
 
 /* --- COMMON GLASS STYLES (Applies to the whole item on hover/checked) --- */
 .radio-item::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;

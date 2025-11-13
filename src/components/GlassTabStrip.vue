@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed } from 'vue'
 
 const props = defineProps({
   /** The currently selected tab key (v-model). */
@@ -33,41 +33,41 @@ const props = defineProps({
   /** The field name to use for the unique identifier if 'tabs' are objects. */
   keyField: {
     type: String,
-    default: "key",
+    default: 'key',
   },
   /** The field name to use for the display label if 'tabs' are objects. */
   labelField: {
     type: String,
-    default: "label",
+    default: 'label',
   },
-});
+})
 
-const emit = defineEmits(["update:modelValue", "select"]);
+const emit = defineEmits(['update:modelValue', 'select'])
 
 /**
  * Normalizes the tabs array to [{ key: key, label: label }, ...] format.
  */
 const normalizedTabs = computed(() => {
   return props.tabs.map((tab) => {
-    if (typeof tab === "string") {
-      return { key: tab, label: tab };
+    if (typeof tab === 'string') {
+      return { key: tab, label: tab }
     }
     return {
       key: tab[props.keyField],
       label: tab[props.labelField],
-    };
-  });
-});
+    }
+  })
+})
 
 /**
  * Handles tab selection, updating the model value and emitting a custom event.
  */
 const selectTab = (key) => {
   if (key !== props.modelValue) {
-    emit("update:modelValue", key);
-    emit("select", key);
+    emit('update:modelValue', key)
+    emit('select', key)
   }
-};
+}
 </script>
 
 <style scoped>
@@ -167,9 +167,7 @@ const selectTab = (key) => {
   color: var(--selected-text);
   /* Selected tab border logic: blue border-b-2 */
   border-bottom: 2px solid #007aff;
-  padding-bottom: calc(
-    0.5rem - 2px
-  ); /* Adjust padding to keep height consistent */
+  padding-bottom: calc(0.5rem - 2px); /* Adjust padding to keep height consistent */
 }
 
 .selected-tab:hover {

@@ -1,9 +1,5 @@
 <template>
-  <div
-    v-if="isVisible"
-    class="popup-backdrop"
-    @click.self="closeOnOutsideClick && close()"
-  >
+  <div v-if="isVisible" class="popup-backdrop" @click.self="closeOnOutsideClick && close()">
     <div class="popup-overlay"></div>
 
     <div
@@ -19,11 +15,7 @@
     >
       <slot></slot>
 
-      <button
-        @click="close"
-        class="popup-close-button"
-        aria-label="Close popup"
-      >
+      <button @click="close" class="popup-close-button" aria-label="Close popup">
         <svg
           class="close-icon"
           fill="none"
@@ -44,7 +36,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -55,26 +47,26 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-});
+})
 
-const emit = defineEmits(["update:modelValue", "close"]);
+const emit = defineEmits(['update:modelValue', 'close'])
 
-const isVisible = ref(props.modelValue);
+const isVisible = ref(props.modelValue)
 
 // Sync internal state with v-model (modelValue prop)
 watch(
   () => props.modelValue,
   (newVal) => {
-    isVisible.value = newVal;
+    isVisible.value = newVal
   },
-);
+)
 
 // Sync v-model back to parent
 const close = () => {
-  isVisible.value = false;
-  emit("update:modelValue", false);
-  emit("close");
-};
+  isVisible.value = false
+  emit('update:modelValue', false)
+  emit('close')
+}
 </script>
 
 <style scoped>

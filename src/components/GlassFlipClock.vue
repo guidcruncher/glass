@@ -23,11 +23,7 @@
 
       <div class="timezone-select-wrapper">
         <label for="timezone-select" class="select-label">Timezone</label>
-        <select
-          id="timezone-select"
-          v-model="selectedTimeZone"
-          class="timezone-select-control"
-        >
+        <select id="timezone-select" v-model="selectedTimeZone" class="timezone-select-control">
           <option v-for="tz in timeZones" :key="tz" :value="tz">
             {{ tz }}
           </option>
@@ -38,72 +34,67 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
-import FlipDigit from "./FlipDigit.vue"; // Assuming this exists
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import FlipDigit from './FlipDigit.vue' // Assuming this exists
 
 // --- STATE ---
-const time = ref(new Date());
-const timeZones = [
-  "America/New_York",
-  "Europe/London",
-  "Asia/Tokyo",
-  "Australia/Sydney",
-];
-const selectedTimeZone = ref(timeZones[1]);
-let timer = null;
+const time = ref(new Date())
+const timeZones = ['America/New_York', 'Europe/London', 'Asia/Tokyo', 'Australia/Sydney']
+const selectedTimeZone = ref(timeZones[1])
+let timer = null
 
 // --- Time Calculation and Formatting ---
 const getTimeInZone = (date) => {
-  const formatter = new Intl.DateTimeFormat("en-US", {
+  const formatter = new Intl.DateTimeFormat('en-US', {
     timeZone: selectedTimeZone.value,
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
     hour12: false,
-  });
+  })
 
-  const parts = formatter.formatToParts(date);
+  const parts = formatter.formatToParts(date)
   // Find and concatenate the hour, minute, and second parts
-  const hour = parts.find((p) => p.type === "hour")?.value || "00";
-  const minute = parts.find((p) => p.type === "minute")?.value || "00";
-  const second = parts.find((p) => p.type === "second")?.value || "00";
+  const hour = parts.find((p) => p.type === 'hour')?.value || '00'
+  const minute = parts.find((p) => p.type === 'minute')?.value || '00'
+  const second = parts.find((p) => p.type === 'second')?.value || '00'
 
-  return `${hour}${minute}${second}`;
-};
+  return `${hour}${minute}${second}`
+}
 
 // Returns an array of 6 digits (HHMMSS)
 const timeDigits = computed(() => {
-  return Array.from(getTimeInZone(time.value));
-});
+  return Array.from(getTimeInZone(time.value))
+})
 
 const formattedDate = computed(() =>
-  time.value.toLocaleDateString("en-US", {
+  time.value.toLocaleDateString('en-US', {
     timeZone: selectedTimeZone.value,
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   }),
-);
+)
 
 const timeZoneLabel = computed(() => {
-  const formatter = new Intl.DateTimeFormat("en-US", {
+  const formatter = new Intl.DateTimeFormat('en-US', {
     timeZone: selectedTimeZone.value,
-    timeZoneName: "longOffset",
-  });
-  return formatter.format(time.value);
-});
+    timeZoneName: 'longOffset',
+  })
+  return formatter.format(time.value)
+})
 
 // --- Lifecycle ---
 onMounted(() => {
   timer = setInterval(() => {
-    time.value = new Date();
-  }, 100);
-});
+    time.value = new Date()
+  }, 100)
+})
 
 onUnmounted(() => {
-  if (timer) clearInterval(timer);
-});
+  if (timer) clearInterval(timer)
+})
 </script>
 
 <style scoped>

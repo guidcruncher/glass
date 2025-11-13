@@ -6,19 +6,13 @@
         <span>{{ progress }}%</span>
       </div>
       <div class="progress-track">
-        <div
-          id="progress-fill"
-          class="progress-fill"
-          :style="{ width: progress + '%' }"
-        ></div>
+        <div id="progress-fill" class="progress-fill" :style="{ width: progress + '%' }"></div>
       </div>
     </div>
   </section>
 </template>
 
-<script setup>
-import { ref } from "vue";
-</script>
+<script setup></script>
 
 <style scoped>
 /* ===================================================================
@@ -94,18 +88,14 @@ import { ref } from "vue";
 .progress-fill {
   height: 100%; /* h-full */
   border-radius: inherit; /* rounded-full */
-  background: linear-gradient(
-    to right,
-    #007aff,
-    #00c2ff
-  ); /* bg-gradient-to-r */
+  background: linear-gradient(to right, #007aff, #00c2ff); /* bg-gradient-to-r */
   transition: width 0.6s ease;
   position: relative;
 }
 
 /* Shimmer/Aesthetic effect (retaining complex CSS/Keyframes) */
 .progress-fill::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   right: 0;

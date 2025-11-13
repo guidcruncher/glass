@@ -5,20 +5,20 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed } from 'vue'
 
 const props = defineProps({
   variant: {
     type: String,
-    default: "dark", // 'dark' or 'light'
-    validator: (value) => ["dark", "light"].includes(value),
+    default: 'dark', // 'dark' or 'light'
+    validator: (value) => ['dark', 'light'].includes(value),
   },
-});
+})
 
 // The class determines which set of CSS variables is used
 const panelClass = computed(() => {
-  return props.variant === "light" ? "light-panel" : "dark-panel";
-});
+  return props.variant === 'light' ? 'light-panel' : 'dark-panel'
+})
 </script>
 
 <style scoped>

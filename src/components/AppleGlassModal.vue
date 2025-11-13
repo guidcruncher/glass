@@ -1,10 +1,6 @@
 <template>
   <teleport to="body">
-    <div
-      v-if="isVisible"
-      class="modal-backdrop"
-      @click.self="closeOnOutsideClick && close()"
-    >
+    <div v-if="isVisible" class="modal-backdrop" @click.self="closeOnOutsideClick && close()">
       <div
         :class="[
           'modal-container',
@@ -110,7 +106,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -121,53 +117,48 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-});
+})
 
-const emit = defineEmits([
-  "update:modelValue",
-  "close",
-  "minimize",
-  "maximize",
-]);
+const emit = defineEmits(['update:modelValue', 'close', 'minimize', 'maximize'])
 
-const isVisible = ref(props.modelValue);
-const isMaximized = ref(false);
+const isVisible = ref(props.modelValue)
+const isMaximized = ref(false)
 
 watch(
   () => props.modelValue,
   (newVal) => {
-    isVisible.value = newVal;
+    isVisible.value = newVal
     // Control body scroll when modal is open
-    document.body.style.overflow = newVal ? "hidden" : "";
+    document.body.style.overflow = newVal ? 'hidden' : ''
   },
-);
+)
 
 const close = () => {
-  isVisible.value = false;
-  isMaximized.value = false; // Reset maximization on close
-  emit("update:modelValue", false);
-  emit("close");
-};
+  isVisible.value = false
+  isMaximized.value = false // Reset maximization on close
+  emit('update:modelValue', false)
+  emit('close')
+}
 
 const minimize = () => {
   // Minimizing typically means closing the modal and letting the parent
   // component handle its minimized state (e.g., a dock icon).
-  close();
-  console.log("Modal minimized action triggered.");
-  emit("minimize");
-};
+  close()
+  console.log('Modal minimized action triggered.')
+  emit('minimize')
+}
 
 const toggleMaximize = () => {
-  isMaximized.value = !isMaximized.value;
-  console.log("Modal maximized state toggled:", isMaximized.value);
-  emit("maximize", isMaximized.value); // Emit new state to parent
-};
+  isMaximized.value = !isMaximized.value
+  console.log('Modal maximized state toggled:', isMaximized.value)
+  emit('maximize', isMaximized.value) // Emit new state to parent
+}
 
 defineExpose({
   close,
   minimize,
   toggleMaximize,
-});
+})
 </script>
 
 <style scoped lang="scss">

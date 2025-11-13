@@ -1,9 +1,6 @@
 <template>
   <div :class="['analog-clock-view-container', bgClass]">
-    <div
-      :class="['clock-face-container', glassClass]"
-      :style="{ width: size, height: size }"
-    >
+    <div :class="['clock-face-container', glassClass]" :style="{ width: size, height: size }">
       <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 400">
         <defs>
           <filter id="glow">
@@ -101,7 +98,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 const props = defineProps({
   timeZone: {
@@ -109,66 +106,64 @@ const props = defineProps({
     default: Intl.DateTimeFormat().resolvedOptions().timeZone,
     validator: (value) => {
       try {
-        Intl.DateTimeFormat(undefined, { timeZone: value });
-        return true;
+        Intl.DateTimeFormat(undefined, { timeZone: value })
+        return true
       } catch {
-        return false;
+        return false
       }
     },
   },
   // Controls the rendered size of the clock component
   size: {
     type: String,
-    default: "400px",
+    default: '400px',
   },
-});
+})
 
-const time = ref(new Date());
-const isDark = ref(false);
-let timer = null;
+const time = ref(new Date())
+const isDark = ref(false)
+let timer = null
 
 // --- Sizing Constants (Based on 400x400 ViewBox) ---
-const VIEWBOX_SIZE = 400;
-const CENTER = VIEWBOX_SIZE / 2;
-const RADIUS = CENTER;
+const VIEWBOX_SIZE = 400
+const CENTER = VIEWBOX_SIZE / 2
+const RADIUS = CENTER
 
 // Hand and Marker Length Ratios (relative to RADIUS)
-const HOUR_HAND_RATIO = 0.4; // 80 / 200 = 0.4
-const MINUTE_HAND_RATIO = 0.6; // 120 / 200 = 0.6
-const SECOND_HAND_RATIO = 0.7; // 140 / 200 = 0.7
-const NUMBER_DISTANCE_RATIO = 0.65; // Hour Numbers (12, 3, 6, 9)
+const HOUR_HAND_RATIO = 0.4 // 80 / 200 = 0.4
+const MINUTE_HAND_RATIO = 0.6 // 120 / 200 = 0.6
+const SECOND_HAND_RATIO = 0.7 // 140 / 200 = 0.7
+const NUMBER_DISTANCE_RATIO = 0.65 // Hour Numbers (12, 3, 6, 9)
 // Removed: const MINUTE_NUMBER_DISTANCE_RATIO = 0.80;
-const OUTER_MARKER_RATIO = 0.85; // 170 / 200 = 0.85
-const INNER_MARKER_RATIO = 0.75; // 150 / 200 = 0.75
+const OUTER_MARKER_RATIO = 0.85 // 170 / 200 = 0.85
+const INNER_MARKER_RATIO = 0.75 // 150 / 200 = 0.75
 
 // --- Time Logic ---
 const getTimeInZone = (date) => {
-  const formatter = new Intl.DateTimeFormat("en-US", {
+  const formatter = new Intl.DateTimeFormat('en-US', {
     timeZone: props.timeZone,
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
     hour12: false,
-  });
+  })
 
-  const parts = formatter.formatToParts(date);
-  const hours = parseInt(parts.find((p) => p.type === "hour").value);
-  const minutes = parseInt(parts.find((p) => p.type === "minute").value);
-  const seconds = parseInt(parts.find((p) => p.type === "second").value);
+  const parts = formatter.formatToParts(date)
+  const hours = parseInt(parts.find((p) => p.type === 'hour').value)
+  const minutes = parseInt(parts.find((p) => p.type === 'minute').value)
+  const seconds = parseInt(parts.find((p) => p.type === 'second').value)
 
-  return { hours, minutes, seconds };
-};
+  return { hours, minutes, seconds }
+}
 
-const timeInZone = computed(() => getTimeInZone(time.value));
-const hours = computed(() => timeInZone.value.hours % 12);
-const minutes = computed(() => timeInZone.value.minutes);
-const seconds = computed(() => timeInZone.value.seconds);
+const timeInZone = computed(() => getTimeInZone(time.value))
+const hours = computed(() => timeInZone.value.hours % 12)
+const minutes = computed(() => timeInZone.value.minutes)
+const seconds = computed(() => timeInZone.value.seconds)
 
-const secondAngle = computed(() => seconds.value * 6 - 90);
-const minuteAngle = computed(
-  () => minutes.value * 6 + seconds.value * 0.1 - 90,
-);
-const hourAngle = computed(() => hours.value * 30 + minutes.value * 0.5 - 90);
+const secondAngle = computed(() => seconds.value * 6 - 90)
+const minuteAngle = computed(() => minutes.value * 6 + seconds.value * 0.1 - 90)
+const hourAngle = computed(() => hours.value * 30 + minutes.value * 0.5 - 90)
 
 // --- SVG Calculation Logic ---
 
@@ -176,27 +171,21 @@ const hourAngle = computed(() => hours.value * 30 + minutes.value * 0.5 - 90);
  * Calculates the end point of a hand based on angle and length ratio.
  */
 const getHandEndPoint = (angle, ratio) => {
-  const length = RADIUS * ratio;
-  const radians = (angle * Math.PI) / 180;
+  const length = RADIUS * ratio
+  const radians = (angle * Math.PI) / 180
   return {
     x: CENTER + length * Math.cos(radians),
     y: CENTER + length * Math.sin(radians),
-  };
-};
+  }
+}
 
-const hourEnd = computed(() =>
-  getHandEndPoint(hourAngle.value, HOUR_HAND_RATIO),
-);
-const minuteEnd = computed(() =>
-  getHandEndPoint(minuteAngle.value, MINUTE_HAND_RATIO),
-);
-const secondEnd = computed(() =>
-  getHandEndPoint(secondAngle.value, SECOND_HAND_RATIO),
-);
+const hourEnd = computed(() => getHandEndPoint(hourAngle.value, HOUR_HAND_RATIO))
+const minuteEnd = computed(() => getHandEndPoint(minuteAngle.value, MINUTE_HAND_RATIO))
+const secondEnd = computed(() => getHandEndPoint(secondAngle.value, SECOND_HAND_RATIO))
 
 const getMarkerPosition = (i) => {
-  const angle = i * 30 - 90;
-  const radians = (angle * Math.PI) / 180;
+  const angle = i * 30 - 90
+  const radians = (angle * Math.PI) / 180
   return {
     // Outer Marker Position
     outerX: CENTER + RADIUS * OUTER_MARKER_RATIO * Math.cos(radians),
@@ -204,8 +193,8 @@ const getMarkerPosition = (i) => {
     // Inner Marker Position
     innerX: CENTER + RADIUS * INNER_MARKER_RATIO * Math.cos(radians),
     innerY: CENTER + RADIUS * INNER_MARKER_RATIO * Math.sin(radians),
-  };
-};
+  }
+}
 
 const getNumberPosition = (num) => {
   const positions = {
@@ -213,86 +202,86 @@ const getNumberPosition = (num) => {
     3: { angle: 0 },
     6: { angle: 90 },
     9: { angle: 180 },
-  };
-  const angle = positions[num].angle;
-  const radians = (angle * Math.PI) / 180;
+  }
+  const angle = positions[num].angle
+  const radians = (angle * Math.PI) / 180
 
   // Position numbers further out than hands
-  const distance = RADIUS * NUMBER_DISTANCE_RATIO;
+  const distance = RADIUS * NUMBER_DISTANCE_RATIO
   return {
     x: CENTER + distance * Math.cos(radians),
     y: CENTER + distance * Math.sin(radians),
-  };
-};
+  }
+}
 
 // Removed: getMinuteNumberPosition
 
 // --- UI Styling ---
 const bgClass = computed(() =>
   isDark.value
-    ? "bg-gradient-to-br from-gray-900 via-purple-900 to-gray-800"
-    : "bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100",
-);
+    ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-gray-800'
+    : 'bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100',
+)
 
 const glassClass = computed(() =>
   isDark.value
-    ? "bg-[rgba(30,30,30,0.4)] border-[rgba(255,255,255,0.15)]"
-    : "bg-[rgba(255,255,255,0.65)] border-[rgba(255,255,255,0.8)]",
-);
+    ? 'bg-[rgba(30,30,30,0.4)] border-[rgba(255,255,255,0.15)]'
+    : 'bg-[rgba(255,255,255,0.65)] border-[rgba(255,255,255,0.8)]',
+)
 
 const numberFontSize = computed(() => {
   // Scales the font size based on the string value of the size prop
-  const baseSize = parseFloat(props.size);
+  const baseSize = parseFloat(props.size)
   if (!isNaN(baseSize)) {
-    return `calc(${props.size} / 16)`; // Scales font size relative to container size
+    return `calc(${props.size} / 16)` // Scales font size relative to container size
   }
-  return "1.5rem"; // Default font size
-});
+  return '1.5rem' // Default font size
+})
 
 // Removed: minuteNumberFontSize
 
 // --- Display Text ---
 const formattedTime = computed(() =>
-  time.value.toLocaleTimeString("en-US", { timeZone: props.timeZone }),
-);
+  time.value.toLocaleTimeString('en-US', { timeZone: props.timeZone }),
+)
 
 const formattedDate = computed(() =>
-  time.value.toLocaleDateString("en-US", {
+  time.value.toLocaleDateString('en-US', {
     timeZone: props.timeZone,
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   }),
-);
+)
 
 const timeZoneLabel = computed(() => {
-  const formatter = new Intl.DateTimeFormat("en-US", {
+  const formatter = new Intl.DateTimeFormat('en-US', {
     timeZone: props.timeZone,
-    timeZoneName: "short",
-  });
-  const parts = formatter.formatToParts(time.value);
-  return parts.find((p) => p.type === "timeZoneName")?.value || props.timeZone;
-});
+    timeZoneName: 'short',
+  })
+  const parts = formatter.formatToParts(time.value)
+  return parts.find((p) => p.type === 'timeZoneName')?.value || props.timeZone
+})
 
 // --- Lifecycle ---
 const checkTheme = () => {
-  isDark.value = document.documentElement.classList.contains("dark");
-};
+  isDark.value = document.documentElement.classList.contains('dark')
+}
 
 onMounted(() => {
   timer = setInterval(() => {
-    time.value = new Date();
-    checkTheme();
-  }, 1000);
-  checkTheme(); // Initial check
-});
+    time.value = new Date()
+    checkTheme()
+  }, 1000)
+  checkTheme() // Initial check
+})
 
 onUnmounted(() => {
   if (timer) {
-    clearInterval(timer);
+    clearInterval(timer)
   }
-});
+})
 </script>
 
 <style scoped>

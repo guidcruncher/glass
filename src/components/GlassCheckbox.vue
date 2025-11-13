@@ -1,7 +1,5 @@
 <template>
-  <label
-    :class="['glass-checkbox-label', themeClass, { 'is-disabled': disabled }]"
-  >
+  <label :class="['glass-checkbox-label', themeClass, { 'is-disabled': disabled }]">
     <input
       type="checkbox"
       class="hidden-input"
@@ -31,7 +29,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 const props = defineProps({
   /** Binds to the checkbox's checked state (v-model) */
@@ -44,38 +42,36 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-});
+})
 
-const emit = defineEmits(["update:modelValue", "change"]);
+const emit = defineEmits(['update:modelValue', 'change'])
 
 // --- THEME AWARENESS (Polling for reactivity to external theme changes) ---
-const isDarkRef = ref(document.documentElement.classList.contains("dark"));
-let themeCheckerInterval = null;
+const isDarkRef = ref(document.documentElement.classList.contains('dark'))
+let themeCheckerInterval = null
 
 onMounted(() => {
   // Poll the DOM class list every 300ms to detect external theme changes
   themeCheckerInterval = setInterval(() => {
-    const isCurrentlyDark = document.documentElement.classList.contains("dark");
+    const isCurrentlyDark = document.documentElement.classList.contains('dark')
     if (isDarkRef.value !== isCurrentlyDark) {
-      isDarkRef.value = isCurrentlyDark;
+      isDarkRef.value = isCurrentlyDark
     }
-  }, 300);
-});
+  }, 300)
+})
 
 onUnmounted(() => {
-  clearInterval(themeCheckerInterval);
-});
+  clearInterval(themeCheckerInterval)
+})
 
-const themeClass = computed(() =>
-  isDarkRef.value ? "dark-mode" : "light-mode",
-);
+const themeClass = computed(() => (isDarkRef.value ? 'dark-mode' : 'light-mode'))
 
 // --- EVENT HANDLER ---
 const handleChange = (event) => {
-  const isChecked = event.target.checked;
-  emit("update:modelValue", isChecked);
-  emit("change", isChecked);
-};
+  const isChecked = event.target.checked
+  emit('update:modelValue', isChecked)
+  emit('change', isChecked)
+}
 </script>
 
 <style scoped lang="scss">

@@ -7,19 +7,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
-        darkMode: "class",
+        darkMode: 'class',
         theme: {
           extend: {
-            backdropBlur: { xs: "2px" },
+            backdropBlur: { xs: '2px' },
             colors: {
-              glassLight: "rgba(255, 255, 255, 0.65)",
-              glassLightBorder: "rgba(255, 255, 255, 0.8)",
-              glassDark: "rgba(30, 30, 30, 0.4)",
-              glassDarkBorder: "rgba(255, 255, 255, 0.15)",
+              glassLight: 'rgba(255, 255, 255, 0.65)',
+              glassLightBorder: 'rgba(255, 255, 255, 0.8)',
+              glassDark: 'rgba(30, 30, 30, 0.4)',
+              glassDarkBorder: 'rgba(255, 255, 255, 0.15)',
             },
           },
         },
-      };
+      }
     </script>
     <style>
       /* Glassmorphic Classes */
@@ -40,12 +40,12 @@
 
       /* Fixed Background */
       .fixed-bg {
-        background: url("https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=2940&auto=format&fit=crop")
+        background: url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=2940&auto=format&fit=crop')
           center center / cover no-repeat fixed;
       }
 
       /* Radio Buttons - Fixed */
-      input[type="radio"].glass-radio {
+      input[type='radio'].glass-radio {
         appearance: none;
         width: 20px;
         height: 20px;
@@ -59,28 +59,28 @@
         transition: all 0.2s ease;
       }
 
-      .light input[type="radio"].glass-radio {
+      .light input[type='radio'].glass-radio {
         border-color: rgba(0, 0, 0, 0.25);
         background: rgba(255, 255, 255, 0.6);
       }
 
-      .dark input[type="radio"].glass-radio {
+      .dark input[type='radio'].glass-radio {
         border-color: rgba(255, 255, 255, 0.35);
         background: rgba(255, 255, 255, 0.05);
       }
 
-      input[type="radio"].glass-radio:checked {
+      input[type='radio'].glass-radio:checked {
         background: rgba(255, 255, 255, 0.3);
         border-color: rgba(255, 255, 255, 0.6);
       }
 
-      .light input[type="radio"].glass-radio:checked {
+      .light input[type='radio'].glass-radio:checked {
         background: rgba(0, 0, 0, 0.7);
         border-color: rgba(0, 0, 0, 0.8);
       }
 
-      input[type="radio"].glass-radio:checked::after {
-        content: "";
+      input[type='radio'].glass-radio:checked::after {
+        content: '';
         position: absolute;
         top: 50%;
         left: 50%;
@@ -91,13 +91,13 @@
         background: white;
       }
 
-      .light input[type="radio"].glass-radio:checked::after {
+      .light input[type='radio'].glass-radio:checked::after {
         background: white;
       }
 
       /* Checkbox & Radio */
-      input[type="checkbox"].glass-check,
-      input[type="radio"].glass-radio {
+      input[type='checkbox'].glass-check,
+      input[type='radio'].glass-radio {
         appearance: none;
         width: 20px;
         height: 20px;
@@ -110,46 +110,46 @@
         position: relative;
         transition: all 0.2s ease;
       }
-      input[type="radio"].glass-radio {
+      input[type='radio'].glass-radio {
         border-radius: 50%;
       }
 
-      .light input[type="checkbox"].glass-check,
-      .light input[type="radio"].glass-radio {
+      .light input[type='checkbox'].glass-check,
+      .light input[type='radio'].glass-radio {
         border-color: rgba(0, 0, 0, 0.25);
         background: rgba(255, 255, 255, 0.6);
       }
-      .light input[type="checkbox"].glass-check:checked,
-      .light input[type="radio"].glass-radio:checked {
+      .light input[type='checkbox'].glass-check:checked,
+      .light input[type='radio'].glass-radio:checked {
         background: rgba(0, 0, 0, 0.7);
         border-color: rgba(0, 0, 0, 0.8);
       }
-      .light input[type="checkbox"].glass-check:checked::after {
+      .light input[type='checkbox'].glass-check:checked::after {
         color: white;
       }
-      .light input[type="radio"].glass-radio:checked::after {
+      .light input[type='radio'].glass-radio:checked::after {
         background: white;
       }
 
-      .dark input[type="checkbox"].glass-check,
-      .dark input[type="radio"].glass-radio {
+      .dark input[type='checkbox'].glass-check,
+      .dark input[type='radio'].glass-radio {
         border-color: rgba(255, 255, 255, 0.35);
         background: rgba(255, 255, 255, 0.05);
       }
-      .dark input[type="checkbox"].glass-check:checked,
-      .dark input[type="radio"].glass-radio:checked {
+      .dark input[type='checkbox'].glass-check:checked,
+      .dark input[type='radio'].glass-radio:checked {
         background: rgba(255, 255, 255, 0.3);
         border-color: rgba(255, 255, 255, 0.6);
       }
-      .dark input[type="checkbox"].glass-check:checked::after {
+      .dark input[type='checkbox'].glass-check:checked::after {
         color: white;
       }
-      .dark input[type="radio"].glass-radio:checked::after {
+      .dark input[type='radio'].glass-radio:checked::after {
         background: white;
       }
 
-      input[type="checkbox"].glass-check:checked::after {
-        content: "✓";
+      input[type='checkbox'].glass-check:checked::after {
+        content: '✓';
         position: absolute;
         top: 50%;
         left: 50%;
@@ -157,8 +157,8 @@
         font-weight: bold;
         font-size: 14px;
       }
-      input[type="radio"].glass-radio:checked::after {
-        content: "";
+      input[type='radio'].glass-radio:checked::after {
+        content: '';
         position: absolute;
         top: 50%;
         left: 50%;
@@ -197,7 +197,7 @@
       }
       .slider:before {
         position: absolute;
-        content: "";
+        content: '';
         height: 26px;
         width: 26px;
         left: 3px;
@@ -255,9 +255,7 @@
       <header
         class="glass-dark border-b border-white border-opacity-15 backdrop-blur-xl sticky top-0 z-50"
       >
-        <div
-          class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
-        >
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <h1 class="text-2xl font-semibold tracking-tight">Glassmorphic UI</h1>
           <div class="flex items-center space-x-6">
             <nav class="hidden md:flex space-x-6">
@@ -324,9 +322,7 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="glass-light rounded-2xl p-6 space-y-4">
                   <h3 class="text-lg font-medium text-gray-900">Light Panel</h3>
-                  <p class="text-sm opacity-80 text-gray-700">
-                    Bright and airy with soft blur.
-                  </p>
+                  <p class="text-sm opacity-80 text-gray-700">Bright and airy with soft blur.</p>
                 </div>
                 <div class="glass-dark rounded-2xl p-6 space-y-4">
                   <h3 class="text-lg font-medium">Dark Panel</h3>
@@ -341,9 +337,7 @@
 
               <!-- Text Input -->
               <div class="space-y-2">
-                <label class="block text-sm font-medium opacity-80"
-                  >Text Input</label
-                >
+                <label class="block text-sm font-medium opacity-80">Text Input</label>
                 <input
                   type="text"
                   placeholder="Enter text..."
@@ -367,22 +361,11 @@
               <div class="space-y-3">
                 <p class="text-sm font-medium opacity-80">Choose theme:</p>
                 <label class="flex items-center space-x-3 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="theme"
-                    class="glass-radio"
-                    value="light"
-                  />
+                  <input type="radio" name="theme" class="glass-radio" value="light" />
                   <span>Light</span>
                 </label>
                 <label class="flex items-center space-x-3 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="theme"
-                    class="glass-radio"
-                    value="dark"
-                    checked
-                  />
+                  <input type="radio" name="theme" class="glass-radio" value="dark" checked />
                   <span>Dark</span>
                 </label>
               </div>
@@ -403,14 +386,10 @@
             </section>
 
             <!-- Bottom Sheet -->
-            <section
-              class="glass-dark rounded-t-3xl p-6 md:rounded-2xl max-w-md mx-auto"
-            >
+            <section class="glass-dark rounded-t-3xl p-6 md:rounded-2xl max-w-md mx-auto">
               <div class="w-12 h-1 bg-gray-500 rounded-full mx-auto mb-6"></div>
               <h3 class="text-lg font-medium mb-3">Bottom Sheet</h3>
-              <p class="text-sm opacity-80 mb-4">
-                Mobile-style panel with grab handle.
-              </p>
+              <p class="text-sm opacity-80 mb-4">Mobile-style panel with grab handle.</p>
               <button
                 class="w-full py-3 rounded-xl bg-white bg-opacity-20 backdrop-blur-md font-medium hover:bg-opacity-30 transition"
               >
@@ -422,9 +401,7 @@
       </div>
 
       <!-- Footer -->
-      <footer
-        class="glass-dark border-t border-white border-opacity-15 mt-auto"
-      >
+      <footer class="glass-dark border-t border-white border-opacity-15 mt-auto">
         <div class="max-w-7xl mx-auto px-6 py-4 text-center text-sm opacity-70">
           © 2025 Glassmorphic UI. Inspired by Apple’s design language.
         </div>
@@ -432,10 +409,7 @@
     </div>
 
     <!-- Modal Dialog -->
-    <div
-      id="modal"
-      class="fixed inset-0 z-50 hidden items-center justify-center p-4"
-    >
+    <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
       <div
         class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
         onclick="closeModal()"
@@ -471,52 +445,49 @@
     </button>
 
     <script>
-      const toggleInput = document.getElementById("theme-toggle-input");
-      const app = document.getElementById("app");
-      const overlay = document.getElementById("overlay");
+      const toggleInput = document.getElementById('theme-toggle-input')
+      const app = document.getElementById('app')
+      const overlay = document.getElementById('overlay')
 
       // Load saved theme
-      const savedTheme = localStorage.getItem("theme");
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)",
-      ).matches;
+      const savedTheme = localStorage.getItem('theme')
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 
       function setTheme(theme) {
-        if (theme === "dark") {
-          document.documentElement.classList.add("dark");
-          app.classList.replace("light", "dark");
-          overlay.classList.replace("bg-white", "bg-black");
-          overlay.classList.replace("bg-opacity-20", "bg-opacity-40");
-          toggleInput.checked = true;
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark')
+          app.classList.replace('light', 'dark')
+          overlay.classList.replace('bg-white', 'bg-black')
+          overlay.classList.replace('bg-opacity-20', 'bg-opacity-40')
+          toggleInput.checked = true
         } else {
-          document.documentElement.classList.remove("dark");
-          app.classList.replace("dark", "light");
-          overlay.classList.replace("bg-black", "bg-white");
-          overlay.classList.replace("bg-opacity-40", "bg-opacity-20");
-          toggleInput.checked = false;
+          document.documentElement.classList.remove('dark')
+          app.classList.replace('dark', 'light')
+          overlay.classList.replace('bg-black', 'bg-white')
+          overlay.classList.replace('bg-opacity-40', 'bg-opacity-20')
+          toggleInput.checked = false
         }
-        localStorage.setItem("theme", theme);
+        localStorage.setItem('theme', theme)
       }
 
       // Initialize
       if (savedTheme) {
-        setTheme(savedTheme);
+        setTheme(savedTheme)
       } else if (prefersDark) {
-        setTheme("dark");
+        setTheme('dark')
       } else {
-        setTheme("light");
+        setTheme('light')
       }
 
       // Toggle on change
-      toggleInput.addEventListener("change", () => {
-        const current =
-          localStorage.getItem("theme") || (prefersDark ? "dark" : "light");
-        setTheme(current === "dark" ? "light" : "dark");
-      });
+      toggleInput.addEventListener('change', () => {
+        const current = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light')
+        setTheme(current === 'dark' ? 'light' : 'dark')
+      })
 
       function closeModal() {
-        document.getElementById("modal").classList.add("hidden");
-        document.getElementById("modal").classList.remove("flex");
+        document.getElementById('modal').classList.add('hidden')
+        document.getElementById('modal').classList.remove('flex')
       }
     </script>
   </body>

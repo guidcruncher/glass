@@ -1,10 +1,6 @@
 <template>
   <button
-    :class="[
-      'glass-button',
-      buttonSizeClass,
-      disabled ? 'disabled' : enabledClass,
-    ]"
+    :class="['glass-button', buttonSizeClass, disabled ? 'disabled' : enabledClass]"
     :style="buttonStyles"
     :disabled="disabled"
     @click="handleClick"
@@ -14,62 +10,60 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed } from 'vue'
 
 const props = defineProps({
   /** The text label to display on the button. */
   label: {
     type: String,
-    default: "Button",
+    default: 'Button',
   },
   /** Defines the button's style variant. */
   variant: {
     type: String,
-    default: "primary",
+    default: 'primary',
   },
   /** Optional custom color (applies only if variant is 'custom'). */
   color: {
     type: String,
-    default: "",
+    default: '',
   },
   /** Optional width for the button (e.g., '120px'). */
   width: {
     type: String,
-    default: "auto",
+    default: 'auto',
   },
   /** Optional height for the button (e.g., '40px'). */
   height: {
     type: String,
-    default: "auto",
+    default: 'auto',
   },
   /** If true, the button is disabled and click event is suppressed. */
   disabled: {
     type: Boolean,
     default: false,
   },
-});
+})
 
-const emit = defineEmits(["click"]);
+const emit = defineEmits(['click'])
 
 /**
  * Calculates the class name for the enabled variant style.
  */
 const enabledClass = computed(() => {
-  if (props.variant === "custom" && props.color) {
-    return "custom";
+  if (props.variant === 'custom' && props.color) {
+    return 'custom'
   }
   // All other variants map directly to a CSS class
-  return props.variant;
-});
+  return props.variant
+})
 
 /**
  * Calculates the class for default padding/sizing only if width/height are auto.
  */
 const buttonSizeClass = computed(() => {
-  return props.width === "auto" && props.height === "auto"
-    ? "default-size"
-    : "custom-size";
-});
+  return props.width === 'auto' && props.height === 'auto' ? 'default-size' : 'custom-size'
+})
 
 /**
  * Applies custom width and height styles.
@@ -77,27 +71,27 @@ const buttonSizeClass = computed(() => {
  */
 const buttonStyles = computed(() => {
   const styles = {
-    "--btn-width": props.width,
-    "--btn-height": props.height,
-  };
-
-  if (props.variant === "custom" && props.color) {
-    // Set a CSS variable for the custom color base and hover effects
-    styles["--custom-color-base"] = props.color + "60"; // 60% opacity
-    styles["--custom-color-hover"] = props.color;
+    '--btn-width': props.width,
+    '--btn-height': props.height,
   }
 
-  return styles;
-});
+  if (props.variant === 'custom' && props.color) {
+    // Set a CSS variable for the custom color base and hover effects
+    styles['--custom-color-base'] = props.color + '60' // 60% opacity
+    styles['--custom-color-hover'] = props.color
+  }
+
+  return styles
+})
 
 /**
  * Emits the click event only if the button is not disabled.
  */
 const handleClick = (event) => {
   if (!props.disabled) {
-    emit("click", event);
+    emit('click', event)
   }
-};
+}
 </script>
 
 <style scoped>
@@ -188,12 +182,7 @@ const handleClick = (event) => {
     0 3px 6px rgba(0, 0, 0, 0.2);
 }
 .primary:hover:not([disabled]) {
-  background-color: rgba(
-    255,
-    255,
-    255,
-    0.1
-  ); /* Subtle white overlay on hover */
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle white overlay on hover */
 }
 
 /* --- 4. Light (White Glass: Secondary Action over dark BG) --- */
@@ -211,10 +200,7 @@ const handleClick = (event) => {
 
 /* --- 5. Custom Color --- */
 .custom {
-  background-color: var(
-    --custom-color-base,
-    #33333360
-  ); /* Default to dark if var is missing */
+  background-color: var(--custom-color-base, #33333360); /* Default to dark if var is missing */
   color: white;
   border-color: rgba(255, 255, 255, 0.3);
   box-shadow:

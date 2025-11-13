@@ -7,18 +7,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
-        darkMode: "class",
+        darkMode: 'class',
         theme: {
           extend: {
             colors: {
-              glassLight: "rgba(255, 255, 255, 0.65)",
-              glassLightBorder: "rgba(255, 255, 255, 0.8)",
-              glassDark: "rgba(30, 30, 30, 0.4)",
-              glassDarkBorder: "rgba(255, 255, 255, 0.15)",
+              glassLight: 'rgba(255, 255, 255, 0.65)',
+              glassLightBorder: 'rgba(255, 255, 255, 0.8)',
+              glassDark: 'rgba(30, 30, 30, 0.4)',
+              glassDarkBorder: 'rgba(255, 255, 255, 0.15)',
             },
           },
         },
-      };
+      }
     </script>
     <style>
       /* Glassmorphic */
@@ -39,7 +39,7 @@
 
       /* Fixed Background */
       .fixed-bg {
-        background: url("https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=2940&auto=format&fit=crop")
+        background: url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=2940&auto=format&fit=crop')
           center center / cover no-repeat fixed;
       }
 
@@ -47,7 +47,7 @@
       .flip-clock {
         display: flex;
         gap: 12px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         font-weight: 600;
       }
       .flip-digit {
@@ -104,7 +104,7 @@
         height: 200%;
       }
       .flip-face text {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         font-weight: 600;
         dominant-baseline: middle;
         text-anchor: middle;
@@ -160,7 +160,7 @@
       }
       .slider:before {
         position: absolute;
-        content: "";
+        content: '';
         height: 26px;
         width: 26px;
         left: 3px;
@@ -202,9 +202,7 @@
       <header
         class="glass-dark border-b border-white border-opacity-15 backdrop-blur-xl sticky top-0 z-50"
       >
-        <div
-          class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
-        >
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <h1 class="text-2xl font-semibold tracking-tight">Flip Clock</h1>
           <label class="toggle-switch">
             <input type="checkbox" id="theme-toggle-input" />
@@ -217,9 +215,7 @@
         <div class="max-w-4xl mx-auto space-y-12">
           <!-- Digital Flip Clock -->
           <section class="glass-dark rounded-2xl p-8 space-y-6">
-            <h2 class="text-2xl font-semibold text-center">
-              Electromechanical Clock
-            </h2>
+            <h2 class="text-2xl font-semibold text-center">Electromechanical Clock</h2>
             <div class="flex justify-center">
               <div class="flip-clock">
                 <div id="digit-h1" class="flip-digit">
@@ -292,9 +288,7 @@
                 </div>
               </div>
             </div>
-            <p class="text-center text-sm opacity-70" id="timezone-label">
-              London (GMT)
-            </p>
+            <p class="text-center text-sm opacity-70" id="timezone-label">London (GMT)</p>
           </section>
 
           <!-- Timezone Selector -->
@@ -361,9 +355,7 @@
       </main>
 
       <!-- Footer -->
-      <footer
-        class="glass-dark border-t border-white border-opacity-15 mt-auto"
-      >
+      <footer class="glass-dark border-t border-white border-opacity-15 mt-auto">
         <div class="max-w-7xl mx-auto px-6 py-4 text-center text-sm opacity-70">
           © 2025 Glassmorphic UI – Flip Clock
         </div>
@@ -372,46 +364,43 @@
 
     <script>
       // === Theme Toggle ===
-      const toggleInput = document.getElementById("theme-toggle-input");
-      const app = document.getElementById("app");
-      const overlay = document.getElementById("overlay");
-      const savedTheme = localStorage.getItem("theme");
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)",
-      ).matches;
+      const toggleInput = document.getElementById('theme-toggle-input')
+      const app = document.getElementById('app')
+      const overlay = document.getElementById('overlay')
+      const savedTheme = localStorage.getItem('theme')
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 
       function setTheme(theme) {
-        if (theme === "dark") {
-          document.documentElement.classList.add("dark");
-          app.classList.remove("light");
-          app.classList.add("dark");
-          overlay.classList.remove("bg-white", "bg-opacity-20");
-          overlay.classList.add("bg-black", "bg-opacity-40");
-          toggleInput.checked = true;
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark')
+          app.classList.remove('light')
+          app.classList.add('dark')
+          overlay.classList.remove('bg-white', 'bg-opacity-20')
+          overlay.classList.add('bg-black', 'bg-opacity-40')
+          toggleInput.checked = true
         } else {
-          document.documentElement.classList.remove("dark");
-          app.classList.remove("dark");
-          app.classList.add("light");
-          overlay.classList.remove("bg-black", "bg-opacity-40");
-          overlay.classList.add("bg-white", "bg-opacity-20");
-          toggleInput.checked = false;
+          document.documentElement.classList.remove('dark')
+          app.classList.remove('dark')
+          app.classList.add('light')
+          overlay.classList.remove('bg-black', 'bg-opacity-40')
+          overlay.classList.add('bg-white', 'bg-opacity-20')
+          toggleInput.checked = false
         }
-        localStorage.setItem("theme", theme);
+        localStorage.setItem('theme', theme)
       }
-      if (savedTheme) setTheme(savedTheme);
-      else if (prefersDark) setTheme("dark");
-      else setTheme("light");
+      if (savedTheme) setTheme(savedTheme)
+      else if (prefersDark) setTheme('dark')
+      else setTheme('light')
 
-      toggleInput.addEventListener("change", () => {
-        const current =
-          localStorage.getItem("theme") || (prefersDark ? "dark" : "light");
-        setTheme(current === "dark" ? "light" : "dark");
-      });
+      toggleInput.addEventListener('change', () => {
+        const current = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light')
+        setTheme(current === 'dark' ? 'light' : 'dark')
+      })
 
       // === Flip Clock Logic ===
-      let currentTz = "Europe/London";
-      let currentTzLabel = "London (GMT)";
-      const digits = ["h1", "h2", "m1", "m2", "s1", "s2"].map((id) => ({
+      let currentTz = 'Europe/London'
+      let currentTzLabel = 'London (GMT)'
+      const digits = ['h1', 'h2', 'm1', 'm2', 's1', 's2'].map((id) => ({
         id,
         el: document.getElementById(`digit-${id}`),
         front: null,
@@ -419,88 +408,88 @@
         card: null,
         value: 0,
         isFlipping: false,
-      }));
+      }))
 
       digits.forEach((d) => {
-        d.front = d.el.querySelector(".front text");
-        d.back = d.el.querySelector(".back text");
-        d.card = d.el.querySelector(".flip-card");
-        d.value = parseInt(d.front.textContent);
-      });
+        d.front = d.el.querySelector('.front text')
+        d.back = d.el.querySelector('.back text')
+        d.card = d.el.querySelector('.flip-card')
+        d.value = parseInt(d.front.textContent)
+      })
 
       function flipDigit(digit, newVal) {
-        if (digit.value === newVal || digit.isFlipping) return;
+        if (digit.value === newVal || digit.isFlipping) return
 
-        digit.isFlipping = true;
-        const card = digit.card;
+        digit.isFlipping = true
+        const card = digit.card
 
-        card.classList.add("flipping");
+        card.classList.add('flipping')
 
         const onEnd = () => {
-          digit.front.textContent = newVal;
-          digit.back.textContent = newVal;
-          digit.value = newVal;
-          card.classList.remove("flipping");
-          digit.isFlipping = false;
-          card.removeEventListener("transitionend", onEnd);
-        };
+          digit.front.textContent = newVal
+          digit.back.textContent = newVal
+          digit.value = newVal
+          card.classList.remove('flipping')
+          digit.isFlipping = false
+          card.removeEventListener('transitionend', onEnd)
+        }
 
-        card.addEventListener("transitionend", onEnd);
+        card.addEventListener('transitionend', onEnd)
       }
 
       function updateClock() {
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString("en-GB", {
+        const now = new Date()
+        const timeStr = now.toLocaleTimeString('en-GB', {
           timeZone: currentTz,
           hour12: false,
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        });
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        })
 
-        const [h, m, s] = timeStr.split(":");
-        const [h1, h2] = h.split("");
-        const [m1, m2] = m.split("");
-        const [s1, s2] = s.split("");
+        const [h, m, s] = timeStr.split(':')
+        const [h1, h2] = h.split('')
+        const [m1, m2] = m.split('')
+        const [s1, s2] = s.split('')
 
-        flipDigit(digits[0], +h1);
-        flipDigit(digits[1], +h2);
-        flipDigit(digits[2], +m1);
-        flipDigit(digits[3], +m2);
-        flipDigit(digits[4], +s1);
-        flipDigit(digits[5], +s2);
+        flipDigit(digits[0], +h1)
+        flipDigit(digits[1], +h2)
+        flipDigit(digits[2], +m1)
+        flipDigit(digits[3], +m2)
+        flipDigit(digits[4], +s1)
+        flipDigit(digits[5], +s2)
 
-        document.getElementById("timezone-label").textContent = currentTzLabel;
+        document.getElementById('timezone-label').textContent = currentTzLabel
       }
 
       function setTimezone(tz, label) {
-        currentTz = tz;
-        currentTzLabel = label;
-        document.getElementById("selected-tz").textContent = tz;
-        document.getElementById("tz-panel").classList.add("hidden");
-        updateClock();
+        currentTz = tz
+        currentTzLabel = label
+        document.getElementById('selected-tz').textContent = tz
+        document.getElementById('tz-panel').classList.add('hidden')
+        updateClock()
       }
 
       // Dropdown
-      const tzBtn = document.getElementById("tz-btn");
-      const tzPanel = document.getElementById("tz-panel");
-      const arrow = tzBtn.querySelector("svg");
-      tzBtn.addEventListener("click", () => {
-        tzPanel.classList.toggle("hidden");
-        arrow.style.transform = tzPanel.classList.contains("hidden")
-          ? "rotate(0deg)"
-          : "rotate(180deg)";
-      });
-      document.addEventListener("click", (e) => {
+      const tzBtn = document.getElementById('tz-btn')
+      const tzPanel = document.getElementById('tz-panel')
+      const arrow = tzBtn.querySelector('svg')
+      tzBtn.addEventListener('click', () => {
+        tzPanel.classList.toggle('hidden')
+        arrow.style.transform = tzPanel.classList.contains('hidden')
+          ? 'rotate(0deg)'
+          : 'rotate(180deg)'
+      })
+      document.addEventListener('click', (e) => {
         if (!tzBtn.contains(e.target) && !tzPanel.contains(e.target)) {
-          tzPanel.classList.add("hidden");
-          arrow.style.transform = "rotate(0deg)";
+          tzPanel.classList.add('hidden')
+          arrow.style.transform = 'rotate(0deg)'
         }
-      });
+      })
 
       // Start
-      updateClock();
-      setInterval(updateClock, 100);
+      updateClock()
+      setInterval(updateClock, 100)
     </script>
   </body>
 </html>

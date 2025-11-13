@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { computed, provide } from "vue";
+import { computed, provide } from 'vue'
 
 // 1. Props & Emits for v-model
 const props = defineProps({
@@ -23,30 +23,30 @@ const props = defineProps({
   },
   theme: {
     type: String,
-    default: "dark", // 'light' or 'dark'
+    default: 'dark', // 'light' or 'dark'
   },
-});
+})
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(['update:modelValue'])
 
 // 2. Computed property for easy update
 const selectedValue = computed({
   get: () => props.modelValue,
   set: (val) => {
-    emit("update:modelValue", val);
+    emit('update:modelValue', val)
   },
-});
+})
 
 // 3. Provide context to child radio items
-provide("radioGroup", {
+provide('radioGroup', {
   name: props.name,
   selectedValue,
   groupDisabled: computed(() => props.disabled),
   theme: computed(() => props.theme),
   updateValue: (value) => {
-    selectedValue.value = value;
+    selectedValue.value = value
   },
-});
+})
 </script>
 
 <style scoped>

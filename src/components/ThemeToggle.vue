@@ -12,51 +12,51 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted, ref } from 'vue'
 
-const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-const isDark = ref(false);
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)')
+const isDark = ref(false)
 
 const setTheme = (theme) => {
-  const isDarkTheme = theme === "dark";
-  isDark.value = isDarkTheme;
-  const root = document.documentElement;
+  const isDarkTheme = theme === 'dark'
+  isDark.value = isDarkTheme
+  const root = document.documentElement
 
   // Set root class
   if (isDarkTheme) {
-    root.classList.add("dark");
+    root.classList.add('dark')
   } else {
-    root.classList.remove("dark");
+    root.classList.remove('dark')
   }
 
   // NOTE: External elements relying on theme should now use CSS variables
   // defined on :root/.dark instead of class replacement logic.
-  const overlay = document.getElementById("overlay");
+  const overlay = document.getElementById('overlay')
   if (overlay) {
     overlay.style.setProperty(
-      "--overlay-color",
-      isDarkTheme ? "rgba(0, 0, 0, 0.4)" : "rgba(255, 255, 255, 0.2)",
-    );
+      '--overlay-color',
+      isDarkTheme ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.2)',
+    )
   }
 
-  localStorage.setItem("_theme", theme);
-};
+  localStorage.setItem('_theme', theme)
+}
 
 const toggleTheme = (event) => {
-  const newTheme = isDark.value ? "light" : "dark";
-  setTheme(newTheme);
-};
+  const newTheme = isDark.value ? 'light' : 'dark'
+  setTheme(newTheme)
+}
 
 onMounted(() => {
-  const savedTheme = localStorage.getItem("_theme");
+  const savedTheme = localStorage.getItem('_theme')
   if (savedTheme) {
-    setTheme(savedTheme);
+    setTheme(savedTheme)
   } else if (prefersDark.matches) {
-    setTheme("dark");
+    setTheme('dark')
   } else {
-    setTheme("light");
+    setTheme('light')
   }
-});
+})
 </script>
 
 <style scoped>

@@ -20,7 +20,7 @@
 /// Converts a Sass map of colors into CSS custom properties (variables).
 /// @param {Map} $map - The map containing color names and hex values.
 /// @param {String} $prefix [sys] - The prefix for the generated CSS variables.
-@mixin map-to-css-vars($map, $prefix: "sys") {
+@mixin map-to-css-vars($map, $prefix: 'sys') {
   @each $key, $value in $map {
     --#{$prefix}-#{$key}: #{$value};
   }
@@ -31,7 +31,7 @@
 /// @param {Map} $light-map - The map for the light theme.
 /// @param {Map} $dark-map - The map for the dark theme.
 /// @param {String} $dark-class [dark-mode] - The class name used to force dark mode.
-@mixin generate-theme-css($light-map, $dark-map, $dark-class: "dark-mode") {
+@mixin generate-theme-css($light-map, $dark-map, $dark-class: 'dark-mode') {
   // 1. Default Variables (Light Mode) on the root element
   :root {
     @include map-to-css-vars($light-map);

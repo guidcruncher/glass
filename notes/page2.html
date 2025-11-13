@@ -7,18 +7,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
-        darkMode: "class",
+        darkMode: 'class',
         theme: {
           extend: {
             colors: {
-              glassLight: "rgba(255, 255, 255, 0.65)",
-              glassLightBorder: "rgba(255, 255, 255, 0.8)",
-              glassDark: "rgba(30, 30, 30, 0.4)",
-              glassDarkBorder: "rgba(255, 255, 255, 0.15)",
+              glassLight: 'rgba(255, 255, 255, 0.65)',
+              glassLightBorder: 'rgba(255, 255, 255, 0.8)',
+              glassDark: 'rgba(30, 30, 30, 0.4)',
+              glassDarkBorder: 'rgba(255, 255, 255, 0.15)',
             },
           },
         },
-      };
+      }
     </script>
     <style>
       /* Glassmorphic */
@@ -39,7 +39,7 @@
 
       /* Fixed Background */
       .fixed-bg {
-        background: url("https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=2940&auto=format&fit=crop")
+        background: url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=2940&auto=format&fit=crop')
           center center / cover no-repeat fixed;
       }
 
@@ -63,18 +63,13 @@
         position: relative;
       }
       .progress-fill::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         right: 0;
         bottom: 0;
         left: 0;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.3),
-          transparent
-        );
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
         animation: shimmer 2s infinite;
       }
       @keyframes shimmer {
@@ -187,7 +182,7 @@
       }
       .slider:before {
         position: absolute;
-        content: "";
+        content: '';
         height: 26px;
         width: 26px;
         left: 3px;
@@ -229,12 +224,8 @@
       <header
         class="glass-dark border-b border-white border-opacity-15 backdrop-blur-xl sticky top-0 z-50"
       >
-        <div
-          class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
-        >
-          <h1 class="text-2xl font-semibold tracking-tight">
-            Progress & Gauges
-          </h1>
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <h1 class="text-2xl font-semibold tracking-tight">Progress & Gauges</h1>
           <div class="flex items-center space-x-6">
             <nav class="hidden md:flex space-x-6">
               <a href="#" class="hover:opacity-70 transition">Dashboard</a>
@@ -301,11 +292,7 @@
                   <span id="progress-percent">0%</span>
                 </div>
                 <div class="progress-container">
-                  <div
-                    id="progress-fill"
-                    class="progress-fill"
-                    style="width: 0%"
-                  ></div>
+                  <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
                 </div>
                 <button
                   onclick="startProgress()"
@@ -341,13 +328,7 @@
               <div class="flex justify-center">
                 <svg class="gauge" viewBox="0 0 200 200">
                   <defs>
-                    <linearGradient
-                      id="gradient"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" stop-color="#34C759" />
                       <stop offset="100%" stop-color="#007AFF" />
                     </linearGradient>
@@ -361,9 +342,7 @@
                     r="80"
                     stroke-dasharray="0, 502.4"
                   ></circle>
-                  <text x="100" y="100" class="gauge-text" id="gauge-text">
-                    0%
-                  </text>
+                  <text x="100" y="100" class="gauge-text" id="gauge-text">0%</text>
                 </svg>
               </div>
               <div class="flex justify-center space-x-3">
@@ -398,9 +377,7 @@
       </div>
 
       <!-- Footer -->
-      <footer
-        class="glass-dark border-t border-white border-opacity-15 mt-auto"
-      >
+      <footer class="glass-dark border-t border-white border-opacity-15 mt-auto">
         <div class="max-w-7xl mx-auto px-6 py-4 text-center text-sm opacity-70">
           © 2025 Glassmorphic UI – Controls Module
         </div>
@@ -409,77 +386,74 @@
 
     <script>
       // === Theme Toggle ===
-      const toggleInput = document.getElementById("theme-toggle-input");
-      const app = document.getElementById("app");
-      const overlay = document.getElementById("overlay");
-      const savedTheme = localStorage.getItem("theme");
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)",
-      ).matches;
+      const toggleInput = document.getElementById('theme-toggle-input')
+      const app = document.getElementById('app')
+      const overlay = document.getElementById('overlay')
+      const savedTheme = localStorage.getItem('theme')
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 
       function setTheme(theme) {
-        if (theme === "dark") {
-          document.documentElement.classList.add("dark");
-          app.classList.replace("light", "dark");
-          overlay.classList.replace("bg-white", "bg-black");
-          overlay.classList.replace("bg-opacity-20", "bg-opacity-40");
-          toggleInput.checked = true;
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark')
+          app.classList.replace('light', 'dark')
+          overlay.classList.replace('bg-white', 'bg-black')
+          overlay.classList.replace('bg-opacity-20', 'bg-opacity-40')
+          toggleInput.checked = true
         } else {
-          document.documentElement.classList.remove("dark");
-          app.classList.replace("dark", "light");
-          overlay.classList.replace("bg-black", "bg-white");
-          overlay.classList.replace("bg-opacity-40", "bg-opacity-20");
-          toggleInput.checked = false;
+          document.documentElement.classList.remove('dark')
+          app.classList.replace('dark', 'light')
+          overlay.classList.replace('bg-black', 'bg-white')
+          overlay.classList.replace('bg-opacity-40', 'bg-opacity-20')
+          toggleInput.checked = false
         }
-        localStorage.setItem("theme", theme);
+        localStorage.setItem('theme', theme)
       }
 
-      if (savedTheme) setTheme(savedTheme);
-      else if (prefersDark) setTheme("dark");
-      else setTheme("light");
+      if (savedTheme) setTheme(savedTheme)
+      else if (prefersDark) setTheme('dark')
+      else setTheme('light')
 
-      toggleInput.addEventListener("change", () => {
-        const current =
-          localStorage.getItem("theme") || (prefersDark ? "dark" : "light");
-        setTheme(current === "dark" ? "light" : "dark");
-      });
+      toggleInput.addEventListener('change', () => {
+        const current = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light')
+        setTheme(current === 'dark' ? 'light' : 'dark')
+      })
 
       // === Progress Bar ===
       function startProgress() {
-        const fill = document.getElementById("progress-fill");
-        const percent = document.getElementById("progress-percent");
-        let width = 0;
+        const fill = document.getElementById('progress-fill')
+        const percent = document.getElementById('progress-percent')
+        let width = 0
         const interval = setInterval(() => {
           if (width >= 100) {
-            clearInterval(interval);
+            clearInterval(interval)
           } else {
-            width += 2;
-            fill.style.width = width + "%";
-            percent.textContent = width + "%";
+            width += 2
+            fill.style.width = width + '%'
+            percent.textContent = width + '%'
           }
-        }, 50);
+        }, 50)
       }
 
       // === Slider ===
-      const slider = document.getElementById("volume-slider");
-      const sliderValue = document.getElementById("slider-value");
-      slider.addEventListener("input", () => {
-        sliderValue.textContent = slider.value;
-      });
+      const slider = document.getElementById('volume-slider')
+      const sliderValue = document.getElementById('slider-value')
+      slider.addEventListener('input', () => {
+        sliderValue.textContent = slider.value
+      })
 
       // === SVG Gauge ===
-      const gaugeFill = document.getElementById("gauge-fill");
-      const gaugeText = document.getElementById("gauge-text");
-      const circumference = 2 * Math.PI * 80;
+      const gaugeFill = document.getElementById('gauge-fill')
+      const gaugeText = document.getElementById('gauge-text')
+      const circumference = 2 * Math.PI * 80
 
       function setGauge(percent) {
-        const offset = circumference - (percent / 100) * circumference;
-        gaugeFill.style.strokeDasharray = `${circumference - offset}, ${circumference}`;
-        gaugeText.textContent = percent + "%";
+        const offset = circumference - (percent / 100) * circumference
+        gaugeFill.style.strokeDasharray = `${circumference - offset}, ${circumference}`
+        gaugeText.textContent = percent + '%'
       }
 
       // Initialize
-      setGauge(45);
+      setGauge(45)
     </script>
   </body>
 </html>

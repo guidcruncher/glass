@@ -23,21 +23,21 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue'
 
-const hour = ref(14);
-const minute = ref(30);
+const hour = ref(14)
+const minute = ref(30)
 
 // Basic input clamping (client-side validation)
 watch(hour, (newVal) => {
-  if (newVal > 23) hour.value = 0;
-  if (newVal < 0) hour.value = 23;
-});
+  if (newVal > 23) hour.value = 0
+  if (newVal < 0) hour.value = 23
+})
 
 watch(minute, (newVal) => {
-  if (newVal > 59) minute.value = 0;
-  if (newVal < 0) minute.value = 59;
-});
+  if (newVal > 59) minute.value = 0
+  if (newVal < 0) minute.value = 59
+})
 </script>
 
 <style scoped>

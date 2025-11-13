@@ -1,8 +1,5 @@
 <template>
-  <section
-    class="calendar-container"
-    :class="{ 'no-borders': !props.showBorders }"
-  >
+  <section class="calendar-container" :class="{ 'no-borders': !props.showBorders }">
     <div class="calendar-wrapper">
       <div class="header-controls">
         <button @click="prevMonth" class="month-button">Previous</button>
@@ -39,7 +36,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed, ref } from 'vue'
 
 // 0. Define Props (NEW)
 const props = defineProps({
@@ -47,42 +44,41 @@ const props = defineProps({
     type: Boolean,
     default: true, // Default is to show borders
   },
-});
+})
 
 // 1. Define the 'date-selected' event
-const emit = defineEmits(["date-selected"]);
+const emit = defineEmits(['date-selected'])
 
-const currentDate = ref(new Date());
-const selectedDate = ref(null);
+const currentDate = ref(new Date())
+const selectedDate = ref(null)
 
 const monthYearString = computed(() =>
-  currentDate.value.toLocaleDateString("en-GB", {
-    month: "long",
-    year: "numeric",
+  currentDate.value.toLocaleDateString('en-GB', {
+    month: 'long',
+    year: 'numeric',
   }),
-);
+)
 
 // --- CALENDAR LOGIC ---
 const getMonthDetails = (date) => {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 for Sunday, 1 for Monday...
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const year = date.getFullYear()
+  const month = date.getMonth()
+  const firstDayOfMonth = new Date(year, month, 1).getDay() // 0 for Sunday, 1 for Monday...
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
 
-  const days = [];
+  const days = []
 
   // Add preceding greyed-out days to fill the first row
   for (let i = 0; i < firstDayOfMonth; i++) {
-    days.push({ id: `prev-${i}`, dayNumber: "", date: null });
+    days.push({ id: `prev-${i}`, dayNumber: '', date: null })
   }
 
   // Add days of the current month
   for (let i = 1; i <= daysInMonth; i++) {
-    const dayDate = new Date(year, month, i);
-    const isToday = dayDate.toDateString() === new Date().toDateString();
+    const dayDate = new Date(year, month, i)
+    const isToday = dayDate.toDateString() === new Date().toDateString()
     const isSelected =
-      selectedDate.value &&
-      dayDate.toDateString() === selectedDate.value.toDateString();
+      selectedDate.value && dayDate.toDateString() === selectedDate.value.toDateString()
 
     days.push({
       id: i,
@@ -90,45 +86,37 @@ const getMonthDetails = (date) => {
       date: dayDate,
       isToday: isToday,
       isSelected: isSelected,
-    });
+    })
   }
 
   // Add trailing greyed-out days to complete the last row
-  const totalCells = days.length;
-  const trailingCount = 42 - totalCells; // Max 6 rows * 7 days = 42
+  const totalCells = days.length
+  const trailingCount = 42 - totalCells // Max 6 rows * 7 days = 42
 
   for (let i = 0; i < trailingCount; i++) {
-    days.push({ id: `next-${i}`, dayNumber: "", date: null });
+    days.push({ id: `next-${i}`, dayNumber: '', date: null })
   }
 
-  return days;
-};
+  return days
+}
 
-const calendarDays = computed(() => getMonthDetails(currentDate.value));
+const calendarDays = computed(() => getMonthDetails(currentDate.value))
 
 const prevMonth = () => {
-  currentDate.value = new Date(
-    currentDate.value.getFullYear(),
-    currentDate.value.getMonth() - 1,
-    1,
-  );
-};
+  currentDate.value = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth() - 1, 1)
+}
 
 const nextMonth = () => {
-  currentDate.value = new Date(
-    currentDate.value.getFullYear(),
-    currentDate.value.getMonth() + 1,
-    1,
-  );
-};
+  currentDate.value = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth() + 1, 1)
+}
 
 const selectDay = (date) => {
   // 2. Update the local selected state
-  selectedDate.value = date;
+  selectedDate.value = date
 
   // 3. Emit the event with the selected Date object
-  emit("date-selected", date);
-};
+  emit('date-selected', date)
+}
 </script>
 
 <style scoped>

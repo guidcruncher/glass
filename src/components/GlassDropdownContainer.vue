@@ -56,103 +56,102 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from "vue";
+import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 
 // Define Props for initial value (optional for the container) and options
 const props = defineProps({
   options: {
     type: Array,
-    default: () => ["Meeting", "Call", "Task", "Reminder", "Birthday"],
+    default: () => ['Meeting', 'Call', 'Task', 'Reminder', 'Birthday'],
   },
   initialValue: {
     type: String,
-    default: "Select an option...",
+    default: 'Select an option...',
   },
-});
+})
 
-const emit = defineEmits(["update:modelValue", "select"]);
+const emit = defineEmits(['update:modelValue', 'select'])
 
 // --- STATE ---
-const selectedValue = ref(props.initialValue);
-const isOpen = ref(false);
+const selectedValue = ref(props.initialValue)
+const isOpen = ref(false)
 
 // Refs for positioning
-const dropdownButton = ref(null);
-const listPositionStyle = ref({});
+const dropdownButton = ref(null)
+const listPositionStyle = ref({})
 
 // --- THEME AWARENESS ---
-const isDark = ref(true);
+const isDark = ref(true)
 const checkTheme = () => {
-  isDark.value = document.documentElement.classList.contains("dark");
-};
+  isDark.value = document.documentElement.classList.contains('dark')
+}
 
 // --- LIFECYCLE ---
-let themeCheckerInterval = null;
+let themeCheckerInterval = null
 
 onMounted(() => {
-  checkTheme();
-  themeCheckerInterval = setInterval(checkTheme, 300);
-  window.addEventListener("scroll", recalculatePosition);
-  window.addEventListener("resize", recalculatePosition);
-});
+  checkTheme()
+  themeCheckerInterval = setInterval(checkTheme, 300)
+  window.addEventListener('scroll', recalculatePosition)
+  window.addEventListener('resize', recalculatePosition)
+})
 
 onUnmounted(() => {
-  if (themeCheckerInterval) clearInterval(themeCheckerInterval);
-  window.removeEventListener("scroll", recalculatePosition);
-  window.removeEventListener("resize", recalculatePosition);
-});
+  if (themeCheckerInterval) clearInterval(themeCheckerInterval)
+  window.removeEventListener('scroll', recalculatePosition)
+  window.removeEventListener('resize', recalculatePosition)
+})
 
 // --- POSITIONING LOGIC ---
 const recalculatePosition = () => {
-  if (!dropdownButton.value || !isOpen.value) return;
+  if (!dropdownButton.value || !isOpen.value) return
 
-  const { top, left, height, width } =
-    dropdownButton.value.getBoundingClientRect();
+  const { top, left, height, width } = dropdownButton.value.getBoundingClientRect()
 
   listPositionStyle.value = {
     top: `${top + height + 8}px`,
     left: `${left}px`,
     width: `${width}px`,
-  };
-};
+  }
+}
 
 // --- DROPDOWN LOGIC ---
 const openDropdown = async () => {
-  isOpen.value = !isOpen.value;
+  isOpen.value = !isOpen.value
   if (isOpen.value) {
-    await nextTick();
-    recalculatePosition();
+    await nextTick()
+    recalculatePosition()
   }
-};
+}
 
 const selectOption = (value) => {
-  selectedValue.value = value;
-  isOpen.value = false;
+  selectedValue.value = value
+  isOpen.value = false
   // Emit the selection for external use
-  emit("select", value);
-  emit("update:modelValue", value);
-};
+  emit('select', value)
+  emit('update:modelValue', value)
+}
 
 const closeDropdown = () => {
-  isOpen.value = false;
-};
+  isOpen.value = false
+}
 
 // --- VUE DIRECTIVE (Must be globally registered or implemented) ---
 const vClickOutside = {
   mounted: (el, binding) => {
     el.clickOutsideEvent = (event) => {
       if (!(el === event.target || el.contains(event.target))) {
-        if (!event.target.closest(".dropdown-list-teleported")) {
-          binding.value(event, el);
+        if (!event.target.closest('.dropdown-list-teleported')) {
+          binding.value(event, el)
         }
       }
-    };
-    document.addEventListener("click", el.clickOutsideEvent);
+    }
+    document.addEventListener('click', el.clickOutsideEvent)
   },
   unmounted: (el) => {
-    document.removeEventListener("click", el.clickOutsideEvent);
+    document.removeEventListener('click', el.clickOutsideEvent)
   },
-};
+}
 </script>
 
 <style scoped>

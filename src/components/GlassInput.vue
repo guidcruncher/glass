@@ -14,23 +14,23 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 const props = defineProps({
   /** Binds to the input's value (v-model) */
   modelValue: {
     type: String,
-    default: "",
+    default: '',
   },
   /** Optional label text displayed above the input */
   label: {
     type: String,
-    default: "",
+    default: '',
   },
   /** Placeholder text inside the input */
   placeholder: {
     type: String,
-    default: "Enter text here...",
+    default: 'Enter text here...',
   },
   /** Unique ID for accessibility (linked to label) */
   id: {
@@ -42,39 +42,37 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-});
+})
 
-const emit = defineEmits(["update:modelValue", "change"]);
+const emit = defineEmits(['update:modelValue', 'change'])
 
 // --- THEME AWARENESS (Polling for reactivity to external theme changes) ---
-const isDarkRef = ref(document.documentElement.classList.contains("dark"));
-let themeCheckerInterval = null;
+const isDarkRef = ref(document.documentElement.classList.contains('dark'))
+let themeCheckerInterval = null
 
 onMounted(() => {
   // Poll the DOM class list every 300ms to detect external theme changes
   themeCheckerInterval = setInterval(() => {
-    const isCurrentlyDark = document.documentElement.classList.contains("dark");
+    const isCurrentlyDark = document.documentElement.classList.contains('dark')
     if (isDarkRef.value !== isCurrentlyDark) {
-      isDarkRef.value = isCurrentlyDark;
+      isDarkRef.value = isCurrentlyDark
     }
-  }, 300);
-});
+  }, 300)
+})
 
 onUnmounted(() => {
-  clearInterval(themeCheckerInterval);
-});
+  clearInterval(themeCheckerInterval)
+})
 
-const themeClass = computed(() =>
-  isDarkRef.value ? "dark-mode" : "light-mode",
-);
+const themeClass = computed(() => (isDarkRef.value ? 'dark-mode' : 'light-mode'))
 
 // --- EVENT HANDLER ---
 const handleInput = (event) => {
-  const value = event.target.value;
-  emit("update:modelValue", value);
+  const value = event.target.value
+  emit('update:modelValue', value)
   // Optional: Emit change event on input blur or when value is final
   // emit('change', value);
-};
+}
 </script>
 
 <style scoped lang="scss">

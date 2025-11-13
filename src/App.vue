@@ -5,16 +5,8 @@
     backgroundImageUrl="https://wallpapercg.com/download/ipados-26-2064x2752-28525.jpg"
   >
     <template #header-nav-links>
-      <a
-        href="#"
-        class="text-sm font-medium hover:opacity-100 opacity-70 transition"
-        >Dashboard</a
-      >
-      <a
-        href="#"
-        class="text-sm font-medium hover:opacity-100 opacity-70 transition"
-        >Settings</a
-      >
+      <a href="#" class="text-sm font-medium hover:opacity-100 opacity-70 transition">Dashboard</a>
+      <a href="#" class="text-sm font-medium hover:opacity-100 opacity-70 transition">Settings</a>
     </template>
 
     <template #left>
@@ -31,12 +23,7 @@
           Glassmorphism Component Showcase
         </h1>
 
-        <GlassTabStrip
-          v-model="selectedTab"
-          :tabs="tabItems"
-          labelField="name"
-          keyField="id"
-        />
+        <GlassTabStrip v-model="selectedTab" :tabs="tabItems" labelField="name" keyField="id" />
 
         <div v-if="selectedTab === 'inputs_pickers'" class="space-y-8">
           <h2 class="text-3xl font-semibold opacity-90">Inputs & Pickers</h2>
@@ -58,17 +45,10 @@
                 <GlassButton variant="primary" @click="modalOpen = true">
                   Open Glass Modal
                 </GlassButton>
-                <GlassButton variant="secondary">
-                  Secondary Button
-                </GlassButton>
+                <GlassButton variant="secondary"> Secondary Button </GlassButton>
                 <GlassButton variant="destructive">
                   <span class="flex items-center space-x-2">
-                    <svg
-                      class="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -85,18 +65,10 @@
             <GlassPanel>
               <h3 class="text-xl font-semibold">Checkboxes & Radios</h3>
               <div class="space-y-4 mt-4">
-                <GlassInput
-                  v-model="textValue"
-                  placeholder="Type something..."
-                />
-                <GlassTextarea
-                  v-model="textValue"
-                  placeholder="Type something..."
-                />
+                <GlassInput v-model="textValue" placeholder="Type something..." />
+                <GlassTextarea v-model="textValue" placeholder="Type something..." />
 
-                <GlassCheckbox v-model="checkbox1">
-                  Enable Feature X
-                </GlassCheckbox>
+                <GlassCheckbox v-model="checkbox1"> Enable Feature X </GlassCheckbox>
 
                 <GlassRadioGroup
                   v-model="selectedFruit"
@@ -108,11 +80,7 @@
                   <GlassRadioItem value="apple" label="Apple" />
                   <GlassRadioItem value="banana" label="Banana" />
 
-                  <GlassRadioItem
-                    value="cherry"
-                    label="Cherry"
-                    :disabled="true"
-                  />
+                  <GlassRadioItem value="cherry" label="Cherry" :disabled="true" />
 
                   <GlassRadioItem value="grape" label="Grape" />
                 </GlassRadioGroup>
@@ -129,9 +97,7 @@
         </div>
 
         <div v-if="selectedTab === 'displays_indicators'" class="space-y-8">
-          <h2 class="text-3xl font-semibold opacity-90">
-            Displays & Indicators
-          </h2>
+          <h2 class="text-3xl font-semibold opacity-90">Displays & Indicators</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
             <GlassCalendar />
 
@@ -188,39 +154,37 @@
     <template #title>Configuration</template>
     <p>This is a floating glass modal component.</p>
     <template #footer>
-      <GlassButton variant="primary" @click="modalOpen = false"
-        >Close</GlassButton
-      >
+      <GlassButton variant="primary" @click="modalOpen = false">Close</GlassButton>
     </template>
   </AppleGlassModal>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref } from 'vue'
 
 // --- Layout Components ---
 // 1. v-model State
-const selectedFruit = ref("banana"); // 'banana' will be initially selected
+const selectedFruit = ref('banana') // 'banana' will be initially selected
 // 3. Disabled State
-const groupDisabled = ref(false);
-const textValue = ref("");
+const groupDisabled = ref(false)
+const textValue = ref('')
 
-const sliderValue = ref(75);
-const selectedDate = ref(new Date());
+const sliderValue = ref(75)
+const selectedDate = ref(new Date())
 // Updated initial tab state to match the new tab structure
-const selectedTab = ref("inputs_pickers");
-const modalOpen = ref(false);
-const progressValue = ref(65);
-const checkbox1 = ref(true);
-const radioValue = ref("A");
-const pageColor = ref("#1E90FF");
+const selectedTab = ref('inputs_pickers')
+const modalOpen = ref(false)
+const progressValue = ref(65)
+const checkbox1 = ref(true)
+const radioValue = ref('A')
+const pageColor = ref('#1E90FF')
 
 // Updated tab items to reflect logical groupings
 const tabItems = ref([
-  { id: "inputs_pickers", name: "Inputs & Pickers" },
-  { id: "displays_indicators", name: "Displays & Indicators" },
-  { id: "clocks_geo", name: "Clocks & Geo" },
-]);
+  { id: 'inputs_pickers', name: 'Inputs & Pickers' },
+  { id: 'displays_indicators', name: 'Displays & Indicators' },
+  { id: 'clocks_geo', name: 'Clocks & Geo' },
+])
 
 // Note: The TimePicker, GlassDropdown, GlassCalendar, GlassGauge,
 // and GlassFlipClock components manage their own internal state.
@@ -256,7 +220,7 @@ const tabItems = ref([
 }
 
 body {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   color: var(--text-color-base);
   background-image: var(--page-bg-url);
   background-size: cover;

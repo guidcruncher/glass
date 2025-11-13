@@ -14,12 +14,7 @@
           flood-opacity="0.8"
           result="flood"
         />
-        <feComposite
-          in="flood"
-          in2="SourceGraphic"
-          operator="in"
-          result="comp"
-        />
+        <feComposite in="flood" in2="SourceGraphic" operator="in" result="comp" />
         <feGaussianBlur in="comp" stdDeviation="2" result="blur" />
         <feMerge>
           <feMergeNode in="blur" />
@@ -28,13 +23,7 @@
       </filter>
 
       <filter id="glassShadow">
-        <feDropShadow
-          dx="0"
-          dy="0"
-          stdDeviation="5"
-          flood-color="black"
-          flood-opacity="0.2"
-        />
+        <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="black" flood-opacity="0.2" />
       </filter>
 
       <g id="segment-a"><path d="M10 0 L70 0 L65 5 L15 5 Z" /></g>
@@ -99,91 +88,85 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 // 1. PROPS
 const props = defineProps({
   size: {
     type: String,
-    default: "md", // sm, md, lg
-    validator: (val) => ["sm", "md", "lg"].includes(val),
+    default: 'md', // sm, md, lg
+    validator: (val) => ['sm', 'md', 'lg'].includes(val),
   },
   theme: {
     type: String,
-    default: "dark", // dark, light
-    validator: (val) => ["dark", "light"].includes(val),
+    default: 'dark', // dark, light
+    validator: (val) => ['dark', 'light'].includes(val),
   },
   timezone: {
     type: String,
-    default: "UTC",
+    default: 'UTC',
   },
-});
+})
 
 // 2. SIZE AND THEME COMPUTATION
 const sizeMap = {
   sm: { width: 300, height: 90, scale: 0.7 },
   md: { width: 420, height: 120, scale: 1 },
   lg: { width: 560, height: 160, scale: 1.3 },
-};
-const currentSize = computed(() => sizeMap[props.size] || sizeMap["md"]);
-const svgSize = computed(() => currentSize.value.width);
-const svgHeight = computed(() => currentSize.value.height);
-const segmentScale = computed(() => currentSize.value.scale);
+}
+const currentSize = computed(() => sizeMap[props.size] || sizeMap['md'])
+const svgSize = computed(() => currentSize.value.width)
+const svgHeight = computed(() => currentSize.value.height)
+const segmentScale = computed(() => currentSize.value.scale)
 
-const activeColor = computed(() =>
-  props.theme === "dark" ? "#00eaff" : "#0070c0",
-);
+const activeColor = computed(() => (props.theme === 'dark' ? '#00eaff' : '#0070c0'))
 const inactiveColor = computed(() =>
-  props.theme === "dark" ? "rgba(0, 234, 255, 0.1)" : "rgba(0, 112, 192, 0.1)",
-);
+  props.theme === 'dark' ? 'rgba(0, 234, 255, 0.1)' : 'rgba(0, 112, 192, 0.1)',
+)
 
 // 3. TIME MANAGEMENT
-const currentTime = ref("");
-let timer = null;
+const currentTime = ref('')
+let timer = null
 
 const updateTime = () => {
   try {
     const options = {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
       hour12: false,
       timeZone: props.timezone,
-    };
-    const timeString = new Intl.DateTimeFormat("en-US", options).format(
-      new Date(),
-    );
-    currentTime.value = timeString.replace(/:/g, ""); // Store as "HHMMSS"
+    }
+    const timeString = new Intl.DateTimeFormat('en-US', options).format(new Date())
+    currentTime.value = timeString.replace(/:/g, '') // Store as "HHMMSS"
   } catch (e) {
-    const now = new Date();
-    currentTime.value = now
-      .toLocaleTimeString("en-US", { hour12: false })
-      .replace(/:/g, "");
+    const now = new Date()
+    currentTime.value = now.toLocaleTimeString('en-US', { hour12: false }).replace(/:/g, '')
   }
-};
+}
 
 const timezoneLabel = computed(() => {
   try {
-    const timeZoneName = new Intl.DateTimeFormat("en-US", {
-      timeZoneName: "short",
+    const timeZoneName = new Intl.DateTimeFormat('en-US', {
+      timeZoneName: 'short',
       timeZone: props.timezone,
     })
       .formatToParts(new Date())
-      .find((part) => part.type === "timeZoneName")?.value;
-    return timeZoneName || props.timezone.toUpperCase();
+      .find((part) => part.type === 'timeZoneName')?.value
+    return timeZoneName || props.timezone.toUpperCase()
   } catch {
-    return props.timezone.toUpperCase();
+    return props.timezone.toUpperCase()
   }
-});
+})
 
 onMounted(() => {
-  updateTime();
-  timer = setInterval(updateTime, 1000);
-});
+  updateTime()
+  timer = setInterval(updateTime, 1000)
+})
 
 onUnmounted(() => {
-  clearInterval(timer);
-});
+  clearInterval(timer)
+})
 
 // 4. DIGIT LOGIC MAPPING
 const segmentMap = {
@@ -197,37 +180,37 @@ const segmentMap = {
   7: { a: 1, b: 1, c: 1, d: 0, e: 0, f: 0, g: 0 },
   8: { a: 1, b: 1, c: 1, d: 1, e: 1, f: 1, g: 1 },
   9: { a: 1, b: 1, c: 1, d: 1, e: 0, f: 1, g: 1 },
-  " ": { a: 0, b: 0, c: 0, d: 0, e: 0, f: 0, g: 0 },
-};
+  ' ': { a: 0, b: 0, c: 0, d: 0, e: 0, f: 0, g: 0 },
+}
 
 const timeDigits = computed(() => {
-  const timeStr = String(currentTime.value).padEnd(6, "0");
+  const timeStr = String(currentTime.value).padEnd(6, '0')
   return Array.from(timeStr)
     .slice(0, 6)
-    .map((char) => segmentMap[char] || segmentMap[" "]);
-});
+    .map((char) => segmentMap[char] || segmentMap[' '])
+})
 
 // 5. LAYOUT COMPUTATION
-const digitWidth = 80;
-const digitSpacing = 10;
-const colonGap = 15;
-const desiredPadding = 10;
+const digitWidth = 80
+const digitSpacing = 10
+const colonGap = 15
+const desiredPadding = 10
 
 // FINAL FIX: Calculate the unscaled translation required to achieve the desired visual padding.
-const leftOffset = computed(() => desiredPadding / segmentScale.value);
+const leftOffset = computed(() => desiredPadding / segmentScale.value)
 
 const digitX = (index) => {
-  let x = leftOffset.value + index * (digitWidth + digitSpacing);
-  if (index >= 2) x += colonGap;
-  if (index >= 4) x += colonGap;
-  return x;
-};
+  let x = leftOffset.value + index * (digitWidth + digitSpacing)
+  if (index >= 2) x += colonGap
+  if (index >= 4) x += colonGap
+  return x
+}
 
 const colonX = computed(() => {
-  const c1_x = digitX(1) + digitWidth + digitSpacing + colonGap / 2;
-  const c2_x = digitX(3) + digitWidth + digitSpacing + colonGap / 2;
-  return [c1_x / segmentScale.value, c2_x / segmentScale.value];
-});
+  const c1_x = digitX(1) + digitWidth + digitSpacing + colonGap / 2
+  const c2_x = digitX(3) + digitWidth + digitSpacing + colonGap / 2
+  return [c1_x / segmentScale.value, c2_x / segmentScale.value]
+})
 </script>
 
 <style scoped>

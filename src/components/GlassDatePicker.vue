@@ -21,14 +21,14 @@
 </template>
 
 <script setup>
-import { computed, defineAsyncComponent } from "vue";
+import { computed, defineAsyncComponent } from 'vue'
 // Assuming GlassDropdownContainer is imported from its file path
-import GlassDropdownContainer from "./GlassDropdownContainer.vue";
+import GlassDropdownContainer from './GlassDropdownContainer.vue'
 
 // --- Placeholder for GlassCalendar (replace with actual component) ---
 // For a real app, this should be the actual calendar component
 const GlassCalendar = defineAsyncComponent(() =>
-  import("./GlassCalendar.vue").catch(() => ({
+  import('./GlassCalendar.vue').catch(() => ({
     template: `
         <div class="glass-calendar-placeholder p-4 text-center text-sm">
             <p>GlassCalendar Placeholder</p>
@@ -38,9 +38,9 @@ const GlassCalendar = defineAsyncComponent(() =>
             </button>
         </div>
     `,
-    emits: ["update:modelValue", "date-selected"],
+    emits: ['update:modelValue', 'date-selected'],
   })),
-);
+)
 
 // --- PROPS and EMITS (v-model for selected date) ---
 const props = defineProps({
@@ -49,15 +49,15 @@ const props = defineProps({
     type: [Date, String, null],
     default: null,
   },
-});
+})
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(['update:modelValue'])
 
 // Use the computed property for V-model
 const dateValue = computed({
   get: () => props.modelValue,
-  set: (val) => emit("update:modelValue", val),
-});
+  set: (val) => emit('update:modelValue', val),
+})
 
 // --- DATE LOGIC ---
 
@@ -66,27 +66,27 @@ const dateValue = computed({
  * Uses a default locale date string.
  */
 const formattedDate = computed(() => {
-  if (!dateValue.value) return null;
+  if (!dateValue.value) return null
 
-  let dateObj;
+  let dateObj
   if (dateValue.value instanceof Date) {
-    dateObj = dateValue.value;
-  } else if (typeof dateValue.value === "string") {
+    dateObj = dateValue.value
+  } else if (typeof dateValue.value === 'string') {
     // Attempt to parse ISO string or similar
-    dateObj = new Date(dateValue.value);
+    dateObj = new Date(dateValue.value)
   }
 
   if (dateObj && !isNaN(dateObj)) {
     // Example format: "Thu, Nov 13, 2025"
     return dateObj.toLocaleDateString(undefined, {
-      weekday: "short",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
   }
-  return null;
-});
+  return null
+})
 
 /**
  * Handles the selection of a date from the calendar.
@@ -95,11 +95,11 @@ const formattedDate = computed(() => {
  */
 const handleDateSelect = (date, closeDropdown) => {
   // Update the modelValue to reflect the new selection
-  dateValue.value = date;
+  dateValue.value = date
 
   // Close the dropdown immediately after selection
-  closeDropdown();
-};
+  closeDropdown()
+}
 </script>
 
 <style scoped>

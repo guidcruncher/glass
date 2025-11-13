@@ -51,76 +51,75 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from "vue";
+import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 
 // --- OPTIONS ---
-const options = ["Meeting", "Call", "Task", "Reminder", "Birthday"];
-const selectedValue = ref("Select an option...");
-const isOpen = ref(false);
+const options = ['Meeting', 'Call', 'Task', 'Reminder', 'Birthday']
+const selectedValue = ref('Select an option...')
+const isOpen = ref(false)
 
 // Ref for the button element to get its position
-const dropdownButton = ref(null);
-const listPositionStyle = ref({});
+const dropdownButton = ref(null)
+const listPositionStyle = ref({})
 
 // --- THEME AWARENESS ---
-const isDark = ref(true);
+const isDark = ref(true)
 const checkTheme = () => {
   // Check if the HTML element has the 'dark' class
-  isDark.value = document.documentElement.classList.contains("dark");
-};
+  isDark.value = document.documentElement.classList.contains('dark')
+}
 
 // --- LIFECYCLE ---
-let themeCheckerInterval = null;
+let themeCheckerInterval = null
 
 onMounted(() => {
-  checkTheme();
+  checkTheme()
   // Poll the DOM to detect external theme changes
-  themeCheckerInterval = setInterval(checkTheme, 300);
+  themeCheckerInterval = setInterval(checkTheme, 300)
   // Add event listener to recalculate position on scroll/resize
-  window.addEventListener("scroll", recalculatePosition);
-  window.addEventListener("resize", recalculatePosition);
-});
+  window.addEventListener('scroll', recalculatePosition)
+  window.addEventListener('resize', recalculatePosition)
+})
 
 onUnmounted(() => {
-  if (themeCheckerInterval) clearInterval(themeCheckerInterval);
-  window.removeEventListener("scroll", recalculatePosition);
-  window.removeEventListener("resize", recalculatePosition);
-});
+  if (themeCheckerInterval) clearInterval(themeCheckerInterval)
+  window.removeEventListener('scroll', recalculatePosition)
+  window.removeEventListener('resize', recalculatePosition)
+})
 
 // --- POSITIONING LOGIC ---
 const recalculatePosition = () => {
-  if (!dropdownButton.value || !isOpen.value) return;
+  if (!dropdownButton.value || !isOpen.value) return
 
   // Get the bounding box of the button relative to the viewport
-  const { top, left, height, width } =
-    dropdownButton.value.getBoundingClientRect();
+  const { top, left, height, width } = dropdownButton.value.getBoundingClientRect()
 
   // Set the style for the teleported list
   listPositionStyle.value = {
     top: `${top + height + 8}px`, // 8px (0.5rem) margin-top
     left: `${left}px`,
     width: `${width}px`,
-  };
-};
+  }
+}
 
 // --- DROPDOWN LOGIC ---
 const openDropdown = async () => {
-  isOpen.value = !isOpen.value;
+  isOpen.value = !isOpen.value
   if (isOpen.value) {
     // Wait for the list element to be rendered in the body before calculating its position
-    await nextTick();
-    recalculatePosition();
+    await nextTick()
+    recalculatePosition()
   }
-};
+}
 
 const selectOption = (value) => {
-  selectedValue.value = value;
-  isOpen.value = false;
-};
+  selectedValue.value = value
+  isOpen.value = false
+}
 
 const closeDropdown = () => {
-  isOpen.value = false;
-};
+  isOpen.value = false
+}
 
 // --- VUE DIRECTIVE (Must be globally registered in your application) ---
 const vClickOutside = {
@@ -128,17 +127,17 @@ const vClickOutside = {
     el.clickOutsideEvent = (event) => {
       if (!(el === event.target || el.contains(event.target))) {
         // Only close if the target isn't the teleported list itself
-        if (!event.target.closest(".dropdown-list-teleported")) {
-          binding.value(event, el);
+        if (!event.target.closest('.dropdown-list-teleported')) {
+          binding.value(event, el)
         }
       }
-    };
-    document.addEventListener("click", el.clickOutsideEvent);
+    }
+    document.addEventListener('click', el.clickOutsideEvent)
   },
   unmounted: (el) => {
-    document.removeEventListener("click", el.clickOutsideEvent);
+    document.removeEventListener('click', el.clickOutsideEvent)
   },
-};
+}
 </script>
 
 <style scoped>

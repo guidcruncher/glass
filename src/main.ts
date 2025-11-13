@@ -1,11 +1,11 @@
 // src/main.ts
-import { createApp } from "vue";
-import App from "./App.vue";
+import { createApp } from 'vue'
+import App from './App.vue'
 
-import "./styles/style.scss";
-import LiquidGlassUI from "./components/index.js";
+import LiquidGlassUI from './components/index.js'
+import './styles/style.scss'
 
-const app = createApp(App);
-app.use(LiquidGlassUI);
+const app = createApp(App)
+app.use(LiquidGlassUI)
 
-app.mount("#app");
+app.mount('#app')

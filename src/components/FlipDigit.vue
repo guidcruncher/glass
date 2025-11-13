@@ -7,11 +7,7 @@
       {{ currentDigit }}
     </div>
 
-    <div
-      class="flipper"
-      :class="{ 'is-flipping': isFlipping }"
-      @transitionend="onFlipEnd"
-    >
+    <div class="flipper" :class="{ 'is-flipping': isFlipping }" @transitionend="onFlipEnd">
       <div class="front-top" :data-digit="nextDigit"></div>
 
       <div class="back-bottom" :data-digit="nextDigit"></div>
@@ -20,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue'
 
 const props = defineProps({
   // The digit to display (0-9)
@@ -28,31 +24,31 @@ const props = defineProps({
     type: [String, Number],
     required: true,
   },
-});
+})
 
-const currentDigit = ref(props.value);
-const nextDigit = ref(props.value);
-const isFlipping = ref(false);
+const currentDigit = ref(props.value)
+const nextDigit = ref(props.value)
+const isFlipping = ref(false)
 
 // Watch for changes to the parent-provided 'value'
 watch(
   () => props.value,
   (newValue, oldValue) => {
     if (newValue !== oldValue) {
-      nextDigit.value = newValue;
-      isFlipping.value = true;
+      nextDigit.value = newValue
+      isFlipping.value = true
     }
   },
-);
+)
 
 // Reset the state and update the static digit after the flip transition finishes
 const onFlipEnd = (event) => {
   // Only proceed if the transition is for the main 'transform' property
-  if (event.propertyName !== "transform") return;
+  if (event.propertyName !== 'transform') return
 
-  currentDigit.value = nextDigit.value;
-  isFlipping.value = false;
-};
+  currentDigit.value = nextDigit.value
+  isFlipping.value = false
+}
 </script>
 
 <style scoped>
@@ -148,10 +144,8 @@ const onFlipEnd = (event) => {
 }
 </style>
 
-*** The video below provides a visual tutorial for creating the flip clock
-animation effect, which is the mechanism behind a `FlipDigit` component. [Flip
-Clock Animation Part 2 - YouTube](https://www.youtube.com/watch?v=iebOE7EYW1Q)
-http://googleusercontent.com/youtube_content/0 *YouTube video views will be
-stored in your YouTube History, and your data will be stored and used by YouTube
-according to its [Terms of
-Service](https://www.youtube.com/static?template=terms)*
+*** The video below provides a visual tutorial for creating the flip clock animation effect, which
+is the mechanism behind a `FlipDigit` component. [Flip Clock Animation Part 2 -
+YouTube](https://www.youtube.com/watch?v=iebOE7EYW1Q) http://googleusercontent.com/youtube_content/0
+*YouTube video views will be stored in your YouTube History, and your data will be stored and used
+by YouTube according to its [Terms of Service](https://www.youtube.com/static?template=terms)*

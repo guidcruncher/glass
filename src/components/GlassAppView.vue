@@ -52,85 +52,77 @@
       </aside>
     </div>
 
-    <footer
-      class="app-footer"
-      :style="{ height: footerHeight }"
-      v-if="slots.bottom"
-    >
+    <footer class="app-footer" :style="{ height: footerHeight }" v-if="slots.bottom">
       <slot name="bottom"></slot>
     </footer>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, watch, ref, useSlots } from "vue";
-import AppHeader from "./AppHeader.vue";
+import { computed, onMounted, ref, useSlots, watch } from 'vue'
+import AppHeader from './AppHeader.vue'
 
 const props = defineProps({
   initialTheme: {
     type: String,
-    default: "dark",
-    validator: (value) => ["light", "dark"].includes(value),
+    default: 'dark',
+    validator: (value) => ['light', 'dark'].includes(value),
   },
-  headerHeight: { type: String, default: "4rem" },
-  footerHeight: { type: String, default: "3rem" },
-  sidebarWidth: { type: String, default: "16rem" },
-  headerTitle: { type: String, default: "Glass App" },
+  headerHeight: { type: String, default: '4rem' },
+  footerHeight: { type: String, default: '3rem' },
+  sidebarWidth: { type: String, default: '16rem' },
+  headerTitle: { type: String, default: 'Glass App' },
   backgroundImageUrl: { type: String, required: false, default: null },
-});
+})
 
-const slots = useSlots();
-const OPEN_WIDTH = computed(() => props.sidebarWidth);
+const slots = useSlots()
+const OPEN_WIDTH = computed(() => props.sidebarWidth)
 
 // --- LOCAL STORAGE KEYS ---
-const SIDEBAR_LEFT_KEY = "glassappview_sidebar_left_open";
-const SIDEBAR_RIGHT_KEY = "glassappview_sidebar_right_open";
+const SIDEBAR_LEFT_KEY = 'glassappview_sidebar_left_open'
+const SIDEBAR_RIGHT_KEY = 'glassappview_sidebar_right_open'
 
 const getInitialState = (key) => {
-  if (typeof localStorage !== "undefined") {
-    const storedState = localStorage.getItem(key);
-    return storedState === "true";
+  if (typeof localStorage !== 'undefined') {
+    const storedState = localStorage.getItem(key)
+    return storedState === 'true'
   }
-  return true; // Default to open
-};
+  return true // Default to open
+}
 
 // --- Sidebar State Management (Initialized from Local Storage) ---
 // Initialize state. If state is not found, default to TRUE only if the slot exists.
-const isLeftSidebarOpen = ref(getInitialState(SIDEBAR_LEFT_KEY));
-const isRightSidebarOpen = ref(getInitialState(SIDEBAR_RIGHT_KEY));
+const isLeftSidebarOpen = ref(getInitialState(SIDEBAR_LEFT_KEY))
+const isRightSidebarOpen = ref(getInitialState(SIDEBAR_RIGHT_KEY))
 
 const toggleWrapper = (name, func) => {
-  return slots[name] ? func : undefined;
-};
+  return slots[name] ? func : undefined
+}
 
 const toggleLeftSidebar = () => {
-  isLeftSidebarOpen.value = !isLeftSidebarOpen.value;
-};
+  isLeftSidebarOpen.value = !isLeftSidebarOpen.value
+}
 const toggleRightSidebar = () => {
-  isRightSidebarOpen.value = !isRightSidebarOpen.value;
-};
+  isRightSidebarOpen.value = !isRightSidebarOpen.value
+}
 
 // Dynamic width calculation (Sidebar width is now controlled purely by the toggle state)
-const leftSidebarWidth = computed(() =>
-  isLeftSidebarOpen.value ? OPEN_WIDTH.value : "0",
-);
-const rightSidebarWidth = computed(() =>
-  isRightSidebarOpen.value ? OPEN_WIDTH.value : "0",
-);
+const leftSidebarWidth = computed(() => (isLeftSidebarOpen.value ? OPEN_WIDTH.value : '0'))
+const rightSidebarWidth = computed(() => (isRightSidebarOpen.value ? OPEN_WIDTH.value : '0'))
 
 // --- WATCHERS FOR STATE PERSISTENCE ---
 
 watch(isLeftSidebarOpen, (newValue) => {
-  if (typeof localStorage !== "undefined") {
-    localStorage.setItem(SIDEBAR_LEFT_KEY, newValue ? "true" : "false");
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem(SIDEBAR_LEFT_KEY, newValue ? 'true' : 'false')
   }
-});
+})
 
 watch(isRightSidebarOpen, (newValue) => {
-  if (typeof localStorage !== "undefined") {
-    localStorage.setItem(SIDEBAR_RIGHT_KEY, newValue ? "true" : "false");
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem(SIDEBAR_RIGHT_KEY, newValue ? 'true' : 'false')
   }
-});
+})
 
 // Expose state for parent control
 defineExpose({
@@ -138,52 +130,50 @@ defineExpose({
   toggleRight: toggleRightSidebar,
   isLeftOpen: isLeftSidebarOpen,
   isRightOpen: isRightSidebarOpen,
-});
+})
 
 // --- Theme Application Logic (Remains Unchanged) ---
 const applyTheme = (theme) => {
-  const isDarkTheme = theme === "dark";
-  const root = document.documentElement;
-  let backgroundUrl;
+  const isDarkTheme = theme === 'dark'
+  const root = document.documentElement
+  let backgroundUrl
 
   if (props.backgroundImageUrl) {
-    backgroundUrl = `url("${props.backgroundImageUrl}")`;
+    backgroundUrl = `url("${props.backgroundImageUrl}")`
   }
 
   // Apply theme classes
   if (isDarkTheme) {
-    root.classList.remove("light");
-    root.classList.add("dark");
+    root.classList.remove('light')
+    root.classList.add('dark')
   } else {
-    root.classList.remove("dark");
-    root.classList.add("light");
+    root.classList.remove('dark')
+    root.classList.add('light')
   }
 
   // Apply background image
-  document.body.style.backgroundImage = backgroundUrl;
-  document.body.style.overflow = "hidden";
-  document.body.style.backgroundSize = "cover";
-  document.body.style.backgroundAttachment = "fixed";
-  localStorage.setItem("_theme", theme);
-};
+  document.body.style.backgroundImage = backgroundUrl
+  document.body.style.overflow = 'hidden'
+  document.body.style.backgroundSize = 'cover'
+  document.body.style.backgroundAttachment = 'fixed'
+  localStorage.setItem('_theme', theme)
+}
 
 // Watch for changes in the theme and the new background URL
 watch(
   () => [props.initialTheme, props.backgroundImageUrl],
   () => {
-    const currentTheme = document.documentElement.classList.contains("dark")
-      ? "dark"
-      : "light";
-    applyTheme(currentTheme);
+    const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+    applyTheme(currentTheme)
   },
   { deep: true },
-);
+)
 
 onMounted(() => {
-  const savedTheme = localStorage.getItem("_theme");
-  const initialThemeToUse = savedTheme || props.initialTheme;
-  applyTheme(initialThemeToUse);
-});
+  const savedTheme = localStorage.getItem('_theme')
+  const initialThemeToUse = savedTheme || props.initialTheme
+  applyTheme(initialThemeToUse)
+})
 </script>
 
 <style>

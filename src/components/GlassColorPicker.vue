@@ -26,10 +26,10 @@
 </template>
 
 <script setup>
-import { computed, defineAsyncComponent } from "vue";
+import { computed } from 'vue'
 // Assuming GlassDropdownContainer is imported from its file path
-import GlassDropdownContainer from "./GlassDropdownContainer.vue";
-import GlassColorPalette from "./GlassColorPalette.vue";
+import GlassColorPalette from './GlassColorPalette.vue'
+import GlassDropdownContainer from './GlassDropdownContainer.vue'
 
 // --- PROPS and EMITS (v-model for selected color) ---
 const props = defineProps({
@@ -38,15 +38,15 @@ const props = defineProps({
     type: [String, null],
     default: null,
   },
-});
+})
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(['update:modelValue'])
 
 // Use the computed property for V-model
 const colorValue = computed({
   get: () => props.modelValue,
-  set: (val) => emit("update:modelValue", val),
-});
+  set: (val) => emit('update:modelValue', val),
+})
 
 // --- DISPLAY LOGIC ---
 
@@ -54,12 +54,12 @@ const selectedColor = computed(() => {
   // Basic validation for common color string formats
   if (
     colorValue.value &&
-    (colorValue.value.startsWith("#") || colorValue.value.startsWith("rgb"))
+    (colorValue.value.startsWith('#') || colorValue.value.startsWith('rgb'))
   ) {
-    return colorValue.value;
+    return colorValue.value
   }
-  return null;
-});
+  return null
+})
 
 /**
  * Handles the selection of a color from the palette.
@@ -68,11 +68,11 @@ const selectedColor = computed(() => {
  */
 const handleColorSelect = (color, closeDropdown) => {
   // Update the modelValue to reflect the new selection
-  colorValue.value = color;
+  colorValue.value = color
 
   // Close the dropdown immediately after selection
-  closeDropdown();
-};
+  closeDropdown()
+}
 </script>
 
 <style scoped>

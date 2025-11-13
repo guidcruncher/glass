@@ -25,8 +25,8 @@ defineProps({
     type: [Number, String],
     default: 50,
   },
-});
-defineEmits(["update:modelValue"]);
+})
+defineEmits(['update:modelValue'])
 </script>
 
 <style scoped>
