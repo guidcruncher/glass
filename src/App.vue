@@ -1,4 +1,4 @@
-<template>
+l<template>
   <GlassAppView
     initial-theme="dark"
     headerTitle="Glass UI Demo App"
@@ -33,10 +33,6 @@
 
               <GlassColorPicker v-model="pageColor" />
 
-              <GlassColorPalette v-model="pageColor" :is-dark="true" :picker-size="350" />
-              <p>
-                Selected Color: <strong>{{ pageColor }}</strong>
-              </p>
             </div>
 
             <!-- Buttons and Inputs Panel -->

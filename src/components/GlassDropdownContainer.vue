@@ -1,84 +1,93 @@
 <template>
-  <section class="dropdown-section">
-    <div class="dropdown-wrapper" v-click-outside="closeDropdown">
-      <button
-        @click="openDropdown"
-        ref="dropdownButton"
-        class="dropdown-button"
-        :class="{
-          'dark-theme': isDark,
-          'light-theme': !isDark,
-          'focus-ring': isOpen,
-        }"
+  <div class="dropdown-wrapper" 
+    v-click-outside="closeDropdown"
+    :style="{ maxWidth: maxButtonWidth }"
+  >
+    <button
+      @click="openDropdown"
+      ref="dropdownButton"
+      class="dropdown-button"
+      :class="{
+        'dark-theme': isDark,
+        'light-theme': !isDark,
+        'focus-ring': isOpen,
+      }"
+    >
+      <!-- Slot for the selected value display -->
+      <slot name="selected">
+        <span>{{ modelValue }}</span>
+      </slot>
+
+      <svg
+        class="dropdown-icon"
+        :class="{ 'rotate-180': isOpen }"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
       >
-        <slot name="selected">
-          <span>{{ selectedValue }}</span>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 9l-7 7-7-7"
+        />
+      </svg>
+    </button>
+
+    <teleport to="body">
+      <div
+        v-show="isOpen"
+        class="dropdown-list-teleported"
+        :class="{ 'dark-theme': isDark, 'light-theme': !isDark }"
+        :style="listPositionStyle"
+      >
+        <!-- Slot for dropdown content, defaulting to iterating through options -->
+        <slot name="dropdown" :close="closeDropdown">
+          <div
+            v-for="option in options"
+            :key="option"
+            class="dropdown-list-item"
+            @click="selectOption(option)"
+            :class="{ 'dark-hover': isDark, 'light-hover': !isDark }"
+          >
+            {{ option }}
+          </div>
         </slot>
-
-        <svg
-          class="dropdown-icon"
-          :class="{ 'rotate-180': isOpen }"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
-      </button>
-
-      <teleport to="body">
-        <div
-          v-show="isOpen"
-          class="dropdown-list-teleported"
-          :class="{ 'dark-theme': isDark, 'light-theme': !isDark }"
-          :style="listPositionStyle"
-        >
-          <slot name="dropdown" :close="closeDropdown">
-            <div
-              v-for="option in options"
-              :key="option"
-              class="dropdown-list-item"
-              @click="selectOption(option)"
-              :class="{ 'dark-hover': isDark, 'light-hover': !isDark }"
-            >
-              {{ option }}
-            </div>
-          </slot>
-        </div>
-      </teleport>
-    </div>
-  </section>
+      </div>
+    </teleport>
+  </div>
 </template>
 
-<script setup>
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+<script setup lang="ts">
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 
-// Define Props for initial value (optional for the container) and options
-const props = defineProps({
-  options: {
-    type: Array,
-    default: () => ['Meeting', 'Call', 'Task', 'Reminder', 'Birthday'],
-  },
-  initialValue: {
-    type: String,
-    default: 'Select an option...',
-  },
-})
+// Define Props
+const props = defineProps<{
+  options: string[] // List of available options
+  modelValue: string // Current selected value (v-model)
+  // Props for list size control
+  maxListWidth?: string // Maximum width of the dropdown list (e.g., '100vw')
+  maxListHeight?: string // Maximum height of the dropdown list (e.g., '100vh')
+  listWidth?: string // Optional fixed width for the list (e.g., '500px')
+  // NEW PROP: Max width for the button/container itself
+  maxButtonWidth?: string // Maximum width of the button component (e.g., '300px')
+}>()
 
-const emit = defineEmits(['update:modelValue', 'select'])
+// Default values for list props
+const defaultMaxListWidth = '100vw'
+const defaultMaxListHeight = '100vh'
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+  (e: 'select', value: string): void
+}>()
 
 // --- STATE ---
-const selectedValue = ref(props.initialValue)
 const isOpen = ref(false)
 
 // Refs for positioning
-const dropdownButton = ref(null)
-const listPositionStyle = ref({})
+const dropdownButton = ref<HTMLElement | null>(null)
+const listPositionStyle = ref<Record<string, string>>({}) // Use Record for dynamic styles
 
 // --- THEME AWARENESS ---
 const isDark = ref(true)
@@ -87,11 +96,11 @@ const checkTheme = () => {
 }
 
 // --- LIFECYCLE ---
-let themeCheckerInterval = null
+let themeCheckerInterval: number | undefined = undefined
 
 onMounted(() => {
   checkTheme()
-  themeCheckerInterval = setInterval(checkTheme, 300)
+  themeCheckerInterval = setInterval(checkTheme, 300) as unknown as number 
   window.addEventListener('scroll', recalculatePosition)
   window.addEventListener('resize', recalculatePosition)
 })
@@ -108,26 +117,37 @@ const recalculatePosition = () => {
 
   const { top, left, height, width } = dropdownButton.value.getBoundingClientRect()
 
+  // Determine the width of the dropdown list: uses listWidth, then button width
+  const finalWidth = props.listWidth || `${width}px`
+
   listPositionStyle.value = {
     top: `${top + height + 8}px`,
     left: `${left}px`,
-    width: `${width}px`,
+    width: finalWidth, // Apply the determined width
+    // Apply max width and height from props, falling back to defaults
+    maxWidth: props.maxListWidth || defaultMaxListWidth,
+    maxHeight: props.maxListHeight || defaultMaxListHeight,
+    // Apply blur to dropdown list when theme is dark
+    backdropFilter: isDark.value ? 'blur(14px)' : 'none',
+    WebkitBackdropFilter: isDark.value ? 'blur(14px)' : 'none',
   }
 }
+
+// Recalculate position if the theme changes or dropdown opens
+watch(isOpen, async (newVal) => {
+    if (newVal) {
+        await nextTick()
+        recalculatePosition()
+    }
+})
 
 // --- DROPDOWN LOGIC ---
 const openDropdown = async () => {
   isOpen.value = !isOpen.value
-  if (isOpen.value) {
-    await nextTick()
-    recalculatePosition()
-  }
 }
 
-const selectOption = (value) => {
-  selectedValue.value = value
+const selectOption = (value: string) => {
   isOpen.value = false
-  // Emit the selection for external use
   emit('select', value)
   emit('update:modelValue', value)
 }
@@ -136,19 +156,20 @@ const closeDropdown = () => {
   isOpen.value = false
 }
 
-// --- VUE DIRECTIVE (Must be globally registered or implemented) ---
+// --- VUE DIRECTIVE (Local implementation) ---
 const vClickOutside = {
-  mounted: (el, binding) => {
-    el.clickOutsideEvent = (event) => {
-      if (!(el === event.target || el.contains(event.target))) {
-        if (!event.target.closest('.dropdown-list-teleported')) {
+  mounted: (el: HTMLElement, binding: any) => {
+    el.clickOutsideEvent = (event: Event) => {
+      const target = event.target as HTMLElement
+      if (!(el === target || el.contains(target))) {
+        if (!target.closest('.dropdown-list-teleported')) {
           binding.value(event, el)
         }
       }
     }
     document.addEventListener('click', el.clickOutsideEvent)
   },
-  unmounted: (el) => {
+  unmounted: (el: HTMLElement) => {
     document.removeEventListener('click', el.clickOutsideEvent)
   },
 }
@@ -156,7 +177,7 @@ const vClickOutside = {
 
 <style scoped>
 /* ===================================================================
-   THEME VARIABLES
+   THEME VARIABLES (omitted for brevity, assume presence)
    =================================================================== */
 /* Dark Mode Variables */
 .dark-theme {
@@ -164,7 +185,6 @@ const vClickOutside = {
   --dropdown-bg: rgba(30, 30, 30, 0.4);
   --dropdown-border: rgba(255, 255, 255, 0.2);
   --button-focus-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
-  --list-item-hover: rgba(255, 255, 255, 0.1);
 }
 
 /* Light Mode Variables */
@@ -173,32 +193,6 @@ const vClickOutside = {
   --dropdown-bg: rgba(255, 255, 255, 0.65);
   --dropdown-border: rgba(0, 0, 0, 0.2);
   --button-focus-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
-  --list-item-hover: rgba(0, 0, 0, 0.1);
-}
-
-/* ===================================================================
-   SECTION AND TITLE 
-   =================================================================== */
-.dropdown-section {
-  padding: 2rem;
-  border-radius: 1rem;
-  background-color: rgba(30, 30, 30, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  color: white;
-}
-.light-theme.dropdown-section {
-  background-color: rgba(255, 255, 255, 0.65);
-  border-color: rgba(0, 0, 0, 0.15);
-  color: #1f2937;
-}
-
-.dropdown-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
 }
 
 /* ===================================================================
@@ -206,10 +200,11 @@ const vClickOutside = {
    =================================================================== */
 .dropdown-wrapper {
   position: relative;
+  /* The maxButtonWidth prop is applied inline in the template */
 }
 
 .dropdown-button {
-  width: 100%;
+  width: 100%; /* Important: Button always takes 100% of its wrapper's width (which is now capped) */
   padding: 0.75rem;
   border-radius: 0.75rem;
   display: flex;
@@ -224,12 +219,6 @@ const vClickOutside = {
   color: var(--text-color);
 }
 
-@media (min-width: 768px) {
-  .dropdown-button {
-    padding: 1rem;
-  }
-}
-
 .dropdown-button.focus-ring {
   outline: none;
   box-shadow: var(--button-focus-shadow);
@@ -240,7 +229,7 @@ const vClickOutside = {
   height: 1.25rem;
   margin-left: 0.5rem;
   transition: transform 0.3s ease;
-  flex-shrink: 0; /* Prevent icon from shrinking if selected content is long */
+  flex-shrink: 0;
 }
 .rotate-180 {
   transform: rotate(180deg);
@@ -255,10 +244,11 @@ const vClickOutside = {
   border-radius: 0.75rem;
   z-index: 9999;
   overflow: hidden;
+  overflow-y: auto; 
 
   background-color: var(--dropdown-bg);
   border: 1px solid var(--dropdown-border);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); 
 }
 
 .dropdown-list-item {
@@ -266,19 +256,16 @@ const vClickOutside = {
   cursor: pointer;
   transition: background-color 0.2s ease;
   color: var(--text-color);
+  font-size: 0.9rem;
 }
 
-@media (min-width: 768px) {
-  .dropdown-list-item {
-    padding: 1rem;
-  }
-}
-
-.dropdown-list-item.dark-hover:hover {
+.dropdown-list-item:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.dropdown-list-item.light-hover:hover {
+.light-theme .dropdown-list-item:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
 </style>
+
+
