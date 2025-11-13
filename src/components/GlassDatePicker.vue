@@ -1,5 +1,5 @@
 <template>
-  <GlassDropdownContainer class="glass-date-picker">
+  <GlassDropdownContainer class="glass-date-picker" :max-button-width="'400px'">
     <template #selected>
       <span v-if="formattedDate" class="selected-date-text">
         {{ formattedDate }}
