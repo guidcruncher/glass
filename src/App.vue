@@ -19,133 +19,139 @@
 
     <template #body>
       <div class="p-8 space-y-12">
-        <h1 class="text-4xl font-bold border-b-2 pb-2 border-accent-color/50">
-          Glassmorphism Component Showcase
-        </h1>
+        <!-- New: iPad OS Tab Panel Control -->
+        <GlassTabContainer v-model="selectedTab" :tabs="tabItems" :full-width="false">
+          <!-- Tab 1: Inputs & Pickers -->
+          <template #inputs_pickers>
+            <h2 class="text-3xl font-semibold opacity-90 mb-6">Inputs & Pickers</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <GlassSlider v-model="sliderValue" />
 
-        <GlassTabStrip v-model="selectedTab" :tabs="tabItems" labelField="name" keyField="id" />
+              <TimePicker />
 
-        <div v-if="selectedTab === 'inputs_pickers'" class="space-y-8">
-          <h2 class="text-3xl font-semibold opacity-90">Inputs & Pickers</h2>
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <GlassSlider v-model="sliderValue" />
+              <GlassDatePicker v-model="selectedDate" />
 
-            <TimePicker />
+              <GlassColorPicker v-model="pageColor" />
 
-            <GlassDatePicker v-model="selectedDate" />
+              <GlassColorPalette v-model="pageColor" :is-dark="true" :picker-size="350" />
+              <p>
+                Selected Color: <strong>{{ pageColor }}</strong>
+              </p>
+            </div>
 
-            <GlassColorPicker v-model="pageColor" />
-          </div>
+            <!-- Buttons and Inputs Panel -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-8">
+              <GlassPanel>
+                <h3 class="text-xl font-semibold">Interaction Demo</h3>
+                <p class="text-sm opacity-80">Test buttons and modals.</p>
+                <div class="flex flex-col space-y-4 pt-4">
+                  <GlassButton variant="primary" @click="modalOpen = true">
+                    Open Glass Modal
+                  </GlassButton>
+                  <GlassButton variant="secondary"> Secondary Button </GlassButton>
+                  <GlassButton variant="destructive">
+                    <span class="flex items-center space-x-2">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                        ></path>
+                      </svg>
+                      <span>Glass Button with Icon</span>
+                    </span>
+                  </GlassButton>
+                </div>
+              </GlassPanel>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            <GlassPanel>
-              <h3 class="text-xl font-semibold">Interaction Demo</h3>
-              <p class="text-sm opacity-80">Test buttons and modals.</p>
-              <div class="flex flex-col space-y-4 pt-4">
-                <GlassButton variant="primary" @click="modalOpen = true">
-                  Open Glass Modal
-                </GlassButton>
-                <GlassButton variant="secondary"> Secondary Button </GlassButton>
-                <GlassButton variant="destructive">
-                  <span class="flex items-center space-x-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                      ></path>
-                    </svg>
-                    <span>Glass Button with Icon</span>
-                  </span>
-                </GlassButton>
+              <GlassPanel>
+                <h3 class="text-xl font-semibold">Checkboxes & Radios</h3>
+                <div class="space-y-4 mt-4">
+                  <GlassCheckbox v-model="checkbox1"> Enable Feature X </GlassCheckbox>
+
+                  <GlassRadioGroup
+                    v-model="selectedFruit"
+                    name="fruit-select"
+                    :theme="theme"
+                    :disabled="groupDisabled"
+                  >
+                    <GlassRadioItem value="apple" label="Apple" />
+                    <GlassRadioItem value="banana" label="Banana" />
+
+                    <GlassRadioItem value="cherry" label="Cherry" :disabled="true" />
+
+                    <GlassRadioItem value="grape" label="Grape" />
+                  </GlassRadioGroup>
+
+                  <GlassRadioGroup name="option" v-model="radioValue" value="A">
+                    Select Option A
+                  </GlassRadioGroup>
+                  <GlassRadioGroup name="option" v-model="radioValue" value="B">
+                    Select Option B
+                  </GlassRadioGroup>
+                </div>
+              </GlassPanel>
+            </div>
+          </template>
+
+          <!-- Tab 2: Displays & Indicators -->
+          <template #displays_indicators>
+            <h2 class="text-3xl font-semibold opacity-90 mb-6">Displays & Indicators</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+              <GlassCalendar />
+
+              <GlassDropdown />
+
+              <GlassGauge />
+
+              <GlassProgressBar :progress-value="progressValue" />
+            </div>
+          </template>
+
+          <!-- Tab 3: Clocks & Geo -->
+          <template #clocks_geo>
+            <h2 class="text-3xl font-semibold opacity-90 mb-6">Clocks & Geo</h2>
+            <!-- Digital Clocks -->
+            <h3 class="text-xl font-medium opacity-80 mt-4">Digital Clocks (World)</h3>
+            <div class="flex justify-center flex-wrap gap-8 mt-4">
+              <div>
+                <GlassDigitalClock size="sm" timezone="Europe/London" />
               </div>
-            </GlassPanel>
-
-            <GlassPanel>
-              <h3 class="text-xl font-semibold">Checkboxes & Radios</h3>
-              <div class="space-y-4 mt-4">
-                <GlassInput v-model="textValue" placeholder="Type something..." />
-                <GlassTextarea v-model="textValue" placeholder="Type something..." />
-
-                <GlassCheckbox v-model="checkbox1"> Enable Feature X </GlassCheckbox>
-
-                <GlassRadioGroup
-                  v-model="selectedFruit"
-                  name="fruit-select"
-                  :theme="theme"
-                  :disabled="groupDisabled"
-                  glassi
-                >
-                  <GlassRadioItem value="apple" label="Apple" />
-                  <GlassRadioItem value="banana" label="Banana" />
-
-                  <GlassRadioItem value="cherry" label="Cherry" :disabled="true" />
-
-                  <GlassRadioItem value="grape" label="Grape" />
-                </GlassRadioGroup>
-
-                <GlassRadioGroup name="option" v-model="radioValue" value="A">
-                  Select Option A
-                </GlassRadioGroup>
-                <GlassRadioGroup name="option" v-model="radioValue" value="B">
-                  Select Option B
-                </GlassRadioGroup>
+              <div>
+                <GlassDigitalClock size="md" timezone="America/New_York" />
               </div>
-            </GlassPanel>
-          </div>
-        </div>
-
-        <div v-if="selectedTab === 'displays_indicators'" class="space-y-8">
-          <h2 class="text-3xl font-semibold opacity-90">Displays & Indicators</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
-            <GlassCalendar />
-
-            <GlassDropdown />
-
-            <GlassGauge />
-
-            <GlassProgressBar :progress-value="progressValue" />
-          </div>
-        </div>
-
-        <div v-if="selectedTab === 'clocks_geo'" class="space-y-8">
-          <h2 class="text-3xl font-semibold opacity-90">Clocks & Geo</h2>
-          <h3 class="text-xl font-medium opacity-80">Digital Clocks (World)</h3>
-          <div class="flex justify-center flex-wrap gap-8">
-            <div>
-              <GlassDigitalClock size="sm" timezone="Europe/London" />
+              <div>
+                <GlassDigitalClock size="lg" timezone="Asia/Tokyo" />
+              </div>
             </div>
-            <div>
-              <GlassDigitalClock size="md" timezone="America/New_York" />
+            <!-- Analog Clocks -->
+            <h3 class="text-xl font-medium opacity-80 mt-8">Analog Clocks</h3>
+            <div class="flex justify-center flex-wrap gap-8 mt-4">
+              <div>
+                <AnalogClock size="300px" timeZone="America/Los_Angeles" />
+              </div>
+              <div>
+                <AnalogClock size="300px" timeZone="Europe/Madrid" />
+              </div>
+              <div>
+                <AnalogClock size="300px" timeZone="Asia/Tokyo" />
+              </div>
             </div>
-            <div>
-              <GlassDigitalClock size="lg" timezone="Asia/Tokyo" />
+            <!-- Geo Clock -->
+            <h3 class="text-xl font-medium opacity-80 mt-8">Global GeoClock</h3>
+            <div class="mt-4">
+              <GeoClock
+                :width="600"
+                twilightLevel="nautical"
+                :height="300"
+                :marker-lat="51.477928"
+                :marker-lon="-0.001545"
+              />
             </div>
-          </div>
-          <h3 class="text-xl font-medium opacity-80">Analog Clocks</h3>
-          <div class="flex justify-center flex-wrap gap-8">
-            <div>
-              <AnalogClock size="300px" timeZone="America/Los_Angeles" />
-            </div>
-            <div>
-              <AnalogClock size="300px" timeZone="Europe/Madrid" />
-            </div>
-            <div>
-              <AnalogClock size="300px" timeZone="Asia/Tokyo" />
-            </div>
-          </div>
-          <h3 class="text-xl font-medium opacity-80">Global GeoClock</h3>
-          <div>
-            <GeoClock
-              :width="600"
-              twilightLevel="nautical"
-              :height="300"
-              :marker-lat="51.477928"
-              :marker-lon="-0.001545"
-            />
-          </div>
-        </div>
+          </template>
+        </GlassTabContainer>
+        <!-- End of GlassTabContainer -->
       </div>
     </template>
   </GlassAppView>
@@ -162,16 +168,11 @@
 <script setup>
 import { ref } from 'vue'
 
-// --- Layout Components ---
-// 1. v-model State
-const selectedFruit = ref('banana') // 'banana' will be initially selected
-// 3. Disabled State
+// --- Demo State ---
+const selectedFruit = ref('banana')
 const groupDisabled = ref(false)
-const textValue = ref('')
-
 const sliderValue = ref(75)
 const selectedDate = ref(new Date())
-// Updated initial tab state to match the new tab structure
 const selectedTab = ref('inputs_pickers')
 const modalOpen = ref(false)
 const progressValue = ref(65)
@@ -179,23 +180,19 @@ const checkbox1 = ref(true)
 const radioValue = ref('A')
 const pageColor = ref('#1E90FF')
 
-// Updated tab items to reflect logical groupings
+// Updated tab items with required 'icon' property for the new component
 const tabItems = ref([
-  { id: 'inputs_pickers', name: 'Inputs & Pickers' },
-  { id: 'displays_indicators', name: 'Displays & Indicators' },
-  { id: 'clocks_geo', name: 'Clocks & Geo' },
-])
+  { id: "inputs_pickers", name: "inputs_pickers", label: "Inputs & Pickers", icon: "sliders" }, // Using sliders for inputs
+  { id: "displays_indicators", name: "displays_indicators", label: "Displays & Indicators", icon: "tv" }, // Using tv for displays
+  { id: "clocks_geo", name: "clocks_geo", label: "Clocks & Geo", icon: "globe" }, // Using globe for geo/clocks
+]);
 
 // Note: The TimePicker, GlassDropdown, GlassCalendar, GlassGauge,
 // and GlassFlipClock components manage their own internal state.
 </script>
 
 <style lang="scss">
-/* Global CSS Variables for the Theme and Glass Effects. 
-  These define the theme structure used by the SASS refactoring in the components.
-  These variables should ideally be defined in a main CSS file, 
-  but are included here for a self-contained demo.
-*/
+/* Global CSS Variables for the Theme and Glass Effects. */
 :root {
   // --- ACCENT/THEME COLORS ---
   --accent-color: #007aff; // Blue for dark mode

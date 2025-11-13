@@ -27,6 +27,7 @@ import GlassRadioGroup from './GlassRadioGroup.vue'
 import GlassRadioItem from './GlassRadioItem.vue'
 import GlassSidebar from './GlassSidebar.vue'
 import GlassSlider from './GlassSlider.vue'
+import GlassTabContainer from './GlassTabContainer.vue'
 import GlassTabStrip from './GlassTabStrip.vue'
 import GlassTextarea from './GlassTextarea.vue'
 import ThemeToggle from './ThemeToggle.vue'
@@ -63,6 +64,7 @@ export const GlassComponents = {
   GlassRadioItem,
   GlassSidebar,
   GlassSlider,
+  GlassTabContainer,
   GlassTabStrip,
   GlassTextarea,
   ThemeToggle,

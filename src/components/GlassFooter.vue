@@ -1,7 +1,7 @@
 <template>
   <div class="glass-footer">
     <p class="text-sm opacity-70">
-      <slot> &copy§§; 2024 Glass UI Demo. All rights reserved. </slot>
+      <slot> &copy; 2025 Glass UI Demo. All rights reserved. </slot>
     </p>
   </div>
 </template>
