@@ -5,7 +5,6 @@ import AppleGlassModal from './AppleGlassModal.vue'
 import ClockDigit from './ClockDigit.vue'
 import ClockSeparator from './ClockSeparator.vue'
 import FlipDigit from './FlipDigit.vue'
-import GeoClock from './GeoClock.vue'
 import GlassAppView from './GlassAppView.vue'
 import GlassButton from './GlassButton.vue'
 import GlassCalendar from './GlassCalendar.vue'
@@ -42,7 +41,6 @@ export const GlassComponents = {
   ClockDigit,
   ClockSeparator,
   FlipDigit,
-  GeoClock,
   GlassAppView,
   GlassButton,
   GlassCalendar,

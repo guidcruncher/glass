@@ -1,5 +1,6 @@
 <template>
-  <div class="dropdown-wrapper" 
+  <div
+    class="dropdown-wrapper"
     v-click-outside="closeDropdown"
     :style="{ maxWidth: maxButtonWidth }"
   >
@@ -25,12 +26,7 @@
         stroke="currentColor"
         viewBox="0 0 24 24"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M19 9l-7 7-7-7"
-        />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </button>
 
@@ -100,7 +96,7 @@ let themeCheckerInterval: number | undefined = undefined
 
 onMounted(() => {
   checkTheme()
-  themeCheckerInterval = setInterval(checkTheme, 300) as unknown as number 
+  themeCheckerInterval = setInterval(checkTheme, 300) as unknown as number
   window.addEventListener('scroll', recalculatePosition)
   window.addEventListener('resize', recalculatePosition)
 })
@@ -135,10 +131,10 @@ const recalculatePosition = () => {
 
 // Recalculate position if the theme changes or dropdown opens
 watch(isOpen, async (newVal) => {
-    if (newVal) {
-        await nextTick()
-        recalculatePosition()
-    }
+  if (newVal) {
+    await nextTick()
+    recalculatePosition()
+  }
 })
 
 // --- DROPDOWN LOGIC ---
@@ -244,11 +240,11 @@ const vClickOutside = {
   border-radius: 0.75rem;
   z-index: 9999;
   overflow: hidden;
-  overflow-y: auto; 
+  overflow-y: auto;
 
   background-color: var(--dropdown-bg);
   border: 1px solid var(--dropdown-border);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 .dropdown-list-item {
@@ -267,5 +263,3 @@ const vClickOutside = {
   background-color: rgba(0, 0, 0, 0.1);
 }
 </style>
-
-

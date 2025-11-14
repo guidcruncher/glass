@@ -1,22 +1,31 @@
- <template>
+<template>
   <div class="time-picker-card">
     <div class="flex space-x-2 items-center">
       <!-- Hour Picker -->
-      <GlassDropdownContainer style="float:left"
-        v-model="hourDisplay" :list-width="'70px'"
-        :options="hours" :max-button-width="'70px'" 
-        class="flex-1"
-      /> 
-      <span class="text-2xl font-light opacity-80" style="float:left;margin-top:10px">:</span>
-      <!-- Minute Picker -->
-      <GlassDropdownContainer style="float:left"
-        v-model="minuteDisplay" :list-width="'70px'"
-        :options="minutes"  :max-button-width="'70px'"
+      <GlassDropdownContainer
+        style="float: left"
+        v-model="hourDisplay"
+        :list-width="'70px'"
+        :options="hours"
+        :max-button-width="'70px'"
         class="flex-1"
       />
-      <!-- Period (AM/PM) Picker -->  
-      <GlassDropdownContainer :list-width="'70px'" style="float:left"
-        v-model="period" :max-button-width="'70px'"
+      <span class="text-2xl font-light opacity-80" style="float: left; margin-top: 10px">:</span>
+      <!-- Minute Picker -->
+      <GlassDropdownContainer
+        style="float: left"
+        v-model="minuteDisplay"
+        :list-width="'70px'"
+        :options="minutes"
+        :max-button-width="'70px'"
+        class="flex-1"
+      />
+      <!-- Period (AM/PM) Picker -->
+      <GlassDropdownContainer
+        :list-width="'70px'"
+        style="float: left"
+        v-model="period"
+        :max-button-width="'70px'"
         :options="periods"
         class="flex-none w-20"
       />
@@ -25,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import GlassDropdownContainer from './GlassDropdownContainer.vue' // Import the base component
 
 // Define Props and Emits
@@ -40,14 +49,10 @@ const emit = defineEmits<{
 // --- TIME OPTIONS GENERATION ---
 
 // Hours: "01" to "12"
-const hours = Array.from({ length: 12 }, (_, i) =>
-  String(i + 1).padStart(2, '0')
-)
+const hours = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'))
 
 // Minutes: "00" to "55" in 5-minute increments
-const minutes = Array.from({ length: 12 }, (_, i) =>
-  String(i * 5).padStart(2, '0')
-)
+const minutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'))
 
 // Periods: AM/PM
 const periods = ['AM', 'PM']
@@ -89,7 +94,7 @@ watch(
     if (m !== minuteDisplay.value) minuteDisplay.value = m
     if (p !== period.value) period.value = p
   },
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 
@@ -115,4 +120,3 @@ watch(
   padding: 0 0.25rem;
 }
 </style>
-

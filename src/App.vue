@@ -1,4 +1,5 @@
-l<template>
+l
+<template>
   <GlassAppView
     initial-theme="dark"
     headerTitle="Glass UI Demo App"
@@ -32,7 +33,6 @@ l<template>
               <GlassDatePicker v-model="selectedDate" />
 
               <GlassColorPicker v-model="pageColor" />
-
             </div>
 
             <!-- Buttons and Inputs Panel -->
@@ -134,17 +134,6 @@ l<template>
                 <AnalogClock size="300px" timeZone="Asia/Tokyo" />
               </div>
             </div>
-            <!-- Geo Clock -->
-            <h3 class="text-xl font-medium opacity-80 mt-8">Global GeoClock</h3>
-            <div class="mt-4">
-              <GeoClock
-                :width="600"
-                twilightLevel="nautical"
-                :height="300"
-                :marker-lat="51.477928"
-                :marker-lon="-0.001545"
-              />
-            </div>
           </template>
         </GlassTabContainer>
         <!-- End of GlassTabContainer -->
@@ -165,6 +154,11 @@ l<template>
 import { ref } from 'vue'
 
 // --- Demo State ---
+const myLocation = ref({
+  lat: 51.477928,
+  lon: -0.001545,
+})
+
 const selectedFruit = ref('banana')
 const groupDisabled = ref(false)
 const sliderValue = ref(75)
