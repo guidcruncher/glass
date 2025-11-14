@@ -63,3 +63,19 @@ export const useThemeStore = defineStore('themeStore', {
     // toggleRight: this.toggleRightSidebar,
   },
 })
+
+/*
+import { storeToRefs } from 'pinia'
+import { ref, watch } from 'vue'
+import { useThemeStore } from '../composables/useThemeStore'
+
+// --- THEME AWARENESS ---
+const themeStore = useThemeStore()
+const { theme, isLeftSidebarOpen, isRightSidebarOpen } = storeToRefs(themeStore)
+const isDark = ref(true)
+
+watch(theme, (newTheme) => {
+  isDark.value = newTheme === 'dark'
+})
+
+*/
