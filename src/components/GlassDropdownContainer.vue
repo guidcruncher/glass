@@ -56,6 +56,7 @@
 
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useTheme } from '../composables/useTheme'
 
 // Define Props
 const props = defineProps<{
@@ -86,23 +87,14 @@ const dropdownButton = ref<HTMLElement | null>(null)
 const listPositionStyle = ref<Record<string, string>>({}) // Use Record for dynamic styles
 
 // --- THEME AWARENESS ---
-const isDark = ref(true)
-const checkTheme = () => {
-  isDark.value = document.documentElement.classList.contains('dark')
-}
-
-// --- LIFECYCLE ---
-let themeCheckerInterval: number | undefined = undefined
+const { isDark } = useTheme() // <--- NEW: Use composable
 
 onMounted(() => {
-  checkTheme()
-  themeCheckerInterval = setInterval(checkTheme, 300) as unknown as number
   window.addEventListener('scroll', recalculatePosition)
   window.addEventListener('resize', recalculatePosition)
 })
 
 onUnmounted(() => {
-  if (themeCheckerInterval) clearInterval(themeCheckerInterval)
   window.removeEventListener('scroll', recalculatePosition)
   window.removeEventListener('resize', recalculatePosition)
 })
