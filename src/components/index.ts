@@ -33,6 +33,7 @@ import ThemeToggle from './ThemeToggle.vue'
 import TimePicker from './TimePicker.vue'
 
 import { clickOutside } from '../directives/clickOutside'
+import { createPinia } from 'pinia'
 
 export const GlassComponents = {
   AnalogClock,
@@ -72,6 +73,8 @@ export const GlassComponents = {
 // Vue 3 Plugin Install Function
 export default {
   install(app) {
+    const pinia = createPinia()
+    app.use(pinia); 
     app.directive('click-outside', clickOutside);  
     Object.keys(GlassComponents).forEach((name) => {
       app.component(name, GlassComponents[name]);

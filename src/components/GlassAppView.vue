@@ -60,7 +60,9 @@
 
 <script setup>
 import { computed, onMounted, ref, useSlots, watch } from 'vue'
+import { useThemeStore } from '../consumables/useThemeStore'
 import AppHeader from './AppHeader.vue'
+import { storeToRefs } from 'pinia'
 
 const props = defineProps({
   initialTheme: {
@@ -83,17 +85,8 @@ const SIDEBAR_LEFT_KEY = 'glassappview_sidebar_left_open'
 const SIDEBAR_RIGHT_KEY = 'glassappview_sidebar_right_open'
 
 const getInitialState = (key) => {
-  if (typeof localStorage !== 'undefined') {
-    const storedState = localStorage.getItem(key)
-    return storedState === 'true'
-  }
-  return true // Default to open
-}
+const { theme, isLeftSidebarOpen, isRightSidebarOpen } = storeToRefs(useThemeStore())
 
-// --- Sidebar State Management (Initialized from Local Storage) ---
-// Initialize state. If state is not found, default to TRUE only if the slot exists.
-const isLeftSidebarOpen = ref(getInitialState(SIDEBAR_LEFT_KEY))
-const isRightSidebarOpen = ref(getInitialState(SIDEBAR_RIGHT_KEY))
 
 const toggleWrapper = (name, func) => {
   return slots[name] ? func : undefined
