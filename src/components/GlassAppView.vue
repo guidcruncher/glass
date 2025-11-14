@@ -7,12 +7,10 @@
     }"
   >
     <header class="app-header" :style="{ height: headerHeight }">
-      <!-- Option 1: Full custom header via slot -->
       <template v-if="$slots.top">
         <slot name="top"></slot>
       </template>
 
-      <!-- Option 2: Default header using AppHeader component -->
       <AppHeader
         v-else
         :title="headerTitle"
@@ -28,7 +26,6 @@
     </header>
 
     <div class="main-content-wrapper">
-      <!-- LEFT SIDEBAR SLOT: Renders always, using its width state -->
       <aside
         class="app-sidebar sidebar-left"
         :style="{ width: leftSidebarWidth }"
@@ -42,7 +39,6 @@
         <slot v-else></slot>
       </main>
 
-      <!-- RIGHT SIDEBAR SLOT: Renders always, using its width state -->
       <aside
         class="app-sidebar sidebar-right"
         :style="{ width: rightSidebarWidth }"
@@ -59,10 +55,11 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, useSlots, watch } from 'vue'
-import { useThemeStore } from '../consumables/useThemeStore'
-import AppHeader from './AppHeader.vue'
+import { computed, onMounted, useSlots, watch } from 'vue'
+// Pinia store import
 import { storeToRefs } from 'pinia'
+import { useThemeStore } from '../composables/useThemeStore'
+import AppHeader from './AppHeader.vue'
 
 const props = defineProps({
   initialTheme: {
@@ -80,42 +77,33 @@ const props = defineProps({
 const slots = useSlots()
 const OPEN_WIDTH = computed(() => props.sidebarWidth)
 
-// --- LOCAL STORAGE KEYS ---
-const SIDEBAR_LEFT_KEY = 'glassappview_sidebar_left_open'
-const SIDEBAR_RIGHT_KEY = 'glassappview_sidebar_right_open'
+// --- PINIA STORE INTEGRATION ---
+const themeStore = useThemeStore()
+// Destructure state properties using storeToRefs to maintain reactivity
+const { theme, isLeftSidebarOpen, isRightSidebarOpen } = storeToRefs(themeStore)
+// Destructure actions
+const { setTheme } = themeStore
 
-const getInitialState = (key) => {
-const { theme, isLeftSidebarOpen, isRightSidebarOpen } = storeToRefs(useThemeStore())
-
+// --- Sidebar Toggles (Now setting Pinia state) ---
 
 const toggleWrapper = (name, func) => {
   return slots[name] ? func : undefined
 }
 
 const toggleLeftSidebar = () => {
+  // Toggling the reactive Pinia state property
   isLeftSidebarOpen.value = !isLeftSidebarOpen.value
 }
 const toggleRightSidebar = () => {
+  // Toggling the reactive Pinia state property
   isRightSidebarOpen.value = !isRightSidebarOpen.value
 }
 
-// Dynamic width calculation (Sidebar width is now controlled purely by the toggle state)
+// Dynamic width calculation (Controlled by Pinia state)
 const leftSidebarWidth = computed(() => (isLeftSidebarOpen.value ? OPEN_WIDTH.value : '0'))
 const rightSidebarWidth = computed(() => (isRightSidebarOpen.value ? OPEN_WIDTH.value : '0'))
 
-// --- WATCHERS FOR STATE PERSISTENCE ---
-
-watch(isLeftSidebarOpen, (newValue) => {
-  if (typeof localStorage !== 'undefined') {
-    localStorage.setItem(SIDEBAR_LEFT_KEY, newValue ? 'true' : 'false')
-  }
-})
-
-watch(isRightSidebarOpen, (newValue) => {
-  if (typeof localStorage !== 'undefined') {
-    localStorage.setItem(SIDEBAR_RIGHT_KEY, newValue ? 'true' : 'false')
-  }
-})
+// NOTE: LocalStorage sidebar watchers are removed as persistence should be handled by the Pinia store itself.
 
 // Expose state for parent control
 defineExpose({
@@ -125,9 +113,9 @@ defineExpose({
   isRightOpen: isRightSidebarOpen,
 })
 
-// --- Theme Application Logic (Remains Unchanged) ---
-const applyTheme = (theme) => {
-  const isDarkTheme = theme === 'dark'
+// --- Theme Application Logic (Now uses Pinia's 'theme' state) ---
+const applyTheme = (currentTheme) => {
+  const isDarkTheme = currentTheme === 'dark'
   const root = document.documentElement
   let backgroundUrl
 
@@ -149,28 +137,43 @@ const applyTheme = (theme) => {
   document.body.style.overflow = 'hidden'
   document.body.style.backgroundSize = 'cover'
   document.body.style.backgroundAttachment = 'fixed'
-  localStorage.setItem('_theme', theme)
+
+  // NOTE: Removed localStorage.setItem('_theme', theme)
 }
 
-// Watch for changes in the theme and the new background URL
+// Watch for changes in the theme state from Pinia, and apply it
 watch(
-  () => [props.initialTheme, props.backgroundImageUrl],
-  () => {
-    const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light'
-    applyTheme(currentTheme)
+  theme,
+  (newTheme) => {
+    applyTheme(newTheme)
   },
-  { deep: true },
+  { immediate: true }, // Run once immediately on setup to apply the initialized store theme
+)
+
+// Watch for changes to the background URL prop
+watch(
+  () => props.backgroundImageUrl,
+  () => {
+    // Re-apply theme only to update the background image if the prop changes
+    applyTheme(theme.value)
+  },
 )
 
 onMounted(() => {
-  const savedTheme = localStorage.getItem('_theme')
-  const initialThemeToUse = savedTheme || props.initialTheme
-  applyTheme(initialThemeToUse)
+  // Use the initialTheme prop to set the theme in the store if it hasn't been set or persisted yet.
+  // In a real scenario, the store would handle loading the persisted state.
+
+  // A safer approach for initialization: if the store theme is null/default/uninitialized, use the prop.
+  // Since Pinia states are initialized, we'll ensure the prop's theme is set as the initial theme
+  // if the store's current theme doesn't match the desired initial theme.
+  if (theme.value !== props.initialTheme) {
+    setTheme(props.initialTheme)
+  }
 })
 </script>
 
 <style>
-/* (Global styles from previous step remain unchanged) */
+/* (Global styles remain unchanged) */
 /* ======================================================\
   GLOBAL CSS SCAFFOLDING & THEME VARIABLES
   ======================================================
