@@ -176,89 +176,90 @@ const vClickOutside = {
    THEME VARIABLES (omitted for brevity, assume presence)
    =================================================================== */
 /* Dark Mode Variables */
-.dropdowncontainer {
+.dark-theme {
+  --text-color: white;
+  --dropdown-bg: rgba(30, 30, 30, 0.4);
+  --dropdown-border: rgba(255, 255, 255, 0.2);
+  --button-focus-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+/* Light Mode Variables */
+.light-theme {
   --text-color: #1f2937; /* gray-900 */
   --dropdown-bg: rgba(255, 255, 255, 0.65);
   --dropdown-border: rgba(0, 0, 0, 0.2);
   --button-focus-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
 
-  &.dark {
-    --text-color: white;
-    --dropdown-bg: rgba(30, 30, 30, 0.4);
-    --dropdown-border: rgba(255, 255, 255, 0.2);
-    --button-focus-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
-  }
-
-  /* ===================================================================
+/* ===================================================================
    DROPDOWN WRAPPER & BUTTON
    =================================================================== */
-  .dropdown-wrapper {
-    position: relative;
-    /* The maxButtonWidth prop is applied inline in the template */
-  }
+.dropdown-wrapper {
+  position: relative;
+  /* The maxButtonWidth prop is applied inline in the template */
+}
 
-  .dropdown-button {
-    width: 100%; /* Important: Button always takes 100% of its wrapper's width (which is now capped) */
-    padding: 0.75rem;
-    border-radius: 0.75rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1rem;
-    transition: all 0.2s ease;
-    cursor: pointer;
+.dropdown-button {
+  width: 100%; /* Important: Button always takes 100% of its wrapper's width (which is now capped) */
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
 
-    background-color: var(--dropdown-bg);
-    border: 1px solid var(--dropdown-border);
-    color: var(--text-color);
-  }
+  background-color: var(--dropdown-bg);
+  border: 1px solid var(--dropdown-border);
+  color: var(--text-color);
+}
 
-  .dropdown-button.focus-ring {
-    outline: none;
-    box-shadow: var(--button-focus-shadow);
-  }
+.dropdown-button.focus-ring {
+  outline: none;
+  box-shadow: var(--button-focus-shadow);
+}
 
-  .dropdown-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    margin-left: 0.5rem;
-    transition: transform 0.3s ease;
-    flex-shrink: 0;
-  }
-  .rotate-180 {
-    transform: rotate(180deg);
-  }
+.dropdown-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-left: 0.5rem;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+.rotate-180 {
+  transform: rotate(180deg);
+}
 
-  /* ===================================================================
+/* ===================================================================
    DROPDOWN LIST (TELEPORTED)
    =================================================================== */
-  .dropdown-list-teleported {
-    position: fixed;
-    margin-top: 0;
-    border-radius: 0.75rem;
-    z-index: 9999;
-    overflow: hidden;
-    overflow-y: auto;
+.dropdown-list-teleported {
+  position: fixed;
+  margin-top: 0;
+  border-radius: 0.75rem;
+  z-index: 9999;
+  overflow: hidden;
+  overflow-y: auto;
 
-    background-color: var(--dropdown-bg);
-    border: 1px solid var(--dropdown-border);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  }
+  background-color: var(--dropdown-bg);
+  border: 1px solid var(--dropdown-border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
 
-  .dropdown-list-item {
-    padding: 0.75rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    color: var(--text-color);
-    font-size: 0.9rem;
-  }
+.dropdown-list-item {
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
 
-  .dropdown-list-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
+.dropdown-list-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
 
-  .light-theme .dropdown-list-item:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
+.light-theme .dropdown-list-item:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 </style>

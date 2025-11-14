@@ -92,16 +92,35 @@ const toggleWrapper = (name, func) => {
 
 const toggleLeftSidebar = () => {
   // Toggling the reactive Pinia state property
-  isLeftSidebarOpen.value = !isLeftSidebarOpen.value
+  if (slots.left) {
+    themeStore.toggleLeftSidebar()
+  }
 }
 const toggleRightSidebar = () => {
   // Toggling the reactive Pinia state property
-  isRightSidebarOpen.value = !isRightSidebarOpen.value
+  if (slots.right) {
+    themeStore.toggleRightSidebar()
+  }
 }
 
 // Dynamic width calculation (Controlled by Pinia state)
-const leftSidebarWidth = computed(() => (isLeftSidebarOpen.value ? OPEN_WIDTH.value : '0'))
-const rightSidebarWidth = computed(() => (isRightSidebarOpen.value ? OPEN_WIDTH.value : '0'))
+const leftSidebarWidth = computed(() => {
+  // If the 'left' slot is NOT used, width is locked to '0'.
+  // Otherwise, use the Pinia state value.
+  if (!slots.left) {
+    return '0'
+  }
+  return isLeftSidebarOpen.value ? OPEN_WIDTH.value : '0'
+})
+
+const rightSidebarWidth = computed(() => {
+  // If the 'right' slot is NOT used, width is locked to '0'.
+  // Otherwise, use the Pinia state value.
+  if (!slots.right) {
+    return '0'
+  }
+  return isRightSidebarOpen.value ? OPEN_WIDTH.value : '0'
+})
 
 // NOTE: LocalStorage sidebar watchers are removed as persistence should be handled by the Pinia store itself.
 
