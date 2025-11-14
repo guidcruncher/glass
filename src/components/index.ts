@@ -2,9 +2,6 @@
 import AnalogClock from './AnalogClock.vue'
 import AppHeader from './AppHeader.vue'
 import AppleGlassModal from './AppleGlassModal.vue'
-import ClockDigit from './ClockDigit.vue'
-import ClockSeparator from './ClockSeparator.vue'
-import FlipDigit from './FlipDigit.vue'
 import GlassAppView from './GlassAppView.vue'
 import GlassButton from './GlassButton.vue'
 import GlassCalendar from './GlassCalendar.vue'
@@ -15,7 +12,6 @@ import GlassDatePicker from './GlassDatePicker.vue'
 import GlassDigitalClock from './GlassDigitalClock.vue'
 import GlassDropdown from './GlassDropdown.vue'
 import GlassDropdownContainer from './GlassDropdownContainer.vue'
-import GlassFlipClock from './GlassFlipClock.vue'
 import GlassFooter from './GlassFooter.vue'
 import GlassGauge from './GlassGauge.vue'
 import GlassInput from './GlassInput.vue'
@@ -39,9 +35,6 @@ export const GlassComponents = {
   AnalogClock,
   AppHeader,
   AppleGlassModal,
-  ClockDigit,
-  ClockSeparator,
-  FlipDigit,
   GlassAppView,
   GlassButton,
   GlassCalendar,
@@ -52,7 +45,6 @@ export const GlassComponents = {
   GlassDigitalClock,
   GlassDropdown,
   GlassDropdownContainer,
-  GlassFlipClock,
   GlassFooter,
   GlassGauge,
   GlassInput,

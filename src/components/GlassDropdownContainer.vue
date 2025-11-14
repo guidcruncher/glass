@@ -55,9 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useThemeStore } from '../composables/useThemeStore'
 
 // Define Props
 const props = defineProps<{
@@ -88,22 +86,23 @@ const dropdownButton = ref<HTMLElement | null>(null)
 const listPositionStyle = ref<Record<string, string>>({}) // Use Record for dynamic styles
 
 // --- THEME AWARENESS ---
-const themeStore = useThemeStore()
-const { theme, isLeftSidebarOpen, isRightSidebarOpen } = storeToRefs(themeStore)
 const isDark = ref(true)
-
-watch(theme, (newTheme) => {
-  isDark.value = newTheme === 'dark'
-})
+const checkTheme = () => {
+  isDark.value = document.documentElement.classList.contains('dark')
+}
 
 // --- LIFECYCLE ---
+let themeCheckerInterval: number | undefined = undefined
 
 onMounted(() => {
+  checkTheme()
+  themeCheckerInterval = setInterval(checkTheme, 300) as unknown as number
   window.addEventListener('scroll', recalculatePosition)
   window.addEventListener('resize', recalculatePosition)
 })
 
 onUnmounted(() => {
+  if (themeCheckerInterval) clearInterval(themeCheckerInterval)
   window.removeEventListener('scroll', recalculatePosition)
   window.removeEventListener('resize', recalculatePosition)
 })
