@@ -38,8 +38,7 @@
         :style="listPositionStyle"
       >
         <!-- Slot for dropdown content, defaulting to iterating through options -->
-        <slot name="dropdown" :close="closeDropdown">
-        </slot>
+        <slot name="dropdown" :close="closeDropdown"> </slot>
       </div>
     </teleport>
   </div>
@@ -123,7 +122,6 @@ watch(isOpen, async (newVal) => {
 // --- DROPDOWN LOGIC ---
 const openDropdown = async () => {
   isOpen.value = !isOpen.value
-  
 }
 
 const selectOption = (value: string) => {
@@ -234,5 +232,4 @@ const vClickOutside = {
   border: 1px solid var(--dropdown-border);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
-
-</style> 
+</style>

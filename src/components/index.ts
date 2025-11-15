@@ -2,7 +2,6 @@
 import AnalogClock from './AnalogClock.vue'
 import AppHeader from './AppHeader.vue'
 import AppleGlassModal from './AppleGlassModal.vue'
-import Calendar from './Calendar.vue'
 import GlassAppView from './GlassAppView.vue'
 import GlassButton from './GlassButton.vue'
 import GlassCalendar from './GlassCalendar.vue'
@@ -36,7 +35,6 @@ export const GlassComponents = {
   AnalogClock,
   AppHeader,
   AppleGlassModal,
-  Calendar,
   GlassAppView,
   GlassButton,
   GlassCalendar,

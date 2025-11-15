@@ -119,7 +119,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:modelValue', 'close', 'minimize', 'maximize'])
+const emit = defineEmits(['update:modelValue', 'close', 'minimize', 'maximize', 'cancel'])
 
 const isVisible = ref(props.modelValue)
 const isMaximized = ref(false)
@@ -130,14 +130,35 @@ watch(
     isVisible.value = newVal
     // Control body scroll when modal is open
     document.body.style.overflow = newVal ? 'hidden' : ''
+
+    if (newVal) {
+      document.addEventListener('keydown', handleKeydown)
+    } else {
+      document.removeEventListener('keydown', handleKeydown)
+    }
   },
 )
+
+const handleKeydown = (event) => {
+  // Only execute the handler if the listener is active and the key is 'Escape'
+  if (event.key === 'Escape') {
+    event.preventDefault()
+    cancel()
+  }
+}
 
 const close = () => {
   isVisible.value = false
   isMaximized.value = false // Reset maximization on close
   emit('update:modelValue', false)
   emit('close')
+}
+
+const cancel = () => {
+  isVisible.value = false
+  isMaximized.value = false // Reset maximization on cancel
+  emit('update:modelValue', false)
+  emit('cancel')
 }
 
 const minimize = () => {
@@ -166,7 +187,7 @@ const toggleMaximize = () => {
 .modal-backdrop {
   /* Fix: Backdrop must support both light and dark themes */
   position: fixed;
-  z-index:9998;
+  z-index: 9998;
   backdrop-filter: blur(10px);
   top: 0;
   left: 0;
@@ -193,13 +214,13 @@ const toggleMaximize = () => {
   min-width: 300px;
   min-height: 150px;
   overflow: hidden;
-  z-index:9999;
+  z-index: 9999;
   /* Glassmorphic Styling (Refactored to use global CSS variables) */
   background-color: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--glass-border-color);
   box-shadow: var(--glass-shadow);
   /* The blur can be a custom variable or fall back to the global blur */
-  backdrop-filter: blur(10px); 
+  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(var(--glass-blur, 16px));
 
   /* Text color now driven by global variable */
@@ -252,7 +273,7 @@ const toggleMaximize = () => {
 .modal-header {
   /* Light mode for header is usually slightly less transparent than body */
   background-color: var(--glass-header-bg, var(--glass-bg));
-  border-bottom: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border-color);
   padding: 0.75rem 1rem; /* py-3 px-4 */
   display: flex;
   align-items: center;
@@ -344,8 +365,8 @@ const toggleMaximize = () => {
 }
 
 .modal-footer {
-  border-top: 1px solid var(--glass-border);
-  padding: 0.75rem 1rem; /* py-3 px-4 */
+  border-top: 1px solid var(--glass-border-color);
+  padding: 0.55rem 0.55rem; /* py-3 px-4 */
   background-color: var(--glass-footer-bg, var(--glass-bg));
   flex-shrink: 0;
 }

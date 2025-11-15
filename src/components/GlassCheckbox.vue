@@ -1,190 +1,160 @@
 <template>
-  <label :class="['glass-checkbox-label', themeClass, { 'is-disabled': disabled }]">
-    <input
-      type="checkbox"
-      class="hidden-input"
-      :checked="modelValue"
-      :disabled="disabled"
-      @change="handleChange"
-    />
-
-    <div class="custom-checkbox">
-      <!-- Checkmark SVG -->
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke-width="3"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <polyline points="20 6 9 17 4 12"></polyline>
-      </svg>
+  <label
+    :class="['apple-toggle-container', { disabled: disabled }]"
+    :tabindex="disabled ? -1 : 0"
+    @keydown.space.prevent="toggle"
+  >
+    <div class="toggle-slot before-slot">
+      <slot name="before" />
     </div>
 
-    <!-- Slot for the label text -->
-    <span class="label-text">
-      <slot></slot>
-    </span>
+    <div
+      :class="['apple-toggle-switch', { checked: isChecked, disabled: disabled }]"
+      @click="toggle"
+      :aria-checked="isChecked"
+      role="switch"
+      :aria-disabled="disabled"
+    >
+      <span class="toggle-thumb"></span>
+    </div>
+
+    <div class="toggle-slot after-slot">
+      <slot name="after" />
+    </div>
   </label>
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted } from 'vue'
-import { useTheme } from '../composables/useTheme'
+import { computed } from 'vue'
 
+// Define Props and Emits
 const props = defineProps({
-  /** Binds to the checkbox's checked state (v-model) */
+  /** Binds the switch state (v-model) */
   modelValue: {
     type: Boolean,
     default: false,
   },
-  /** Disables the checkbox */
+  /** Disables the control */
   disabled: {
     type: Boolean,
     default: false,
   },
 })
 
-const emit = defineEmits(['update:modelValue', 'change'])
+const emit = defineEmits(['update:modelValue'])
 
-// --- THEME AWARENESS (Polling for reactivity to external theme changes) ---
-const { isDark } = useTheme()
+// --- Composition API Logic ---
 
-onMounted(() => {
-  // Poll the DOM class list every 300ms to detect external theme changes
-})
+/**
+ * Computed property to hold the current checked state from modelValue.
+ */
+const isChecked = computed(() => props.modelValue)
 
-onUnmounted(() => {})
-
-const themeClass = computed(() => (isDark.value ? 'dark-mode' : 'light-mode'))
-
-// --- EVENT HANDLER ---
-const handleChange = (event) => {
-  const isChecked = event.target.checked
-  emit('update:modelValue', isChecked)
-  emit('change', isChecked)
+/**
+ * Toggles the state and emits the new value, but only if not disabled.
+ */
+const toggle = () => {
+  if (!props.disabled) {
+    emit('update:modelValue', !props.modelValue)
+  }
 }
 </script>
 
-<style scoped lang="scss">
-// --- SCSS VARIABLES ---
-$size: 1.25rem; // Checkbox width and height
-$border-radius: 0.375rem; // Rounded corners
-$blur-level: 8px;
-
-/* -------------------------------------------------------------------
-   CSS Variable Definitions (Theme Switching)
-   We define all dynamic colors using CSS variables
-   ------------------------------------------------------------------- */
-
-// --- Default/Light Mode Variables ---
-:root,
-.light-mode {
-  --glass-bg: rgba(255, 255, 255, 0.6);
-  --glass-border: rgba(0, 0, 0, 0.2);
-  --glass-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  --checked-bg: #4c8fff; /* Standard blue check color */
-  --checked-border: #4c8fff;
-  --checkmark-color: white;
-  --text-color: #1f2937;
-
-  --hover-bg: rgba(255, 255, 255, 0.8);
-  --disabled-opacity: 0.6;
+<style scoped>
+/* --- 🎨 Theme Variables (Theme Awareness) --- */
+:root {
+  /* Light Theme Defaults (iOS/macOS Light) */
+  --apple-toggle-bg-color-unchecked: #e9e9ea;
+  --apple-toggle-border-color-unchecked: #d1d1d6;
+  --apple-toggle-checked-color: #34c759; /* Apple Green */
+  --apple-toggle-thumb-color: #ffffff; /* White */
+  --apple-toggle-disabled-opacity: 0.5;
 }
 
-// --- Dark Mode Overrides ---
-.dark-mode {
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.35);
-  --glass-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-
-  --checked-bg: #5f9bff; /* Slightly lighter blue for dark BG */
-  --checked-border: #5f9bff;
-  --checkmark-color: #111; /* Dark checkmark for better contrast on glass */
-  --text-color: #f3f4f6;
-
-  --hover-bg: rgba(255, 255, 255, 0.1);
+.dark {
+  :root {
+    /* Dark Theme Overrides (iOS/macOS Dark) */
+    --apple-toggle-bg-color-unchecked: #3a3a3c;
+    --apple-toggle-border-color-unchecked: #48484a;
+    --apple-toggle-checked-color: #30d158; /* Slightly brighter green for dark mode */
+  }
 }
 
-/* -------------------------------------------------------------------
-   Component Styling
-   ------------------------------------------------------------------- */
+/* --- 🍏 Component Styling --- */
 
-.glass-checkbox-label {
+.apple-toggle-container {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 12px; /* Space between slots and the control */
   cursor: pointer;
   user-select: none;
-  color: var(--text-color);
-  transition: opacity 0.3s ease;
+  border-radius: 6px;
+  padding: 4px; /* For focus outline visibility */
+  outline: none; /* Removed default focus outline */
+  transition: opacity 0.2s ease;
 }
 
-.label-text {
-  font-size: 1rem;
+.apple-toggle-container.disabled {
+  opacity: var(--apple-toggle-disabled-opacity);
+  cursor: not-allowed;
 }
 
-.hidden-input {
-  /* Hide the actual browser checkbox */
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
+/* Custom Focus State (for keyboard accessibility) */
+.apple-toggle-container:focus-visible:not(.disabled) {
+  outline: 2px solid var(--apple-toggle-checked-color);
+  outline-offset: 1px;
 }
 
-.custom-checkbox {
-  width: $size;
-  height: $size;
-  border-radius: $border-radius;
+.toggle-slot {
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  /* --- Glassmorphic Effect --- */
-  background-color: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-
-  transition: all 0.2s ease-in-out;
-
-  /* Checkmark styling (hidden by default) */
-  svg {
-    width: 70%;
-    height: 70%;
-    stroke: var(--checkmark-color);
-    opacity: 0;
-    transform: scale(0.6);
-    transition: all 0.2s ease-in-out;
-  }
+  /* Min-height matches switch height for vertical alignment */
+  min-height: 30px;
 }
 
-/* --- State: Hover (when NOT disabled) --- */
-.glass-checkbox-label:hover:not(.is-disabled) .custom-checkbox {
-  background-color: var(--hover-bg);
+.apple-toggle-switch {
+  /* The track (background) */
+  width: 51px; /* Standard iOS width */
+  height: 31px; /* Standard iOS height */
+  border-radius: 15.5px; /* Perfect oval shape */
+  border: 1px solid var(--apple-toggle-border-color-unchecked);
+  background-color: var(--apple-toggle-bg-color-unchecked);
+  transition:
+    background-color 0.3s,
+    border-color 0.3s;
+  flex-shrink: 0;
+  position: relative;
 }
 
-/* --- State: Checked --- */
-.hidden-input:checked + .custom-checkbox {
-  background-color: var(--checked-bg);
-  border-color: var(--checked-border);
-
-  svg {
-    opacity: 1;
-    transform: scale(1);
-  }
+.apple-toggle-switch.checked {
+  background-color: var(--apple-toggle-checked-color);
+  border-color: var(--apple-toggle-checked-color);
 }
 
-/* --- State: Disabled --- */
-.glass-checkbox-label.is-disabled {
-  cursor: not-allowed;
-  opacity: var(--disabled-opacity);
+.toggle-thumb {
+  /* The circular indicator */
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px; /* Standard iOS thumb size */
+  height: 27px;
+  background-color: var(--apple-toggle-thumb-color);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle lift */
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.8, 0.4, 1.2),
+    box-shadow 0.3s;
 }
 
-.glass-checkbox-label.is-disabled .custom-checkbox {
-  pointer-events: none;
-  opacity: var(--disabled-opacity);
+/* Thumb position when checked */
+.apple-toggle-switch.checked .toggle-thumb {
+  transform: translateX(
+    20px
+  ); /* 51px width - 27px thumb - 2px padding on each side = 20px travel */
+}
+
+/* Disabled styling (thumb color slightly dimmed for contrast) */
+.apple-toggle-switch.disabled .toggle-thumb {
+  background-color: #f0f0f0;
 }
 </style>

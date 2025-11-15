@@ -100,6 +100,7 @@ const handleClick = (event) => {
    =================================================================== */
 .glass-button {
   /* Layout and Font */
+  margin: 10px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -50,7 +50,9 @@ l
               </GlassButton>
 
               <h3>Checkboxes & Radios</h3>
-              <GlassCheckbox v-model="checkbox1"> Enable Feature X </GlassCheckbox>
+              <GlassCheckbox v-model="checkbox1"
+                ><template #after>Enable Feature X</template>
+              </GlassCheckbox>
 
               <GlassRadioGroup
                 v-model="selectedFruit"
