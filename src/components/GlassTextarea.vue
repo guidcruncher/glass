@@ -16,7 +16,10 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
+import { useTheme } from '../composables/useTheme'
+
+const { isDark } = useTheme()
 
 const props = defineProps({
   /** Binds to the input's value (v-model) */
@@ -56,25 +59,11 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'change'])
 
-// --- THEME AWARENESS (Polling for reactivity to external theme changes) ---
-const isDarkRef = ref(document.documentElement.classList.contains('dark'))
-let themeCheckerInterval = null
+onMounted(() => {})
 
-onMounted(() => {
-  // Poll the DOM class list every 300ms to detect external theme changes
-  themeCheckerInterval = setInterval(() => {
-    const isCurrentlyDark = document.documentElement.classList.contains('dark')
-    if (isDarkRef.value !== isCurrentlyDark) {
-      isDarkRef.value = isCurrentlyDark
-    }
-  }, 300)
-})
+onUnmounted(() => {})
 
-onUnmounted(() => {
-  clearInterval(themeCheckerInterval)
-})
-
-const themeClass = computed(() => (isDarkRef.value ? 'dark-mode' : 'light-mode'))
+const themeClass = computed(() => (isDark.value ? 'dark-mode' : 'light-mode'))
 
 // --- EVENT HANDLER ---
 const handleInput = (event) => {

@@ -1,122 +1,108 @@
 <template>
-  <div class="time-picker-card">
-    <div class="flex space-x-2 items-center">
-      <!-- Hour Picker -->
-      <GlassDropdownContainer
-        style="float: left"
-        v-model="hourDisplay"
-        :list-width="'70px'"
-        :options="hours"
-        :max-button-width="'70px'"
-        class="flex-1"
-      />
-      <span class="text-2xl font-light opacity-80" style="float: left; margin-top: 10px">:</span>
-      <!-- Minute Picker -->
-      <GlassDropdownContainer
-        style="float: left"
-        v-model="minuteDisplay"
-        :list-width="'70px'"
-        :options="minutes"
-        :max-button-width="'70px'"
-        class="flex-1"
-      />
-      <!-- Period (AM/PM) Picker -->
-      <GlassDropdownContainer
-        :list-width="'70px'"
-        style="float: left"
-        v-model="period"
-        :max-button-width="'70px'"
-        :options="periods"
-        class="flex-none w-20"
-      />
-    </div>
+  <div class="time-input-group">
+    <input
+      type="number"
+      min="0"
+      max="23"
+      v-model.number="hour"
+      placeholder="14"
+      class="time-input"
+    />
+    <span class="separator-text">:</span>
+    <input
+      type="number"
+      min="0"
+      max="59"
+      v-model.number="minute"
+      placeholder="30"
+      class="time-input"
+    />
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, watch } from 'vue'
-import GlassDropdownContainer from './GlassDropdownContainer.vue' // Import the base component
 
-// Define Props and Emits
-const props = defineProps<{
-  modelValue: string // Expected format: "HH:MM A" (e.g., "03:45 PM")
-}>()
+const hour = ref(14)
+const minute = ref(30)
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
-}>()
-
-// --- TIME OPTIONS GENERATION ---
-
-// Hours: "01" to "12"
-const hours = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'))
-
-// Minutes: "00" to "55" in 5-minute increments
-const minutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'))
-
-// Periods: AM/PM
-const periods = ['AM', 'PM']
-
-// --- INTERNAL STATE ---
-
-// Function to parse the modelValue into internal components
-const parseTime = (timeString: string) => {
-  // Default to 12:00 PM if parsing fails
-  if (!timeString || !timeString.match(/^\d{2}:\d{2} (AM|PM)$/)) {
-    return { h: '12', m: '00', p: 'PM' }
-  }
-  const [time, period] = timeString.split(' ')
-  const [hour, minute] = time.split(':')
-  return { h: hour, m: minute, p: period }
-}
-
-const initialTime = parseTime(props.modelValue)
-
-const hourDisplay = ref(initialTime.h)
-const minuteDisplay = ref(initialTime.m)
-const period = ref(initialTime.p)
-
-// --- COMPUTED / WATCHER FOR MODEL SYNC ---
-
-// Watch internal state and emit combined time string
-watch([hourDisplay, minuteDisplay, period], ([newH, newM, newP]) => {
-  const newTime = `${newH}:${newM} ${newP}`
-  emit('update:modelValue', newTime)
+// Basic input clamping (client-side validation)
+watch(hour, (newVal) => {
+  if (newVal > 23) hour.value = 0
+  if (newVal < 0) hour.value = 23
 })
 
-// Watch external modelValue and update internal state
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    const { h, m, p } = parseTime(newVal)
-    // Only update if external value is different to prevent loop
-    if (h !== hourDisplay.value) hourDisplay.value = h
-    if (m !== minuteDisplay.value) minuteDisplay.value = m
-    if (p !== period.value) period.value = p
-  },
-  { immediate: true },
-)
+watch(minute, (newVal) => {
+  if (newVal > 59) minute.value = 0
+  if (newVal < 0) minute.value = 59
+})
 </script>
 
 <style scoped>
-/*
- * Minimal styling for the Time Picker card wrapper. 
- * Relies on the GlassDropdownContainer for the actual glassmorphism effects.
- */
-.time-picker-card {
-  /* Using standard Tailwind/CSS variable practices for a glass container */
-  background-color: var(--glass-bg-base, rgba(30, 30, 30, 0.4));
-  backdrop-filter: blur(var(--glass-blur, 14px));
-  -webkit-backdrop-filter: blur(var(--glass-blur, 14px));
-  border: 1px solid var(--glass-border-color, rgba(255, 255, 255, 0.15));
-  box-shadow: var(--glass-shadow, 0 10px 30px rgba(0, 0, 0, 0.4));
-  border-radius: 1rem;
-  color: var(--text-color-base, #f9fafb);
+/* ===================================================================
+   THEME VARIABLES
+   =================================================================== */
+/* Dark Theme (Default) */
+:root {
+  --glass-bg: rgba(30, 30, 30, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  --text-color: white;
+
+  --input-bg: rgba(255, 255, 255, 0.1); /* bg-white/10 */
+  --input-border: rgba(255, 255, 255, 0.3); /* border-white/30 */
+  --input-focus-bg: rgba(255, 255, 255, 0.2); /* focus:bg-white/20 */
+  --input-focus-ring: rgba(255, 255, 255, 0.5); /* focus:ring-white/50 */
+}
+/* Light Theme (Override) */
+.dark {
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(0, 0, 0, 0.15);
+  --glass-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --text-color: #1f2937;
+
+  --input-bg: rgba(255, 255, 255, 0.8); /* light:bg-white/80 */
+  --input-border: rgba(0, 0, 0, 0.2); /* light:border-black/20 */
+  --input-focus-bg: rgba(255, 255, 255, 1); /* light:focus:bg-white/100 */
+  --input-focus-ring: rgba(0, 0, 0, 0.5);
 }
 
-/* Specific styling to ensure colon is centered */
-.time-picker-card > .flex > span {
-  display: block;
-  padding: 0 0.25rem;
+/* ===================================================================
+   CONTAINER AND LAYOUT
+   =================================================================== */
+
+.time-input-group {
+  display: flex;
+  gap: 0.75rem; /* space-x-3 */
+}
+
+.separator-text {
+  font-size: 1.5rem; /* text-2xl */
+}
+
+/* ===================================================================
+   INPUT STYLES
+   =================================================================== */
+.time-input {
+  width: 4rem; /* w-16 */
+  text-align: center;
+  padding: 0.75rem; /* p-3 */
+  border-radius: 0.75rem; /* rounded-xl */
+  border-width: 1px;
+  font-size: 1.5rem; /* text-2xl */
+  font-family: monospace; /* font-mono */
+  transition: all 0.2s ease;
+  appearance: none; /* appearance-none */
+  outline: none;
+
+  /* Theme Application */
+  background-color: var(--input-bg);
+  border-color: var(--input-border);
+  color: inherit;
+}
+
+.time-input:focus {
+  background-color: var(--input-focus-bg);
+  box-shadow: 0 0 0 2px var(--input-focus-ring); /* focus:ring-2 */
 }
 </style>

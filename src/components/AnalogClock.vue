@@ -1,104 +1,85 @@
 <template>
-  <div :class="['analog-clock-view-container', bgClass]">
-    <div :class="['clock-face-container', glassClass]" :style="{ width: size, height: size }">
-      <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 400">
-        <defs>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
+  <div :class="['clock-face-container', glassClass]" :style="{ width: size, height: size }">
+    <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 400">
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+          <feMerge>
+            <feMergeNode in="coloredBlur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
 
-        <line
-          v-for="i in 12"
-          :key="`marker-${i}`"
-          :x1="getMarkerPosition(i - 1).outerX"
-          :y1="getMarkerPosition(i - 1).outerY"
-          :x2="getMarkerPosition(i - 1).innerX"
-          :y2="getMarkerPosition(i - 1).innerY"
-          :stroke="isDark ? '#ffffff' : '#1f2937'"
-          :stroke-width="(i - 1) % 3 === 0 ? 4 : 2"
-          :opacity="isDark ? 0.6 : 0.7"
-          stroke-linecap="round"
-        />
+      <line
+        v-for="i in 12"
+        :key="`marker-${i}`"
+        :x1="getMarkerPosition(i - 1).outerX"
+        :y1="getMarkerPosition(i - 1).outerY"
+        :x2="getMarkerPosition(i - 1).innerX"
+        :y2="getMarkerPosition(i - 1).innerY"
+        :stroke="isDark ? '#ffffff' : '#1f2937'"
+        :stroke-width="(i - 1) % 3 === 0 ? 4 : 2"
+        :opacity="isDark ? 0.6 : 0.7"
+        stroke-linecap="round"
+      />
 
-        <text
-          v-for="num in [12, 3, 6, 9]"
-          :key="`number-${num}`"
-          :x="getNumberPosition(num).x"
-          :y="getNumberPosition(num).y"
-          text-anchor="middle"
-          dominant-baseline="middle"
-          :class="['font-bold', isDark ? 'fill-white' : 'fill-gray-800']"
-          :opacity="isDark ? 0.9 : 1"
-          :style="{ fontSize: numberFontSize }"
-        >
-          {{ num }}
-        </text>
+      <text
+        v-for="num in [12, 3, 6, 9]"
+        :key="`number-${num}`"
+        :x="getNumberPosition(num).x"
+        :y="getNumberPosition(num).y"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        :class="['font-bold', isDark ? 'fill-white' : 'fill-gray-800']"
+        :opacity="isDark ? 0.9 : 1"
+        :style="{ fontSize: numberFontSize }"
+      >
+        {{ num }}
+      </text>
 
-        <circle
-          cx="200"
-          cy="200"
-          r="12"
-          :fill="isDark ? '#FF453A' : '#FF3B30'"
-          filter="url(#glow)"
-        />
+      <circle cx="200" cy="200" r="12" :fill="isDark ? '#FF453A' : '#FF3B30'" filter="url(#glow)" />
 
-        <line
-          x1="200"
-          y1="200"
-          :x2="hourEnd.x"
-          :y2="hourEnd.y"
-          :stroke="isDark ? '#ffffff' : '#1f2937'"
-          stroke-width="8"
-          stroke-linecap="round"
-          :opacity="isDark ? 0.9 : 1"
-          filter="url(#glow)"
-        />
+      <line
+        x1="200"
+        y1="200"
+        :x2="hourEnd.x"
+        :y2="hourEnd.y"
+        :stroke="isDark ? '#ffffff' : '#1f2937'"
+        stroke-width="8"
+        stroke-linecap="round"
+        :opacity="isDark ? 0.9 : 1"
+        filter="url(#glow)"
+      />
 
-        <line
-          x1="200"
-          y1="200"
-          :x2="minuteEnd.x"
-          :y2="minuteEnd.y"
-          :stroke="isDark ? '#0A84FF' : '#007AFF'"
-          stroke-width="6"
-          stroke-linecap="round"
-          filter="url(#glow)"
-        />
+      <line
+        x1="200"
+        y1="200"
+        :x2="minuteEnd.x"
+        :y2="minuteEnd.y"
+        :stroke="isDark ? '#0A84FF' : '#007AFF'"
+        stroke-width="6"
+        stroke-linecap="round"
+        filter="url(#glow)"
+      />
 
-        <line
-          x1="200"
-          y1="200"
-          :x2="secondEnd.x"
-          :y2="secondEnd.y"
-          :stroke="isDark ? '#FF453A' : '#FF3B30'"
-          stroke-width="2"
-          stroke-linecap="round"
-          filter="url(#glow)"
-        />
-      </svg>
-    </div>
-
-    <div :class="['digital-display', glassClass]">
-      <div :class="['time', isDark ? 'text-white' : 'text-gray-800']">
-        {{ formattedTime }}
-      </div>
-      <div :class="['date', isDark ? 'text-gray-300' : 'text-gray-600']">
-        {{ formattedDate }}
-      </div>
-      <div :class="['timezone', isDark ? 'text-gray-400' : 'text-gray-500']">
-        {{ timeZoneLabel }}
-      </div>
-    </div>
+      <line
+        x1="200"
+        y1="200"
+        :x2="secondEnd.x"
+        :y2="secondEnd.y"
+        :stroke="isDark ? '#FF453A' : '#FF3B30'"
+        stroke-width="2"
+        stroke-linecap="round"
+        filter="url(#glow)"
+      />
+    </svg>
   </div>
 </template>
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useTheme } from '../composables/useTheme'
 
 const props = defineProps({
   timeZone: {
@@ -121,7 +102,7 @@ const props = defineProps({
 })
 
 const time = ref(new Date())
-const isDark = ref(false)
+const { isDark } = useTheme()
 let timer = null
 
 // --- Sizing Constants (Based on 400x400 ViewBox) ---
@@ -272,9 +253,7 @@ const checkTheme = () => {
 onMounted(() => {
   timer = setInterval(() => {
     time.value = new Date()
-    checkTheme()
   }, 1000)
-  checkTheme() // Initial check
 })
 
 onUnmounted(() => {
@@ -285,18 +264,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Scoped Tailwind-like classes converted to standard CSS structure */
-
-.analog-clock-view-container {
-  /* Using fixed positioning for demonstration only, normally this would be flex-item */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  transition: all 0.5s ease;
-}
-
 .clock-face-container {
   position: relative;
   border-radius: 50%;

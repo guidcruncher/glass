@@ -18,6 +18,9 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useTheme } from '../composables/useTheme'
+
+const { isDark } = useTheme()
 
 const props = defineProps({
   /** The currently selected tab key (v-model). */

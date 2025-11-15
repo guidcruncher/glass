@@ -6,18 +6,15 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useTheme } from '../composables/useTheme'
 
-const props = defineProps({
-  variant: {
-    type: String,
-    default: 'dark', // 'dark' or 'light'
-    validator: (value) => ['dark', 'light'].includes(value),
-  },
-})
+const { isDark } = useTheme()
+
+const props = defineProps({})
 
 // The class determines which set of CSS variables is used
 const panelClass = computed(() => {
-  return props.variant === 'light' ? 'light-panel' : 'dark-panel'
+  return isDark.value ? 'dark-panel' : 'light-panel'
 })
 </script>
 

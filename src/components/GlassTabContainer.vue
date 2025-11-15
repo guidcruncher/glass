@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useTheme } from '../composables/useTheme'
+
+const { isDark } = useTheme()
 
 // Define the structure for a single tab item
 interface TabItem {

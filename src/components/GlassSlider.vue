@@ -2,8 +2,10 @@
   <section class="slider-section-container">
     <div class="slider-wrapper">
       <div class="slider-text-info">
-        <span>Volume</span>
-        <span>{{ modelValue }}</span>
+        <span><slot name="befere">Prompt</slot></span>
+        <span
+          ><slot name="after">{{ modelValue }}</slot></span
+        >
       </div>
       <input
         type="range"
@@ -51,13 +53,6 @@ defineEmits(['update:modelValue'])
    CONTAINER AND LAYOUT
    =================================================================== */
 .slider-section-container {
-  /* Glass Panel Styling */
-  background-color: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-radius: 1rem; /* rounded-2xl */
   padding: 2rem; /* p-8 */
   color: var(--text-color);
 }

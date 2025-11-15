@@ -1,15 +1,15 @@
 <template>
-  <section class="progress-section-container">
-    <div class="progress-wrapper">
-      <div class="progress-text-info">
-        <span>Upload Progress</span>
-        <span>{{ progress }}%</span>
-      </div>
-      <div class="progress-track">
-        <div id="progress-fill" class="progress-fill" :style="{ width: progress + '%' }"></div>
-      </div>
+  <div class="progress-wrapper">
+    <div class="progress-text-info">
+      <span><slot name="befere">Upload Progress</slot></span>
+      <span
+        ><slot name="after">{{ progress }}%</slot></span
+      >
     </div>
-  </section>
+    <div class="progress-track">
+      <div id="progress-fill" class="progress-fill" :style="{ width: progress + '%' }"></div>
+    </div>
+  </div>
 </template>
 
 <script setup></script>

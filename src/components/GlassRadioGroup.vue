@@ -6,6 +6,9 @@
 
 <script setup>
 import { computed, provide } from 'vue'
+import { useTheme } from '../composables/useTheme'
+
+const { isDark } = useTheme()
 
 // 1. Props & Emits for v-model
 const props = defineProps({
@@ -20,10 +23,6 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false,
-  },
-  theme: {
-    type: String,
-    default: 'dark', // 'light' or 'dark'
   },
 })
 
@@ -42,7 +41,7 @@ provide('radioGroup', {
   name: props.name,
   selectedValue,
   groupDisabled: computed(() => props.disabled),
-  theme: computed(() => props.theme),
+  theme: computed(() => (isDark.value ? 'dark' : 'light')),
   updateValue: (value) => {
     selectedValue.value = value
   },

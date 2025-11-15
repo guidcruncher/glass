@@ -24,8 +24,8 @@ l
         <GlassTabContainer v-model="selectedTab" :tabs="tabItems" :full-width="false">
           <!-- Tab 1: Inputs & Pickers -->
           <template #inputs_pickers>
-            <h2 class="text-3xl font-semibold opacity-90 mb-6">Inputs & Pickers</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <GlassPanel>
+              <h2>Inputs & Pickers</h2>
               <GlassSlider v-model="sliderValue" />
 
               <TimePicker />
@@ -33,68 +33,41 @@ l
               <GlassDatePicker v-model="selectedDate" />
 
               <GlassColorPicker v-model="pageColor" />
-            </div>
 
-            <!-- Buttons and Inputs Panel -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-8">
-              <GlassPanel>
-                <h3 class="text-xl font-semibold">Interaction Demo</h3>
-                <p class="text-sm opacity-80">Test buttons and modals.</p>
-                <div class="flex flex-col space-y-4 pt-4">
-                  <GlassButton variant="primary" @click="modalOpen = true">
-                    Open Glass Modal
-                  </GlassButton>
-                  <GlassButton variant="secondary"> Secondary Button </GlassButton>
-                  <GlassButton variant="destructive">
-                    <span class="flex items-center space-x-2">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                        ></path>
-                      </svg>
-                      <span>Glass Button with Icon</span>
-                    </span>
-                  </GlassButton>
-                </div>
-              </GlassPanel>
+              <!-- Buttons and Inputs Panel -->
+              <h3>Interaction Demo</h3>
+              <p>Test buttons and modals.</p>
+              <GlassButton variant="primary" @click="modalOpen = true">
+                Open Glass Modal
+              </GlassButton>
+              <GlassButton variant="secondary"> Secondary Button </GlassButton>
+              <GlassButton variant="destructive">
+                <span>Glass Button with icon</span>
+              </GlassButton>
 
-              <GlassPanel>
-                <h3 class="text-xl font-semibold">Checkboxes & Radios</h3>
-                <div class="space-y-4 mt-4">
-                  <GlassCheckbox v-model="checkbox1"> Enable Feature X </GlassCheckbox>
+              <h3>Checkboxes & Radios</h3>
+              <GlassCheckbox v-model="checkbox1"> Enable Feature X </GlassCheckbox>
 
-                  <GlassRadioGroup
-                    v-model="selectedFruit"
-                    name="fruit-select"
-                    :theme="theme"
-                    :disabled="groupDisabled"
-                  >
-                    <GlassRadioItem value="apple" label="Apple" />
-                    <GlassRadioItem value="banana" label="Banana" />
+              <GlassRadioGroup
+                v-model="selectedFruit"
+                name="fruit-select"
+                :theme="theme"
+                :disabled="groupDisabled"
+              >
+                <GlassRadioItem value="apple" label="Apple" />
+                <GlassRadioItem value="banana" label="Banana" />
 
-                    <GlassRadioItem value="cherry" label="Cherry" :disabled="true" />
+                <GlassRadioItem value="cherry" label="Cherry" :disabled="true" />
 
-                    <GlassRadioItem value="grape" label="Grape" />
-                  </GlassRadioGroup>
-
-                  <GlassRadioGroup name="option" v-model="radioValue" value="A">
-                    Select Option A
-                  </GlassRadioGroup>
-                  <GlassRadioGroup name="option" v-model="radioValue" value="B">
-                    Select Option B
-                  </GlassRadioGroup>
-                </div>
-              </GlassPanel>
-            </div>
+                <GlassRadioItem value="grape" label="Grape" />
+              </GlassRadioGroup>
+            </GlassPanel>
           </template>
 
           <!-- Tab 2: Displays & Indicators -->
           <template #displays_indicators>
-            <h2 class="text-3xl font-semibold opacity-90 mb-6">Displays & Indicators</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+            <GlassPanel>
+              <h2>Displays & Indicators</h2>
               <GlassCalendar />
 
               <GlassDropdown />
@@ -102,15 +75,16 @@ l
               <GlassGauge />
 
               <GlassProgressBar :progress-value="progressValue" />
-            </div>
+            </GlassPanel>
           </template>
 
           <!-- Tab 3: Clocks & Geo -->
           <template #clocks_geo>
-            <h2 class="text-3xl font-semibold opacity-90 mb-6">Clocks & Geo</h2>
-            <!-- Digital Clocks -->
-            <h3 class="text-xl font-medium opacity-80 mt-4">Digital Clocks (World)</h3>
-            <div class="flex justify-center flex-wrap gap-8 mt-4">
+            <GlassPanel>
+              <h2>Clocks & Geo</h2>
+              <!-- Digital Clocks -->
+              <h3 class="text-xl font-medium opacity-80 mt-4">Digital Clocks (World)</h3>
+
               <div>
                 <GlassDigitalClock size="sm" timezone="Europe/London" />
               </div>
@@ -120,34 +94,34 @@ l
               <div>
                 <GlassDigitalClock size="lg" timezone="Asia/Tokyo" />
               </div>
-            </div>
-            <!-- Analog Clocks -->
-            <h3 class="text-xl font-medium opacity-80 mt-8">Analog Clocks</h3>
-            <div class="flex justify-center flex-wrap gap-8 mt-4">
+
+              <!-- Analog Clocks -->
+              <h3>Analog Clocks</h3>
               <div>
-                <AnalogClock size="300px" timeZone="America/Los_Angeles" />
+                <AnalogClock size="100px" timeZone="America/Los_Angeles" />
               </div>
               <div>
-                <AnalogClock size="300px" timeZone="Europe/Madrid" />
+                <AnalogClock size="200px" timeZone="Europe/Madrid" />
               </div>
               <div>
                 <AnalogClock size="300px" timeZone="Asia/Tokyo" />
               </div>
-            </div>
+            </GlassPanel>
           </template>
         </GlassTabContainer>
         <!-- End of GlassTabContainer -->
       </div>
     </template>
-  </GlassAppView>
-
-  <AppleGlassModal v-model="modalOpen">
-    <template #title>Configuration</template>
-    <p>This is a floating glass modal component.</p>
-    <template #footer>
-      <GlassButton variant="primary" @click="modalOpen = false">Close</GlassButton>
+    <template #hidden>
+      <AppleGlassModal v-model="modalOpen">
+        <template #title>Configuration</template>
+        <p>This is a floating glass modal component.</p>
+        <template #footer>
+          <GlassButton variant="primary" @click="modalOpen = false">Close</GlassButton>
+        </template>
+      </AppleGlassModal>
     </template>
-  </AppleGlassModal>
+  </GlassAppView>
 </template>
 
 <script setup>

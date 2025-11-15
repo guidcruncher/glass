@@ -1,25 +1,23 @@
 <template>
-  <section class="gauge-section">
-    <div class="gauge-wrapper">
-      <svg class="gauge-svg" viewBox="0 0 200 200">
-        <defs>
-          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#34C759" />
-            <stop offset="100%" stop-color="#007AFF" />
-          </linearGradient>
-        </defs>
-        <circle class="gauge-bg" cx="100" cy="100" r="80"></circle>
-        <circle
-          class="gauge-fill"
-          cx="100"
-          cy="100"
-          r="80"
-          :stroke-dasharray="strokeDasharray"
-        ></circle>
-        <text x="100" y="100" class="gauge-text">{{ percent }}%</text>
-      </svg>
-    </div>
-  </section>
+  <div class="gauge-wrapper">
+    <svg class="gauge-svg" viewBox="0 0 200 200">
+      <defs>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#34C759" />
+          <stop offset="100%" stop-color="#007AFF" />
+        </linearGradient>
+      </defs>
+      <circle class="gauge-bg" cx="100" cy="100" r="80"></circle>
+      <circle
+        class="gauge-fill"
+        cx="100"
+        cy="100"
+        r="80"
+        :stroke-dasharray="strokeDasharray"
+      ></circle>
+      <text x="100" y="100" class="gauge-text">{{ percent }}%</text>
+    </svg>
+  </div>
 </template>
 
 <script setup>
@@ -67,22 +65,6 @@ onMounted(() => {
 /* ===================================================================
    CONTAINER AND LAYOUT
    =================================================================== */
-.gauge-section {
-  /* Glass Panel Styling */
-  background-color: var(--gauge-bg-glass);
-  border: 1px solid var(--gauge-border);
-  box-shadow: var(--gauge-shadow);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-radius: 1rem; /* rounded-2xl */
-  padding: 2rem; /* p-8 */
-
-  /* Layout: space-y-6 */
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  color: var(--gauge-text-color);
-}
 
 .gauge-title {
   font-size: 1.5rem; /* text-2xl */
@@ -93,7 +75,6 @@ onMounted(() => {
 .gauge-wrapper,
 .gauge-controls {
   display: flex;
-  justify-content: center; /* flex justify-center */
 }
 
 .gauge-controls {

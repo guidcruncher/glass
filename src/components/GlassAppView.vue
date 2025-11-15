@@ -52,6 +52,9 @@
       <slot name="bottom"></slot>
     </footer>
   </div>
+  <div style="display: none" v-if="$slots.hidden">
+    <slot name="hidden"></slot>
+  </div>
 </template>
 
 <script setup>

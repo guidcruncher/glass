@@ -9,11 +9,7 @@
   >
     <defs>
       <filter id="lcdGlow">
-        <feFlood
-          :flood-color="theme === 'dark' ? '#00eaff' : '#0070c0'"
-          flood-opacity="0.8"
-          result="flood"
-        />
+        <feFlood :flood-color="isDark ? '#00eaff' : '#0070c0'" flood-opacity="0.8" result="flood" />
         <feComposite in="flood" in2="SourceGraphic" operator="in" result="comp" />
         <feGaussianBlur in="comp" stdDeviation="2" result="blur" />
         <feMerge>
@@ -89,6 +85,9 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useTheme } from '../composables/useTheme'
+
+const { isDark } = useTheme()
 
 // 1. PROPS
 const props = defineProps({
@@ -96,11 +95,6 @@ const props = defineProps({
     type: String,
     default: 'md', // sm, md, lg
     validator: (val) => ['sm', 'md', 'lg'].includes(val),
-  },
-  theme: {
-    type: String,
-    default: 'dark', // dark, light
-    validator: (val) => ['dark', 'light'].includes(val),
   },
   timezone: {
     type: String,
@@ -119,10 +113,8 @@ const svgSize = computed(() => currentSize.value.width)
 const svgHeight = computed(() => currentSize.value.height)
 const segmentScale = computed(() => currentSize.value.scale)
 
-const activeColor = computed(() => (props.theme === 'dark' ? '#00eaff' : '#0070c0'))
-const inactiveColor = computed(() =>
-  props.theme === 'dark' ? 'rgba(0, 234, 255, 0.1)' : 'rgba(0, 112, 192, 0.1)',
-)
+const activeColor = computed(() => (isDark ? '#00eaff' : '#0070c0'))
+const inactiveColor = computed(() => (isDark ? 'rgba(0, 234, 255, 0.1)' : 'rgba(0, 112, 192, 0.1)'))
 
 // 3. TIME MANAGEMENT
 const currentTime = ref('')

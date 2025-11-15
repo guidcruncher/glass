@@ -1,57 +1,53 @@
 <template>
-  <section class="dropdown-section">
-    <div class="dropdown-wrapper" v-click-outside="closeDropdown">
-      <button
-        @click="openDropdown"
-        ref="dropdownButton"
-        class="dropdown-button"
-        :class="{
-          'dark-theme': isDark,
-          'light-theme': !isDark,
-          'focus-ring': isOpen,
-        }"
+  <div class="dropdown-wrapper" v-click-outside="closeDropdown">
+    <button
+      @click="openDropdown"
+      ref="dropdownButton"
+      class="dropdown-button"
+      :class="{
+        'dark-theme': isDark,
+        'light-theme': !isDark,
+        'focus-ring': isOpen,
+      }"
+    >
+      <span>{{ selectedValue }}</span>
+      <svg
+        class="dropdown-icon"
+        :class="{ 'rotate-180': isOpen }"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
       >
-        <span>{{ selectedValue }}</span>
-        <svg
-          class="dropdown-icon"
-          :class="{ 'rotate-180': isOpen }"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
-      </button>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
 
-      <teleport to="body">
+    <teleport to="body">
+      <div
+        v-show="isOpen"
+        class="dropdown-list-teleported"
+        :class="{ 'dark-theme': isDark, 'light-theme': !isDark }"
+        :style="listPositionStyle"
+      >
         <div
-          v-show="isOpen"
-          class="dropdown-list-teleported"
-          :class="{ 'dark-theme': isDark, 'light-theme': !isDark }"
-          :style="listPositionStyle"
+          v-for="option in options"
+          :key="option"
+          class="dropdown-list-item"
+          @click="selectOption(option)"
+          :class="{ 'dark-hover': isDark, 'light-hover': !isDark }"
         >
-          <div
-            v-for="option in options"
-            :key="option"
-            class="dropdown-list-item"
-            @click="selectOption(option)"
-            :class="{ 'dark-hover': isDark, 'light-hover': !isDark }"
-          >
-            {{ option }}
-          </div>
+          {{ option }}
         </div>
-      </teleport>
-    </div>
-  </section>
+      </div>
+    </teleport>
+  </div>
 </template>
 
 <script setup>
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { useTheme } from '../composables/useTheme'
+
+const { isDark } = useTheme()
 
 // --- OPTIONS ---
 const options = ['Meeting', 'Call', 'Task', 'Reminder', 'Birthday']
@@ -63,26 +59,14 @@ const dropdownButton = ref(null)
 const listPositionStyle = ref({})
 
 // --- THEME AWARENESS ---
-const isDark = ref(true)
-const checkTheme = () => {
-  // Check if the HTML element has the 'dark' class
-  isDark.value = document.documentElement.classList.contains('dark')
-}
-
-// --- LIFECYCLE ---
-let themeCheckerInterval = null
 
 onMounted(() => {
-  checkTheme()
-  // Poll the DOM to detect external theme changes
-  themeCheckerInterval = setInterval(checkTheme, 300)
   // Add event listener to recalculate position on scroll/resize
   window.addEventListener('scroll', recalculatePosition)
   window.addEventListener('resize', recalculatePosition)
 })
 
 onUnmounted(() => {
-  if (themeCheckerInterval) clearInterval(themeCheckerInterval)
   window.removeEventListener('scroll', recalculatePosition)
   window.removeEventListener('resize', recalculatePosition)
 })
@@ -163,19 +147,6 @@ const vClickOutside = {
   --list-item-hover: rgba(0, 0, 0, 0.1);
 }
 
-/* ===================================================================
-   SECTION AND TITLE (Glass Panel)
-   =================================================================== */
-.dropdown-section {
-  padding: 2rem; /* p-8 */
-  border-radius: 1rem;
-  background-color: rgba(30, 30, 30, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  color: white;
-}
 .light-theme.dropdown-section {
   background-color: rgba(255, 255, 255, 0.65);
   border-color: rgba(0, 0, 0, 0.15);

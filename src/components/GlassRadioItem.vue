@@ -31,6 +31,9 @@
 
 <script setup>
 import { computed, inject } from 'vue'
+import { useTheme } from '../composables/useTheme'
+
+const { isDark } = useTheme()
 
 // 1. Props
 const props = defineProps({
@@ -56,7 +59,7 @@ if (!group) {
 
 // 3. Computed Properties from injected context
 const name = computed(() => group.name)
-const theme = computed(() => group.theme.value)
+const theme = computed(() => (isDark.value ? 'dark' : 'light'))
 const isDisabled = computed(() => props.disabled || group.groupDisabled.value)
 
 // Check if the current item is selected
@@ -101,17 +104,6 @@ const handleChange = () => {
   z-index: 2; /* Keep text above the glass background */
 }
 
-/*
-|--------------------------------------------------------------------------
-| Glassmorphism & Theme Styling (The core of the request)
-|--------------------------------------------------------------------------
-*/
-
-/* --- THEME: DARK (Default) --- */
-.theme-dark {
-  color: white; /* Text color */
-}
-
 .theme-dark .control-box {
   border: 1px solid rgba(255, 255, 255, 0.3);
   background-color: rgba(255, 255, 255, 0.08); /* Light fill */
@@ -135,22 +127,6 @@ const handleChange = () => {
 
 .theme-light.is-checked .control-box {
   background-color: rgba(0, 123, 255, 0.2); /* Checked accent */
-}
-
-/* --- COMMON GLASS STYLES (Applies to the whole item on hover/checked) --- */
-.radio-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: inherit;
-  /* 🛑 KEY GLASS MORPHISM PROPERTY */
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 1;
-  transition: all 0.3s ease;
 }
 
 .radio-item:not(.is-disabled):hover::before {

@@ -150,115 +150,137 @@ const minimize = () => {
 
 const toggleMaximize = () => {
   isMaximized.value = !isMaximized.value
-  console.log('Modal maximized state toggled:', isMaximized.value)
-  emit('maximize', isMaximized.value) // Emit new state to parent
+  if (isMaximized.value) {
+    emit('maximize')
+  }
 }
-
-defineExpose({
-  close,
-  minimize,
-  toggleMaximize,
-})
 </script>
 
-<style scoped lang="scss">
-// SASS Variables for Glassmorphic Styling (Unchanged)
-$modal-bg: rgba(255, 255, 255, 0.8);
-$modal-border: rgba(255, 255, 255, 0.9);
-$modal-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-$modal-blur: 14px;
-$modal-text: #111827;
-$header-bg-tint: rgba(255, 255, 255, 0.2);
-$header-border-color: rgba(0, 0, 0, 0.1);
-
-// ------------------------------------
-// 1. BACKDROP AND CONTAINER (Unchanged, relies on position: fixed)
-// ------------------------------------
+<style scoped>
+/*
+|--------------------------------------------------------------------------
+| BASE STYLES
+|--------------------------------------------------------------------------
+*/
 
 .modal-backdrop {
+  /* Fix: Backdrop must support both light and dark themes */
   position: fixed;
-  inset: 0;
-  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  background-color: rgba(0, 0, 0, 0.3);
-
-  // Background blur behind the modal
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-
+  background-color: rgba(0, 0, 0, 0.3); /* Default (Light Mode) Backdrop */
   transition: background-color 0.3s ease;
 }
 
+/* Dark Mode Backdrop Override */
+:global(html.dark) .modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.7); /* Darker backdrop for dark mode */
+}
+
 .modal-container {
-  position: relative;
-  border-radius: 0.75rem; /* rounded-xl */
-  width: 100%;
-  max-width: 42rem; /* max-w-xl */
-  color: $modal-text;
+  /* Core layout and fixed default size */
+  width: 90vw; /* Default width */
+  max-width: 600px; /* Equivalent to max-w-xl */
+  max-height: 90vh;
+  min-width: 300px;
+  min-height: 150px;
   overflow: hidden;
 
-  // Glassmorphism effect
-  background-color: $modal-bg;
-  border: 1px solid $modal-border;
-  box-shadow: $modal-shadow;
-  backdrop-filter: blur($modal-blur);
-  -webkit-backdrop-filter: blur($modal-blur);
+  /* Glassmorphic Styling (Refactored to use global CSS variables) */
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  /* The blur can be a custom variable or fall back to the global blur */
+  backdrop-filter: blur(var(--glass-blur, 16px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 16px));
 
-  // Transition for size and opacity changes
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  transform: scale(0.95);
-  opacity: 0;
+  /* Text color now driven by global variable */
+  color: var(--text-color);
 
-  &.is-visible {
-    transform: scale(1);
-    opacity: 1;
-  }
+  border-radius: 0.75rem; /* rounded-xl */
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform 0.3s ease-out,
+    opacity 0.3s ease-out; /* Transition for scale and opacity */
 }
 
-// ------------------------------------
-// 2. MAXIMIZED STATE (Unchanged)
-// ------------------------------------
+/*
+|--------------------------------------------------------------------------
+| VISIBILITY & TRANSITIONS
+|--------------------------------------------------------------------------
+*/
+
+.modal-container.is-hidden {
+  opacity: 0;
+  transform: scale(0.95) translateY(20px);
+}
+.modal-container.is-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/*
+|--------------------------------------------------------------------------
+| MAXIMIZED STATE
+|--------------------------------------------------------------------------
+*/
 
 .modal-container.is-maximized {
-  max-width: 100vw;
   width: 100vw;
+  max-width: 100vw;
   height: 100vh;
+  max-height: 100vh;
   border-radius: 0;
-  transform: none !important;
-  box-shadow: none;
+  transform: none; /* Override visibility transform */
 }
 
-// ------------------------------------
-// 3. HEADER (Unchanged)
-// ------------------------------------
+/*
+|--------------------------------------------------------------------------
+| HEADER
+|--------------------------------------------------------------------------
+*/
 
 .modal-header {
+  /* Light mode for header is usually slightly less transparent than body */
+  background-color: var(--glass-header-bg, var(--glass-bg));
+  border-bottom: 1px solid var(--glass-border);
+  padding: 0.75rem 1rem; /* py-3 px-4 */
   display: flex;
   align-items: center;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid $header-border-color;
-  background-color: $header-bg-tint;
+  gap: 0.5rem; /* space-x-2 */
+  position: relative;
+  flex-shrink: 0;
+}
+
+.header-title {
+  font-weight: 600;
+  font-size: 0.875rem; /* text-sm */
+  text-align: center;
+  flex-grow: 1;
 }
 
 .header-button-group {
   display: flex;
   gap: 0.5rem; /* space-x-2 */
+  position: absolute; /* Position over the header to the left */
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10; /* Ensure buttons are clickable */
 }
 
-.header-title {
-  flex-grow: 1; /* flex-grow */
-  text-align: center;
-  font-size: 0.875rem; /* text-sm */
-  font-weight: 500; /* font-medium */
-  opacity: 0.7;
-}
-
-// ------------------------------------
-// 4. HEADER BUTTONS (MAC STYLE) (Unchanged)
-// ------------------------------------
+/*
+|--------------------------------------------------------------------------
+| HEADER BUTTONS (Mac OS Style)
+|--------------------------------------------------------------------------
+*/
 
 .header-button {
   width: 0.75rem; /* w-3 */
@@ -291,43 +313,38 @@ $header-border-color: rgba(0, 0, 0, 0.1);
     } /* hover:bg-green-600 */
   }
 
-  // Icon inside button
+  /* Icon inside button */
   .icon-svg {
     width: 6px;
     height: 6px;
     opacity: 0;
     transition: opacity 0.1s ease;
+    /* Icon stroke color is black for the colored buttons and does not change with theme */
     color: rgba(0, 0, 0, 0.7);
   }
 
-  // Show icons on hover
+  /* Show icons on hover */
   &:hover .icon-svg {
     opacity: 1;
   }
 }
 
-// ------------------------------------
-// 5. BODY AND FOOTER (Unchanged)
-// ------------------------------------
+/*
+|--------------------------------------------------------------------------
+| BODY & FOOTER
+|--------------------------------------------------------------------------
+*/
 
 .modal-body {
-  padding: 1.5rem;
-  max-height: 70vh;
-  overflow-y: auto;
-
-  .is-maximized & {
-    // Adjust body height when maximized (100vh - header height - footer height if present)
-    max-height: calc(100vh - (0.75rem * 2 + 1px) - 1.5rem - 1rem);
-    padding: 2rem;
-  }
+  padding: 1rem; /* p-4 */
+  overflow-y: auto; /* Scrollable content */
+  flex-grow: 1;
 }
 
 .modal-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid $header-border-color;
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  background-color: $header-bg-tint;
+  border-top: 1px solid var(--glass-border);
+  padding: 0.75rem 1rem; /* py-3 px-4 */
+  background-color: var(--glass-footer-bg, var(--glass-bg));
+  flex-shrink: 0;
 }
 </style>

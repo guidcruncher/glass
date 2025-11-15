@@ -1,8 +1,5 @@
 <template>
-  <div
-    :class="['glass-color-picker', { 'dark-theme': isDarkTheme }]"
-    @mouseleave="isDragging = false"
-  >
+  <div :class="['glass-color-picker', { 'dark-theme': isDark }]" @mouseleave="isDragging = false">
     <div class="color-area-container" ref="colorAreaRef" @mousedown="startDrag($event, 'color')">
       <svg
         class="color-area-svg"
@@ -56,6 +53,7 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useTheme } from '../composables/useTheme'
 import { hexToHsv, hsvToHex } from '../utils/color-utils'
 
 const props = defineProps({
@@ -68,7 +66,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'colorSelected'])
 
 // --- Theme State ---
-const isDarkTheme = ref(false) // Can be driven by a global store or a more complex check
+const isDark = useTheme()
 
 // --- Color State (HSV) ---
 const hsv = ref(hexToHsv(props.modelValue))
@@ -169,11 +167,6 @@ const handleMouseMove = (event) => {
 onMounted(() => {
   document.addEventListener('mousemove', handleMouseMove)
   document.addEventListener('mouseup', stopDrag)
-
-  // Simple initial check for a 'dark-theme' class on the body
-  if (document.body.classList.contains('dark-theme')) {
-    isDarkTheme.value = true
-  }
 })
 
 onUnmounted(() => {
