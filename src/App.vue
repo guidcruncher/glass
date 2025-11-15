@@ -34,6 +34,10 @@ l
 
               <GlassColorPicker v-model="pageColor" />
 
+              <GlassInput />
+
+              <GlassTextarea rows="5" cols="60" />
+
               <!-- Buttons and Inputs Panel -->
               <h3>Interaction Demo</h3>
               <p>Test buttons and modals.</p>
