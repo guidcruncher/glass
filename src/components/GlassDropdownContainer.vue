@@ -1,6 +1,6 @@
 <template>
   <div
-    class="dropdown-wrapper"
+    class="['dropdown-wrapper', {isOpen: 'blur'}]§"
     v-click-outside="closeDropdown"
     :style="{ maxWidth: maxButtonWidth }"
   >
@@ -39,15 +39,6 @@
       >
         <!-- Slot for dropdown content, defaulting to iterating through options -->
         <slot name="dropdown" :close="closeDropdown">
-          <div
-            v-for="option in options"
-            :key="option"
-            class="dropdown-list-item"
-            @click="selectOption(option)"
-            :class="{ 'dark-hover': isDark, 'light-hover': !isDark }"
-          >
-            {{ option }}
-          </div>
         </slot>
       </div>
     </teleport>
@@ -132,6 +123,7 @@ watch(isOpen, async (newVal) => {
 // --- DROPDOWN LOGIC ---
 const openDropdown = async () => {
   isOpen.value = !isOpen.value
+  
 }
 
 const selectOption = (value: string) => {
@@ -163,7 +155,7 @@ const vClickOutside = {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* ===================================================================
    THEME VARIABLES (omitted for brevity, assume presence)
    =================================================================== */
@@ -226,6 +218,10 @@ const vClickOutside = {
 /* ===================================================================
    DROPDOWN LIST (TELEPORTED)
    =================================================================== */
+.blur {
+  backdrop-filter: blur(10px);
+}
+
 .dropdown-list-teleported {
   position: fixed;
   margin-top: 0;
@@ -233,25 +229,10 @@ const vClickOutside = {
   z-index: 9999;
   overflow: hidden;
   overflow-y: auto;
-
+  color: var(--text-color);
   background-color: var(--dropdown-bg);
   border: 1px solid var(--dropdown-border);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-.dropdown-list-item {
-  padding: 0.75rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  color: var(--text-color);
-  font-size: 0.9rem;
-}
-
-.dropdown-list-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.light-theme .dropdown-list-item:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-</style>
+</style> 

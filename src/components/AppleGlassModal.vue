@@ -156,7 +156,7 @@ const toggleMaximize = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /*
 |--------------------------------------------------------------------------
 | BASE STYLES
@@ -166,6 +166,8 @@ const toggleMaximize = () => {
 .modal-backdrop {
   /* Fix: Backdrop must support both light and dark themes */
   position: fixed;
+  z-index:9998;
+  backdrop-filter: blur(10px);
   top: 0;
   left: 0;
   width: 100%;
@@ -191,13 +193,13 @@ const toggleMaximize = () => {
   min-width: 300px;
   min-height: 150px;
   overflow: hidden;
-
+  z-index:9999;
   /* Glassmorphic Styling (Refactored to use global CSS variables) */
   background-color: var(--glass-bg);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
   /* The blur can be a custom variable or fall back to the global blur */
-  backdrop-filter: blur(var(--glass-blur, 16px));
+  backdrop-filter: blur(10px); 
   -webkit-backdrop-filter: blur(var(--glass-blur, 16px));
 
   /* Text color now driven by global variable */

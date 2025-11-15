@@ -46,7 +46,7 @@ const props = defineProps({
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* Scoped styles for the header component structure */
 /* The app-header-component class is expected to be styled by GlassAppView.vue */
 

@@ -263,7 +263,7 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .clock-face-container {
   position: relative;
   border-radius: 50%;

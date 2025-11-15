@@ -31,7 +31,7 @@ defineProps({
 defineEmits(['update:modelValue'])
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* ===================================================================
    THEME VARIABLES
    =================================================================== */

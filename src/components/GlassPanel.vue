@@ -1,6 +1,8 @@
 <template>
-  <div :class="['glass-panel', panelClass]">
-    <slot></slot>
+  <div :class="['apple-panel', themeClass]">
+    <div class="panel-content">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -10,54 +12,50 @@ import { useTheme } from '../composables/useTheme'
 
 const { isDark } = useTheme()
 
-const props = defineProps({})
-
-// The class determines which set of CSS variables is used
-const panelClass = computed(() => {
-  return isDark.value ? 'dark-panel' : 'light-panel'
+// Computed property to dynamically apply the correct CSS class
+const themeClass = computed(() => {
+  return isDark.value ? 'theme-dark' : 'theme-light'
 })
 </script>
 
 <style scoped>
-/* ===================================================================
-   BASE PANEL STYLES (Applies to all variants)
-   =================================================================== */
-.glass-panel {
-  border-radius: 1rem; /* rounded-2xl */
-  padding: 1.5rem; /* p-6 */
-  /* Replaces space-y-4 for slot content */
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+/*
+ * Styles for the Apple-style Panel 
+ */
 
-  /* Glassmorphism */
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-
-  /* Dynamic styles set by theme/variant */
-  background-color: var(--panel-bg);
-  border: 1px solid var(--panel-border);
-  box-shadow: var(--panel-shadow);
+/* --- Panel Container --- */
+.apple-panel {
+  /* Basic Panel Structure */
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 99vw; /* Example fixed width */
+  min-height: 200px;
+  backdrop-filter: blur(10px); /* Key Apple UI effect */
+  overflow: hidden;
   transition: all 0.3s ease;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
-/* ===================================================================
-   VARIANT STYLES (CSS Variables for Theme Switching)
-   =================================================================== */
-
-/* --- Dark Panel (Default) --- */
-.dark-panel {
-  --panel-bg: rgba(30, 30, 30, 0.4);
-  --panel-border: rgba(255, 255, 255, 0.15);
-  --panel-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); /* shadow-2xl */
-  color: white;
+/* --- Light Theme (Default) --- */
+.apple-panel.theme-light {
+  /* Background: A translucent light gray/white */
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #1c1c1e; /* Dark text */
 }
 
-/* --- Light Panel --- */
-.light-panel {
-  --panel-bg: rgba(255, 255, 255, 0.65);
-  --panel-border: rgba(255, 255, 255, 0.8);
-  --panel-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); /* shadow-lg */
-  color: #1f2937;
+/* --- Dark Theme --- */
+.apple-panel.theme-dark {
+  /* Background: A translucent dark gray/black */
+  background-color: rgba(28, 28, 30, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff; /* Light text */
+}
+
+/* --- Panel Content Slot --- */
+.panel-content {
+  padding: 20px;
 }
 </style>

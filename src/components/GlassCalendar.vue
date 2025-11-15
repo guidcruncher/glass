@@ -119,7 +119,7 @@ const selectDay = (date) => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* ===================================================================
    THEME VARIABLES
    =================================================================== */
@@ -155,15 +155,10 @@ const selectDay = (date) => {
    CONTAINER AND LAYOUT
    =================================================================== */
 .calendar-container {
-  /* Glass Panel Styling */
-  background-color: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   border-radius: 1rem; /* rounded-2xl */
   padding: 2rem; /* p-8 */
-  color: var(--text-color-base);
+  color: var(--ui-text-color);
   max-width: 400px;
   margin: 0;
 }

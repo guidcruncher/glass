@@ -74,7 +74,7 @@ const selectTab = (name: string) => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 /* Custom utility to hide the horizontal scrollbar but allow scrolling */
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE and Edge */

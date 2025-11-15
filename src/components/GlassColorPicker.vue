@@ -75,7 +75,7 @@ const handleColorSelect = (color, closeDropdown) => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* Scoped styles specific to the Color Picker */
 
 .selected-color-display {

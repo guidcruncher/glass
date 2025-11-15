@@ -194,7 +194,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* (Global styles remain unchanged) */
 /* ======================================================\
   GLOBAL CSS SCAFFOLDING & THEME VARIABLES

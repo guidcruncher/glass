@@ -9,7 +9,7 @@
 
     <template #dropdown="{ close: closeDropdown }">
       <div class="calendar-wrapper">
-        <GlassCalendar
+        <Calendar
           :show-borders="false"
           :modelValue="dateValue"
           @update:modelValue="handleDateSelect($event, closeDropdown)"
@@ -102,7 +102,7 @@ const handleDateSelect = (date, closeDropdown) => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* Scoped styles specific to the Date Picker */
 
 /* Styles for the visible selected text */

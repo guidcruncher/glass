@@ -48,7 +48,7 @@ provide('radioGroup', {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .radio-group {
   display: flex;
   gap: 1.5rem; /* Space out the radio buttons */

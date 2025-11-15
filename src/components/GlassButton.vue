@@ -31,12 +31,12 @@ const props = defineProps({
   /** Optional width for the button (e.g., '120px'). */
   width: {
     type: String,
-    default: 'auto',
+    default: 'max-content',
   },
   /** Optional height for the button (e.g., '40px'). */
   height: {
     type: String,
-    default: 'auto',
+    default: '44px',
   },
   /** If true, the button is disabled and click event is suppressed. */
   disabled: {
@@ -94,7 +94,7 @@ const handleClick = (event) => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* ===================================================================
    BASE BUTTON STYLES (Applies to all states and variants)
    =================================================================== */
@@ -105,9 +105,11 @@ const handleClick = (event) => {
   justify-content: center;
   border-radius: 12px; /* rounded-xl */
   font-weight: 600; /* font-semibold */
+  font-size: 14px !important;
   line-height: 1.5;
   cursor: pointer;
-
+  padding-left: 20px;
+  padding-right: 20px;
   /* Sizing */
   width: var(--btn-width, auto);
   height: var(--btn-height, auto);

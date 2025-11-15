@@ -110,7 +110,7 @@ $blur-level: 8px;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  width: 100%;
+  width: 95%;
 }
 
 .input-label {

@@ -73,7 +73,7 @@ const handleChange = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /*
 |--------------------------------------------------------------------------
 | Base Styles & Hidden Input

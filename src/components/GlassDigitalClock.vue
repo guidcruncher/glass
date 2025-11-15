@@ -205,7 +205,7 @@ const colonX = computed(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 svg {
   /* Crucial for filters (shadows, glow) to be visible outside the defined element bounds */
   overflow: visible;
